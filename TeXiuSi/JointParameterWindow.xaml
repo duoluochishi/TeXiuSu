@@ -1,0 +1,145 @@
+﻿<Window x:Class="TeXiuSi.JointParameterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeXiuSi"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="关节参数窗口" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J1</TextBlock>
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 状态码：</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J2</TextBlock>
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电机转速（rpm）</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J3</TextBlock>
+        <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 位置度数(°)</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J4</TextBlock>
+        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电源电压(V)</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 相线电流(mA)</TextBlock>
+        <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J5</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" >J6</TextBlock>
+        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角加速度(0.001rad/s∧2)</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电机温度(℃)</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 驱动器温度(℃)</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 碰撞保护</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 堵转保护</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 错误状态</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 使能状态</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 通讯状态</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角度状态</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+    </Grid>
+</Window>
+

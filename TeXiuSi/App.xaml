@@ -1,0 +1,24 @@
+﻿<Application x:Class="TeXiuSi.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TeXiuSi"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="BlueGrey" SecondaryColor="Lime" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 可选的附加颜色自定义 -->
+            <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#FF80D6FF" />
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FF000000" />
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#FF2196F3" />
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#FF0B79D0" />
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="#FFFFFFFF" />-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

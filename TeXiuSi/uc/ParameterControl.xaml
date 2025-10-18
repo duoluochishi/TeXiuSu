@@ -1,0 +1,417 @@
+﻿<UserControl x:Class="TeXiuSi.uc.ParameterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:TeXiuSi.uc"
+             mc:Ignorable="d" Background="White"
+             d:DesignHeight="850" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type xctk:DecimalUpDown}" BasedOn="{StaticResource {x:Type xctk:DecimalUpDown}}" x:Key="MaterialLikeDecimalUpDownStyle">
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Value" />
+                <Setter Property="materialDesign:TextFieldAssist.HasClearButton" Value="False"/>
+                <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignTextBoxAndComboBoxBorder}" />
+                <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                <Setter Property="materialDesign:ValidationAssist.Suppress" Value="True"/>
+                <Setter Property="Height" Value="45" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type xctk:DecimalUpDown}">
+                            <Border x:Name="PART_RootBorder"
+                        Background="Transparent" 
+                        BorderThickness="1" BorderBrush="Black"
+                        CornerRadius="3"></Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <x:Array x:Key="JointNames" Type="sys:String">
+                <sys:String>1</sys:String>
+                <sys:String>2</sys:String>
+                <sys:String>3</sys:String>
+                <sys:String>4</sys:String>
+                <sys:String>5</sys:String>
+                <sys:String>6</sys:String>
+            </x:Array>
+            <x:Array x:Key="LoadValues" Type="sys:String">
+                <sys:String>空载</sys:String>
+                <sys:String>半载</sys:String>
+                <sys:String>满载</sys:String>
+            </x:Array>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem
+      Header="关节设置">
+                <GroupBox
+  Margin="16"
+  materialDesign:ElevationAssist.Elevation="Dp6"
+  Header="关节限制参数"
+  Style="{StaticResource MaterialDesignCardGroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 关节序号:</TextBlock>
+                        <ComboBox
+x:Name="Outlined"  Grid.Column="2"
+Width="150" HorizontalAlignment="Center"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+ItemsSource="{StaticResource JointNames}" 
+SelectedIndex="0"
+/>
+                        <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
+                        <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <xctk:DecimalUpDown 
+                                Grid.Row="1" 
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.01" Minimum="0" Maximum="50"
+                                FormatString="F2"  Height="40"
+                                />
+                        <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最小角度:</TextBlock>
+                        <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown 
+                                Grid.Row="2" 
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.1" Minimum="0" Maximum="50"
+                                FormatString="F1"  Height="40"
+                                >
+
+                        </xctk:DecimalUpDown>
+                        <TextBlock 
+        Text="°" Grid.Row="1" Grid.Column="3"
+        VerticalAlignment="Center" 
+        HorizontalAlignment="Left" FontSize="18"
+        IsHitTestVisible="False" />
+
+                        <TextBlock 
+Text="°" Grid.Row="2" Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left" FontSize="18"
+IsHitTestVisible="False" />
+                        <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大速度:</TextBlock>
+                        <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown 
+                                Grid.Row="3" 
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.01" Minimum="0" Maximum="50"
+                                FormatString="F2"  Height="40"
+                                >
+                        </xctk:DecimalUpDown>
+                        <TextBlock 
+Text="rand/s" Grid.Row="3" Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left"  FontSize="12"
+IsHitTestVisible="False" />
+                        <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大加速度:</TextBlock>
+                        <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <xctk:DecimalUpDown 
+                                Grid.Row="4" 
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.01" Minimum="0" Maximum="50"
+                                FormatString="F2"  Height="40"
+                                />
+                        <TextBlock 
+Text="rand/s∧2" Grid.Row="4" Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left" Margin="0 0 0 0" FontSize="12"
+IsHitTestVisible="False" />
+                        <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0">编辑</Button>
+
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+            <TabItem 
+      Header="末端设置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="3*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <GroupBox
+Margin="16"
+materialDesign:ElevationAssist.Elevation="Dp6"
+Header="关节限制参数"
+Style="{StaticResource MaterialDesignCardGroupBox}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 负载值:</TextBlock>
+                            <ComboBox
+x:Name="LoadInfo"  Grid.Column="1" Width="180"
+HorizontalAlignment="Right"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" 
+ ItemsSource="{StaticResource LoadValues}"
+                                SelectedIndex="1"
+/>
+                            <Button Height="45" Width="180" Grid.Column="2">确定</Button>
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大线速度:</TextBlock>
+                        <Slider  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown 
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.001" Minimum="0" Maximum="50"
+                                FormatString="F3"  Height="40"
+                                />
+                        <TextBlock 
+Text="m/s"  Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left"  FontSize="12"
+IsHitTestVisible="False" />
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
+                        <Slider Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown  Grid.Row="1"
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.001" Minimum="0" Maximum="50"
+                                FormatString="F3"  Height="40"
+                                />
+                        <TextBlock Grid.Row="1"
+Text="rad/s"  Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left"  FontSize="12"
+IsHitTestVisible="False" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
+                        <Slider Grid.Row="2"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown  Grid.Row="2"
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.001" Minimum="0" Maximum="50"
+                                FormatString="F3"  Height="40"
+                                />
+                        <TextBlock Grid.Row="2"
+Text="m/s∧2"  Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left"  FontSize="12"
+IsHitTestVisible="False" />
+                        <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角加速度:</TextBlock>
+                        <Slider Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <xctk:DecimalUpDown  Grid.Row="3"
+                                Grid.Column="2" 
+                                Width="150"
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"
+                                Increment="0.001" Minimum="0" Maximum="50"
+                                FormatString="F3"  Height="40"
+                                />
+                        <TextBlock Grid.Row="3"
+Text="rad/s"  Grid.Column="3"
+VerticalAlignment="Center" 
+HorizontalAlignment="Left"  FontSize="12"
+IsHitTestVisible="False" />
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem
+      Header="碰撞等级">
+                <GroupBox
+  Margin="16"
+  materialDesign:ElevationAssist.Elevation="Dp6"
+  Header="碰撞防护等级"
+  Style="{StaticResource MaterialDesignCardGroupBox}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 1号:</TextBlock>
+
+                        <Slider  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  
+ Grid.Column="2" 
+Value="{Binding PopupHorizontalOffset}" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" >2号:</TextBlock>
+                        <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="1" 
+ Grid.Column="2" 
+Value="{Binding PopupHorizontalOffset}" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 3号:</TextBlock>
+                        <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50" Grid.Row="2" Grid.Column="3"
+Value="{Binding PopupHorizontalOffset}" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 4号:</TextBlock>
+                        <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="3" 
+ Grid.Column="2" 
+Value="{Binding PopupHorizontalOffset}" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 5号:</TextBlock>
+                        <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="4" 
+ Grid.Column="2" 
+Value="{Binding PopupHorizontalOffset}" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0">编辑</Button>
+
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+            <TabItem 
+      Header="关节信息">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 20 0"> 运动信息:</TextBlock>
+                    <Button x:Name="btnsportInfo" Width="280" Height="50" Grid.Column="1"
+Style="{StaticResource MaterialDesignRaisedButton}" Click="btnsportInfo_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+        Kind="TextBoxOutline" 
+        Margin="0 0 8 0" />
+                            <TextBlock
+        Text="查看详情" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 状态信息:</TextBlock>
+
+                    <Button x:Name="btnConditionInfo" Grid.Row="1" Width="280" Height="50" Grid.Column="1"
+Style="{StaticResource MaterialDesignRaisedButton}" Click="btnConditionInfo_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+        Kind="TextBoxOutline" 
+        Margin="0 0 8 0" />
+                            <TextBlock
+        Text="查看详情" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
