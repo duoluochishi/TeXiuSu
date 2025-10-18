@@ -157,6 +157,8 @@
       <DependentUpon>JointParameterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\EnumerationClass.cs" />
+    <Compile Include="Model\JointParamenterModel.cs" />
+    <Compile Include="Model\JointParameterNodel.cs" />
     <Compile Include="Model\Sports.cs" />
     <Compile Include="uc\MotorConfiguration.xaml.cs">
       <DependentUpon>MotorConfiguration.xaml</DependentUpon>
@@ -164,6 +166,8 @@
     <Compile Include="uc\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\JoinParampeterViewModel.cs" />
+    <Compile Include="ViewModel\JointMotionNode.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="JointMotionParameters.xaml">
       <SubType>Designer</SubType>
