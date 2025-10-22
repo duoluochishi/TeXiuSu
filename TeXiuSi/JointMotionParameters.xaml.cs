@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TeXiuSi.ViewModel;
 
 namespace TeXiuSi
 {
@@ -22,6 +23,10 @@ namespace TeXiuSi
         public JointMotionParameters()
         {
             InitializeComponent();
+            JoinMotionParametersViewModel joinMotionViewModel = new JoinMotionParametersViewModel();
+
+            this.DataContext = joinMotionViewModel;
+
         }
     }
 }

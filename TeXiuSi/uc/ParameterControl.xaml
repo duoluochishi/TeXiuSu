@@ -182,7 +182,7 @@ Style="{StaticResource MaterialDesignCardGroupBox}">
 x:Name="LoadInfo"  Grid.Column="1" Width="180"
 HorizontalAlignment="Right"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
- ItemsSource="{StaticResource LoadValues}"
+ItemsSource="{StaticResource LoadValues}"
                                 SelectedIndex="1"
 />
                             <Button Height="45" Width="180" Grid.Column="2">确定</Button>

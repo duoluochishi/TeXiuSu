@@ -25,38 +25,38 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节1</TextBlock>
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 线速度(0.001m/s)</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding }"> ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].LinearVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].LinearVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].LinearVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].LinearVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].LinearVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].LinearVelocity}"> ---</TextBlock>
         <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节2</TextBlock>
         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角速度(0.001rad/s)</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].AngularVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].AngularVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].AngularVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].AngularVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].AngularVelocity}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].AngularVelocity}"> ---</TextBlock>
         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节3</TextBlock>
         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 线加速度(0.001m/s∧2)</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].LinearAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].LinearAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].LinearAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].LinearAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].LinearAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].LinearAcceleration}"> ---</TextBlock>
         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节4</TextBlock>
         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角加速度(0.001rad/s∧2)</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].AngularAcceleration}"> ---</TextBlock>
         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节5</TextBlock>
         <TextBlock Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > 关节6</TextBlock>

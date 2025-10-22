@@ -131,3 +131,4 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.csproj.CoreCompileInputs.ca
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.csproj.Up2Date
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.pdb
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe.config

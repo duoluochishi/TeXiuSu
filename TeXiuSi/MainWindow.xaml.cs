@@ -897,5 +897,24 @@ namespace TeXiuSi
 
             Window.GetWindow(this).Close();
         }
+        private void NameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox == null) return;
+
+            // 假设您要限制输入为最多三位小数
+            string pattern = @"^-?\d*(\.\d{1,3})?$"; // 匹配整数或小数点后最多三位的数字
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textBox.Text, pattern))
+            {
+                // 如果文本不符合要求，则撤销上一次的更改
+                // ⚠️ 注意：需要一种机制来保存上一次合法的值
+                // 最简单但粗暴的方式是：
+                // string currentText = textBox.Text;
+                // string correctedText = Regex.Match(currentText, @"^-?\d*(\.\d{0,3})?").Value;
+                // textBox.Text = correctedText;
+                // textBox.CaretIndex = correctedText.Length; // 保持光标在末尾
+            }
+        }
     }
 }

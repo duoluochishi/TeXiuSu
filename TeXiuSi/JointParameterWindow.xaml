@@ -35,111 +35,111 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J1</TextBlock>
         <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 状态码：</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].CanineStateCode}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].CanineStateCode}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].CanineStateCode}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].CanineStateCode}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].CanineStateCode}"> ---</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].CanineStateCode}"> ---</TextBlock>
         <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J2</TextBlock>
         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电机转速（rpm）</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].MotorSpeed}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].MotorSpeed}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].MotorSpeed}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].MotorSpeed}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].MotorSpeed}"> ---</TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].MotorSpeed}"> ---</TextBlock>
         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J3</TextBlock>
         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 位置度数(°)</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].PositionDegree}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].PositionDegree}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].PositionDegree}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].PositionDegree}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].PositionDegree}"> ---</TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].PositionDegree}"> ---</TextBlock>
         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J4</TextBlock>
         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电源电压(V)</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].PowerSupplyVoltage}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].PowerSupplyVoltage}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].PowerSupplyVoltage}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].PowerSupplyVoltage}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].PowerSupplyVoltage}"> ---</TextBlock>
+        <TextBlock Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].PowerSupplyVoltage}"> ---</TextBlock>
         <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 相线电流(mA)</TextBlock>
         <TextBlock Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" > J5</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].WiringCurrent}"> ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].WiringCurrent}"> ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].WiringCurrent}"> ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].WiringCurrent}"> ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].WiringCurrent}"> ---</TextBlock>
+        <TextBlock Grid.Row="5" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].WiringCurrent}"> ---</TextBlock>
         <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > ---</TextBlock>
         <TextBlock Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" >J6</TextBlock>
         <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角加速度(0.001rad/s∧2)</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="6" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].AngularAcceleration}"> ---</TextBlock>
+        <TextBlock Grid.Row="6" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].AngularAcceleration}"> ---</TextBlock>
         <TextBlock Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 电机温度(℃)</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="7" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].MotorTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].MotorTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].MotorTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].MotorTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].MotorTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="7" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].MotorTemperature}"> ---</TextBlock>
         <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 驱动器温度(℃)</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="8" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].DriverTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].DriverTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].DriverTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].DriverTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].DriverTemperature}"> ---</TextBlock>
+        <TextBlock Grid.Row="8" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].DriverTemperature}"> ---</TextBlock>
         <TextBlock Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 碰撞保护</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="9" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].CollisionProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].CollisionProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].CollisionProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].CollisionProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].CollisionProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="9" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].CollisionProtection}"> ---</TextBlock>
         <TextBlock Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 堵转保护</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="10" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].RotorBlockingProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].RotorBlockingProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].RotorBlockingProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].RotorBlockingProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].RotorBlockingProtection}"> ---</TextBlock>
+        <TextBlock Grid.Row="10" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].RotorBlockingProtection}"> ---</TextBlock>
         <TextBlock Grid.Row="11" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 错误状态</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="11" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].ErrorStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].ErrorStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].ErrorStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].ErrorStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].ErrorStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="11" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].ErrorStatus}"> ---</TextBlock>
         <TextBlock Grid.Row="12" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 使能状态</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="12" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].EnabledState}"> ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].EnabledState}"> ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].EnabledState}"> ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].EnabledState}"> ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].EnabledState}"> ---</TextBlock>
+        <TextBlock Grid.Row="12" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].EnabledState}"> ---</TextBlock>
         <TextBlock Grid.Row="13" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 通讯状态</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="13" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角度状态</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
-        <TextBlock Grid.Row="14" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" > ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="13" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].CommunicationStatus}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13" > 角度状态</TextBlock>                                                
+        <TextBlock Grid.Row="14" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[0].AngleState}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[1].AngleState}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[2].AngleState}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[3].AngleState}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[4].AngleState}"> ---</TextBlock>
+        <TextBlock Grid.Row="14" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="13" Text="{Binding JointMotionsName[5].AngleState}"> ---</TextBlock>
     </Grid>
 </Window>
 
