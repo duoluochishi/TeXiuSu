@@ -8,12 +8,14 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:TeXiuSi"
         xmlns:uc="clr-namespace:TeXiuSi.uc"
+        xmlns:helper="clr-namespace:TeXiuSi.Helper"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="None"
         Title="MainWindow" Height="1000" Width="1600">
     <Window.Resources>
         <ResourceDictionary>
-           
+            <helper:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
             <x:Array x:Key="JointNames" Type="sys:String">
                 <sys:String>1</sys:String>
                 <sys:String>2</sys:String>
@@ -134,7 +136,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
     DisplayMemberPath="DisplayName"
     Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.ColumnSpan="2" Margin="188,0,0,0"
     />
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsPointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Margin="10,10,10,10">
                                                         <GroupBox Padding="8" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                             <GroupBox.Header >
@@ -540,7 +542,7 @@ Style="{StaticResource MaterialDesignRaisedButton}">
                                                     </StackPanel>
 
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsArcMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>
@@ -855,7 +857,7 @@ Text="画弧" />
                                                         </Button>
                                                     </Grid>
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsJointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                         <GroupBox.Header >
                                                             <StackPanel Orientation="Horizontal">
@@ -1022,7 +1024,7 @@ Text="编辑" />
 
                                                     </GroupBox>
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsStraightLineMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid Margin="20 50 20 20">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>

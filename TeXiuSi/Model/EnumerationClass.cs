@@ -45,11 +45,6 @@ namespace TeXiuSi.Model
         /// </summary>
         [Description("直线运动")]
         StraightLineMotion = 3,
-        /// <summary>
-        /// MIT
-        /// </summary>
-        [Description("MIT")]
-        MIT = 4,
     }
     /// <summary>
     /// 操作模式
