@@ -50,7 +50,7 @@ namespace TeXiuSi.ViewModel
         private EnumBindingItem<SportType> _selectedSportType;
 
         // 绑定到ComboBox的SelectedItem属性
-        public EnumBindingItem<SportType>  SelectedSportType
+        public EnumBindingItem<SportType> SelectedSportType
         {
             get { return _selectedSportType; }
             set
@@ -62,8 +62,41 @@ namespace TeXiuSi.ViewModel
                 {
                     // 你可以获取到选择的中文名和枚举值
                     Console.WriteLine($"选择了: {_selectedSportType.DisplayName}，枚举值为: {_selectedSportType.Value}");
+
+                    IsPointMotionVisible = _selectedSportType.Value == SportType.PointMotion;
+                    IsArcMotionVisible = _selectedSportType.Value == SportType.ArcMotion;
+                    IsJointMotionVisible = _selectedSportType.Value == SportType.JointMotion;
+                    IsStraightLineMotionVisible = _selectedSportType.Value == SportType.StraightLineMotion;
                 }
             }
+        }
+
+        private bool _isPointMotionVisible;
+        public bool IsPointMotionVisible
+        {
+            get { return _isPointMotionVisible; }
+            set { _isPointMotionVisible = value; OnPropertyChanged(); }
+        }
+
+        private bool _isArcMotionVisible;
+        public bool IsArcMotionVisible
+        {
+            get { return _isArcMotionVisible; }
+            set { _isArcMotionVisible = value; OnPropertyChanged(); }
+        }
+
+        private bool _isJointMotionVisible;
+        public bool IsJointMotionVisible
+        {
+            get { return _isJointMotionVisible; }
+            set { _isJointMotionVisible = value; OnPropertyChanged(); }
+        }
+
+        private bool _isStraightLineMotionVisible;
+        public bool IsStraightLineMotionVisible
+        {
+            get { return _isStraightLineMotionVisible; }
+            set { _isStraightLineMotionVisible = value; OnPropertyChanged(); }
         }
 
         // 在ViewModel中添加以下属性和初始化代码
