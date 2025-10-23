@@ -132,3 +132,5 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.csproj.Up2Date
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.pdb
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe.config
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\ConnectPage.g.cs
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\ConnectPage.baml

@@ -1,0 +1,8 @@
+# 忽略 Visual Studio 的缓存目录
+.vs/
+
+# 常见的其他忽略项（可选）
+bin/
+obj/
+*.suo
+*.user

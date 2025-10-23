@@ -916,5 +916,11 @@ namespace TeXiuSi
                 // textBox.CaretIndex = correctedText.Length; // 保持光标在末尾
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ConnectPage connectPage = new ConnectPage();
+            connectPage.ShowDialog();
+        }
     }
 }

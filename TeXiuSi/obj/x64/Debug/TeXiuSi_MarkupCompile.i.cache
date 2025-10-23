@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Project\ASP.Net\TeXiuSi\TeXiuSi\obj\x64\Debug\
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\
 TeXiuSi
 none
 false
 DEBUG;TRACE
-D:\Project\ASP.Net\TeXiuSi\TeXiuSi\App.xaml
-5-1702406449
+D:\Project\texiusi\TeXiuSu\TeXiuSi\App.xaml
+6-2087471050
 
-191620195467
-39857047677
-JointMotionParameters.xaml;JointParameterWindow.xaml;MainWindow.xaml;uc\MotorConfiguration.xaml;uc\ParameterControl.xaml;
+291980041100
+39757540095
+ConnectPage.xaml;JointMotionParameters.xaml;JointParameterWindow.xaml;MainWindow.xaml;uc\MotorConfiguration.xaml;uc\ParameterControl.xaml;
 
 True
 

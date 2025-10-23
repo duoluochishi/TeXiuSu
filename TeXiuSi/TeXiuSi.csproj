@@ -148,6 +148,9 @@
     </ApplicationDefinition>
     <Compile Include="Behaviors\DecimalInputBehavior.cs" />
     <Compile Include="CanProcess.cs" />
+    <Compile Include="ConnectPage.xaml.cs">
+      <DependentUpon>ConnectPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Helper\CanBusHelper.cs" />
     <Compile Include="Helper\dmArmHelper.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="JointParameterWindow.xaml.cs">
       <DependentUpon>JointParameterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\ConnectNodeModel.cs" />
     <Compile Include="Model\EnumerationClass.cs" />
     <Compile Include="Model\JointMotionNodeModel.cs" />
     <Compile Include="Model\JointParamenterModel.cs" />
@@ -168,10 +172,15 @@
     <Compile Include="uc\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ConnectViewModel.cs" />
     <Compile Include="ViewModel\JoinMotionParametersViewModel.cs" />
     <Compile Include="ViewModel\JoinParampeterViewModel.cs" />
     <Compile Include="ViewModel\JointMotionNode.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Page Include="ConnectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="JointMotionParameters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button Width='120' HorizontalAlignment="Left" Margin="10 0 0 0">机械臂通讯</Button>
+            <Button Width='120' HorizontalAlignment="Left" Margin="10 0 0 0" Click="Button_Click">机械臂通讯</Button>
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 20 0">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">速度：</TextBlock>
                 <Slider  HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -90,7 +90,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
             </Grid.ColumnDefinitions>
             <Grid>
                 <materialDesign:Card >
-                    <TabControl 
+                    <TabControl x:Name="TableControl"
     Style="{StaticResource MaterialDesignFilledTabControl}"
     TabStripPlacement="Left">
                         <TabItem
@@ -855,7 +855,7 @@ Text="画弧" />
                                                         </Button>
                                                     </Grid>
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
                                                     <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                         <GroupBox.Header >
                                                             <StackPanel Orientation="Horizontal">
@@ -1021,6 +1021,165 @@ Text="编辑" />
                                                         </Grid>
 
                                                     </GroupBox>
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3">
+                                                    <Grid Margin="20 50 20 20">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                            <RowDefinition></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> X(mm)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                    Width="32" 
+                                                                                    Height="32" 
+                                                                                    Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+  TextChanged="NameTextBox_TextChanged"
+  materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                    Width="32" 
+                                                                                    Height="32" 
+                                                                                    Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> Y(mm)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+TextChanged="NameTextBox_TextChanged"
+materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> Z(mm)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+TextChanged="NameTextBox_TextChanged"
+materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RX(°)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+TextChanged="NameTextBox_TextChanged"
+materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RY(°)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+TextChanged="NameTextBox_TextChanged"
+materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RZ(°)：</TextBlock>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Minus" />
+                                                            </Button>
+                                                            <TextBox Width="400"
+TextChanged="NameTextBox_TextChanged"
+materialDesign:HintAssist.Hint="0.000">
+
+                                                            </TextBox>
+                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0">
+                                                                <materialDesign:PackIcon
+                                                                                  Width="32" 
+                                                                                  Height="32" 
+                                                                                  Kind="Plus" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 30 0">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <materialDesign:PackIcon
+Kind="ChartLineVariant" 
+Margin="0 0 8 0" />
+                                                                    <TextBlock
+Text="回零" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                            <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <materialDesign:PackIcon
+Kind="LinkEdit" 
+Margin="0 0 8 0" />
+                                                                    <TextBlock
+Text="编辑" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </Grid>
                                                 </StackPanel>
                                                 
                                             </Grid>
@@ -1210,7 +1369,7 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
                         </TabItem>
                     </TabControl>
                 </materialDesign:Card>
-                <Button Width="100" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80">
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon
 Kind="Bookshelf" 
@@ -1219,7 +1378,7 @@ Margin="0 0 8 0" />
 Text="轨迹库" />
                     </StackPanel>
                 </Button>
-                <Button Width="100" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom">关节状态</Button>
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom">关节状态</Button>
             </Grid>
 
             <Grid Grid.Column="1" >
