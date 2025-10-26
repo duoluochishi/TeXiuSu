@@ -16,59 +16,187 @@ namespace TeXiuSi.ViewModel
 
     public partial class MainViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private ObservableCollection<EnumBindingItem<OperationType>> _operationModes;
+        public ObservableCollection<EnumBindingItem<OperationType>> OperationModes { get; set; }
+        public ObservableCollection<EnumBindingItem<SportType>> SportTypes { get; set; }
 
-        [ObservableProperty]
-        private ObservableCollection<EnumBindingItem<SportType>> _sportTypes;
-
-        [ObservableProperty]
         private EnumBindingItem<OperationType> _selectedOperationMode;
+        public EnumBindingItem<OperationType> SelectedOperationMode
+        {
+            get { return _selectedOperationMode; }
+            set
+            {
+                _selectedOperationMode = value;
+                OnPropertyChanged();
+                if (_selectedOperationMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedOperationMode.DisplayName}，枚举值为: {_selectedOperationMode.Value}");
+                }
+            }
+        }
 
-        [ObservableProperty]
         private EnumBindingItem<SportType> _selectedSportType;
+        public EnumBindingItem<SportType> SelectedSportType
+        {
+            get { return _selectedSportType; }
+            set
+            {
+                _selectedSportType = value;
+                OnPropertyChanged();
+                if (_selectedSportType != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedSportType.DisplayName}，枚举值为: {_selectedSportType.Value}");
+                    IsPointMotionVisible = _selectedSportType.Value == SportType.PointMotion;
+                    IsArcMotionVisible = _selectedSportType.Value == SportType.ArcMotion;
+                    IsJointMotionVisible = _selectedSportType.Value == SportType.JointMotion;
+                    IsStraightLineMotionVisible = _selectedSportType.Value == SportType.StraightLineMotion;
+                }
+            }
+        }
 
-        [ObservableProperty]
         private bool _isPointMotionVisible;
+        public bool IsPointMotionVisible
+        {
+            get { return _isPointMotionVisible; }
+            set { _isPointMotionVisible = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private bool _isArcMotionVisible;
+        public bool IsArcMotionVisible
+        {
+            get { return _isArcMotionVisible; }
+            set { _isArcMotionVisible = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private bool _isJointMotionVisible;
+        public bool IsJointMotionVisible
+        {
+            get { return _isJointMotionVisible; }
+            set { _isJointMotionVisible = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private bool _isStraightLineMotionVisible;
+        public bool IsStraightLineMotionVisible
+        {
+            get { return _isStraightLineMotionVisible; }
+            set { _isStraightLineMotionVisible = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private ObservableCollection<EnumBindingItem<LinkageSettings>> _linkageSettingsModes;
+        public ObservableCollection<EnumBindingItem<LinkageSettings>> LinkageSettingsModes
+        {
+            get { return _linkageSettingsModes; }
+            set { _linkageSettingsModes = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private EnumBindingItem<LinkageSettings> _selectedLinkageSettingsMode;
+        public EnumBindingItem<LinkageSettings> SelectedLinkageSettingsMode
+        {
+            get { return _selectedLinkageSettingsMode; }
+            set
+            {
+                _selectedLinkageSettingsMode = value;
+                OnPropertyChanged();
+                if (_selectedLinkageSettingsMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedLinkageSettingsMode.DisplayName}，枚举值为: {_selectedLinkageSettingsMode.Value}");
+                }
+            }
+        }
 
-        [ObservableProperty]
         private ObservableCollection<EnumBindingItem<FeedbackCommand>> _feedbackCommandModes;
+        public ObservableCollection<EnumBindingItem<FeedbackCommand>> FeedbackCommandModes
+        {
+            get { return _feedbackCommandModes; }
+            set { _feedbackCommandModes = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private EnumBindingItem<FeedbackCommand> _selectedFeedbackCommandMode;
+        public EnumBindingItem<FeedbackCommand> SelectedFeedbackCommandMode
+        {
+            get { return _selectedFeedbackCommandMode; }
+            set
+            {
+                _selectedFeedbackCommandMode = value;
+                OnPropertyChanged();
+                if (_selectedFeedbackCommandMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedFeedbackCommandMode.DisplayName}，枚举值为: {_selectedFeedbackCommandMode.Value}");
+                }
+            }
+        }
 
-        [ObservableProperty]
         private ObservableCollection<EnumBindingItem<ControlInstruction>> _controlInstructionModes;
+        public ObservableCollection<EnumBindingItem<ControlInstruction>> ControlInstructionModes
+        {
+            get { return _controlInstructionModes; }
+            set { _controlInstructionModes = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private EnumBindingItem<ControlInstruction> _selectedControlInstructionMode;
+        public EnumBindingItem<ControlInstruction> SelectedControlInstructionMode
+        {
+            get { return _selectedControlInstructionMode; }
+            set
+            {
+                _selectedControlInstructionMode = value;
+                OnPropertyChanged();
+                if (_selectedControlInstructionMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedControlInstructionMode.DisplayName}，枚举值为: {_selectedControlInstructionMode.Value}");
+                }
+            }
+        }
 
-        [ObservableProperty]
         private ObservableCollection<EnumBindingItem<AddressOffset>> _addressOffsetModes;
+        public ObservableCollection<EnumBindingItem<AddressOffset>> AddressOffsetModes
+        {
+            get { return _addressOffsetModes; }
+            set { _addressOffsetModes = value; OnPropertyChanged(); }
+        }
 
-        [ObservableProperty]
         private EnumBindingItem<AddressOffset> _selectedAddressOffsetMode;
+        public EnumBindingItem<AddressOffset> SelectedAddressOffsetMode
+        {
+            get { return _selectedAddressOffsetMode; }
+            set
+            {
+                _selectedAddressOffsetMode = value;
+                OnPropertyChanged();
+                if (_selectedAddressOffsetMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedAddressOffsetMode.DisplayName}，枚举值为: {_selectedAddressOffsetMode.Value}");
+                }
+            }
+        }
 
-        [ObservableProperty]
+
         private double _sharedJawValue;
+        public double SharedJawValue
+        {
+            get { return _sharedJawValue; }
+            set
+            {
+                if (_sharedJawValue != value)
+                {
+                    _sharedJawValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        [ObservableProperty]
         private double _sharedJawTorqueValue;
+        public double SharedJawTorqueValue
+        {
+            get { return _sharedJawTorqueValue; }
+            set
+            {
+                if (_sharedJawTorqueValue != value)
+                {
+                    _sharedJawTorqueValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public double MinValue { get; set; } = 0;
         public double MaxValue { get; set; } = 50;
@@ -155,18 +283,6 @@ namespace TeXiuSi.ViewModel
             }
             if (AddressOffsetModes.Count > 0)
                 SelectedAddressOffsetMode = AddressOffsetModes[0];
-        }
-
-        partial void OnSelectedSportTypeChanged(EnumBindingItem<SportType> value)
-        {
-            if (value != null)
-            {
-                Console.WriteLine($"选择了: {value.DisplayName}，枚举值为: {value.Value}");
-                IsPointMotionVisible = value.Value == SportType.PointMotion;
-                IsArcMotionVisible = value.Value == SportType.ArcMotion;
-                IsJointMotionVisible = value.Value == SportType.JointMotion;
-                IsStraightLineMotionVisible = value.Value == SportType.StraightLineMotion;
-            }
         }
 
         #region Window Control Commands
