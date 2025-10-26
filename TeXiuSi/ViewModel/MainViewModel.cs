@@ -203,8 +203,8 @@ namespace TeXiuSi.ViewModel
 
         public MainViewModel()
         {
-            dmArmHelper dmArmHelper = new dmArmHelper();
-            dmArmHelper.testArm();
+            //dmArmHelper dmArmHelper = new dmArmHelper();
+            //dmArmHelper.testArm();
 
             SharedJawValue = 0;
 
