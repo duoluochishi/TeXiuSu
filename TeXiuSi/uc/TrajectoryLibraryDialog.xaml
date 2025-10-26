@@ -1,4 +1,4 @@
-﻿<Window x:Class="TeXiuSi.uc.TrajectoryLibraryDialog"
+<Window x:Class="TeXiuSi.uc.TrajectoryLibraryDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -29,7 +29,8 @@
             ItemsSource="{Binding Items4}" />
 
 
-        <Button Grid.Row="1" Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Command="{Binding ImportFileCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon
 Kind="FilePlusOutline" 
@@ -38,7 +39,8 @@ Margin="0 0 8 0" />
 Text="导入文件" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="1" Grid.Column="1"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="1"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Command="{Binding NewTrajectoryCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon
 Kind="PlusCircleOutline" 
@@ -47,7 +49,8 @@ Margin="0 0 8 0" />
 Text="新建" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="1" Grid.Column="2"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="2"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Command="{Binding DeleteTrajectoryCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon
 Kind="DeleteOutline" 
@@ -56,7 +59,8 @@ Margin="0 0 8 0" />
 Text="删除" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="1" Grid.Column="3"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="3"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Command="{Binding SendTrajectoryCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon
 Kind="SendVariantOutline" 
@@ -65,7 +69,8 @@ Margin="0 0 8 0" />
 Text="发送" />
             </StackPanel>
         </Button>
-        <Button Grid.Row="1" Grid.Column="4"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="4"   Width="220"  Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Command="{Binding ExportFileCommand}">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon
 Kind="FileDownloadOutline" 
