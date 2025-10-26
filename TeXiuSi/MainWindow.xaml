@@ -573,7 +573,7 @@ Style="{StaticResource MaterialDesignRaisedButton}">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -584,7 +584,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -595,7 +595,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -606,7 +606,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -617,7 +617,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -628,7 +628,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -658,7 +658,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -669,7 +669,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -680,7 +680,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -691,7 +691,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -702,7 +702,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -713,7 +713,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -743,7 +743,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -754,7 +754,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -765,7 +765,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="70 0 0 0"
+Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -776,7 +776,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -787,7 +787,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -798,7 +798,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="150" Margin="56 0 0 0"
+Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center"
 Increment="0.01" Minimum="0" Maximum="50"
@@ -1251,8 +1251,8 @@ Text="编辑" />
       Header="夹爪控制">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition></ColumnDefinition>
-                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="2*"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition></RowDefinition>
@@ -1265,7 +1265,7 @@ Text="编辑" />
                                                     <RowDefinition></RowDefinition>
                                                 </Grid.RowDefinitions>
 
-                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">夹爪间距（mm）:</TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">夹爪间距（mm）:</TextBlock>
 
 
                                                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -1280,7 +1280,7 @@ Text="编辑" />
                                                          Text="{Binding SharedJawValue, Mode=TwoWay, StringFormat={}{0:F3}}"></TextBox>
                                                 </StackPanel>
 
-                                                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">夹爪扭矩（N/m）:</TextBlock>
+                                                <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">夹爪扭矩（N/m）:</TextBlock>
 
                                                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                                                     <Slider HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -1296,7 +1296,7 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
 
 
 
-                                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">示例教程器行程系数:</TextBlock>
+                                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">示例教程器行程系数:</TextBlock>
 
                                                 <materialDesign:NumericUpDown Grid.Row="2" Width="130"
                                         Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -1323,7 +1323,7 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
                                                     <ComboBoxItem>100</ComboBoxItem>
                                                 </ComboBox>
 
-                                                <TextBlock Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">示例器助力等级:</TextBlock>
+                                                <TextBlock Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">示例器助力等级:</TextBlock>
 
                                                 <materialDesign:NumericUpDown Grid.Row="4" Width="130"
                                         Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -1337,15 +1337,15 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
                                                     </materialDesign:NumericUpDown.DecreaseContent>
                                                 </materialDesign:NumericUpDown>
 
-                                                <TextBlock Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">夹爪状态:</TextBlock>
+                                                <TextBlock Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">夹爪状态:</TextBlock>
 
                                                 <Button Grid.Row="5" Grid.Column="1" Width="150" HorizontalAlignment="Right">失能</Button>
 
-                                                <TextBlock Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">清除错误:</TextBlock>
+                                                <TextBlock Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">清除错误:</TextBlock>
 
                                                 <Button Grid.Row="6" Grid.Column="1" Width="150" HorizontalAlignment="Right">确认</Button>
 
-                                                <TextBlock Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">设置零点:</TextBlock>
+                                                <TextBlock Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">设置零点:</TextBlock>
 
 
                                                 <Button Grid.Row="7" Grid.Column="1" Width="150" HorizontalAlignment="Right">确认</Button>
@@ -1363,15 +1363,10 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
       Header="电机设置">
                             <uc:MotorConfiguration/>
                         </TabItem>
-                        <TabItem
-      Header="版本升级">
-                            <TextBlock
-        Margin="8"
-        Text="Tab 4 with long width" />
-                        </TabItem>
+                       
                     </TabControl>
                 </materialDesign:Card>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80">
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 160" Click="Button_Click_1">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon
 Kind="Bookshelf" 
@@ -1380,7 +1375,10 @@ Margin="0 0 8 0" />
 Text="轨迹库" />
                     </StackPanel>
                 </Button>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom">关节状态</Button>
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80" Click="Button_Click_2">关节状态</Button>
+
+
+                <Button x:Name="btnUpdate" Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnUpdate_Click">版本升级</Button>
             </Grid>
 
             <Grid Grid.Column="1" >

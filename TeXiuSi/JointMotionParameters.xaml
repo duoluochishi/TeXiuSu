@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TeXiuSi"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="关节运动参数" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="10 0 0 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>

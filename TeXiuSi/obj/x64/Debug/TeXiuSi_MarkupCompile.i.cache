@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Project\texiusi\TeXiuSu\TeXiuSi\App.xaml
-6-2087471050
+8-708400278
 
-291980041100
-39757540095
-ConnectPage.xaml;JointMotionParameters.xaml;JointParameterWindow.xaml;MainWindow.xaml;uc\MotorConfiguration.xaml;uc\ParameterControl.xaml;
+36-1191341888
+40-1621128416
+ConnectPage.xaml;JointMotionParameters.xaml;JointParameterWindow.xaml;MainWindow.xaml;uc\MotorConfiguration.xaml;uc\ParameterControl.xaml;uc\TrajectoryLibraryDialog.xaml;VersionUpgrade.xaml;
 
-True
+False
 

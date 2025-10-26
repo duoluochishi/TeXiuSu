@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
 
 namespace TeXiuSi
@@ -921,6 +922,24 @@ namespace TeXiuSi
         {
             ConnectPage connectPage = new ConnectPage();
             connectPage.ShowDialog();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            TrajectoryLibraryDialog trajectoryLibraryDialog = new TrajectoryLibraryDialog();
+            trajectoryLibraryDialog.ShowDialog();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            JointParameterWindow jointParameterWindow=new JointParameterWindow();
+            jointParameterWindow.ShowDialog();
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            VersionUpgrade versionUpgrade = new VersionUpgrade();
+            versionUpgrade.ShowDialog();
         }
     }
 }

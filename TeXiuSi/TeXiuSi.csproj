@@ -84,6 +84,9 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="ShowMeTheXAML, Version=2.0.0.62, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ShowMeTheXAML.2.0.0\lib\net472\ShowMeTheXAML.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
@@ -152,6 +155,7 @@
       <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EnumExtensions.cs" />
+    <Compile Include="Helper\BooleanToVisibilityConverter.cs" />
     <Compile Include="Helper\CanBusHelper.cs" />
     <Compile Include="Helper\dmArmHelper.cs" />
     <Compile Include="JointMotionParameters.xaml.cs">
@@ -165,17 +169,27 @@
     <Compile Include="Model\JointMotionNodeModel.cs" />
     <Compile Include="Model\JointParamenterModel.cs" />
     <Compile Include="Model\JointParameterNodel.cs" />
+    <Compile Include="Model\SelectableViewModel.cs" />
     <Compile Include="Model\Sports.cs" />
+    <Compile Include="Model\UpDateTableViewModel.cs" />
     <Compile Include="uc\MotorConfiguration.xaml.cs">
       <DependentUpon>MotorConfiguration.xaml</DependentUpon>
     </Compile>
     <Compile Include="uc\ParameterControl.xaml.cs">
       <DependentUpon>ParameterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="uc\TrajectoryLibraryDialog.xaml.cs">
+      <DependentUpon>TrajectoryLibraryDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VersionUpgrade.xaml.cs">
+      <DependentUpon>VersionUpgrade.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ConnectViewModel.cs" />
     <Compile Include="ViewModel\JoinMotionParametersViewModel.cs" />
     <Compile Include="ViewModel\JoinParampeterViewModel.cs" />
     <Compile Include="ViewModel\JointMotionNode.cs" />
+    <Compile Include="ViewModel\ListsAndGridsViewModel.cs" />
+    <Compile Include="ViewModel\ListsUpdateGridsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Page Include="ConnectPage.xaml">
       <SubType>Designer</SubType>
@@ -208,6 +222,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="uc\ParameterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="uc\TrajectoryLibraryDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VersionUpgrade.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
