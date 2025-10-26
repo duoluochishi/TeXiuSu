@@ -165,3 +165,5 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\TeXiuSi.csproj.Up2Date
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\x64\Debug\ShowMeTheXAML.dll
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\uc\TrajectoryLibraryDialog.g.cs
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\uc\TrajectoryLibraryDialog.baml
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\VersionUpgrade.g.cs
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\x64\Debug\VersionUpgrade.baml

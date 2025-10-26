@@ -50,7 +50,7 @@
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <Button Width='120' HorizontalAlignment="Left" Margin="10 0 0 0" Command="{Binding ConnectArmCommand}">机械臂通讯</Button>
+            <Button Width='120' HorizontalAlignment="Left" Margin="10 0 0 0" Click="Button_Click">机械臂通讯</Button>
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 20 0">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">速度：</TextBlock>
                 <Slider  HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -60,26 +60,26 @@
             </StackPanel>
 
 
-            <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White" Command="{Binding DisableArmCommand}">失能</Button>
-            <Button Grid.Column="4" Width='80' HorizontalAlignment="Left" Margin="10 0 0 0" Foreground="White" Command="{Binding EmergencyStopCommand}">急停</Button>
+            <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White">失能</Button>
+            <Button Grid.Column="4" Width='80' HorizontalAlignment="Left" Margin="10 0 0 0" Foreground="White">急停</Button>
             <Button x:Name="btnMin" Grid.Column="5"
   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
   Style="{StaticResource MaterialDesignIconButton}"
-  ToolTip="MaterialDesignIconButton" Command="{Binding MinimizeWindowCommand}">
+  ToolTip="MaterialDesignIconButton" Click="btnMin_Click">
                 <materialDesign:PackIcon
     Kind="WindowMinimize" />
             </Button>
             <Button Grid.Column="6" x:Name="btnMax" 
 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
 Style="{StaticResource MaterialDesignIconButton}"
-ToolTip="MaterialDesignIconButton" Command="{Binding MaximizeWindowCommand}">
+ToolTip="MaterialDesignIconButton" Click="btnMax_Click">
                 <materialDesign:PackIcon
   Kind="WindowMaximize" />
             </Button>
             <Button Grid.Column="7" x:Name="btnClose" 
 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
 Style="{StaticResource MaterialDesignIconButton}"
-ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
+ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                 <materialDesign:PackIcon
   Kind="WindowClose" />
             </Button>
@@ -162,10 +162,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     <RowDefinition></RowDefinition>
                                                                 </Grid.RowDefinitions>
                                                                 <StackPanel>
-                                                                    <Button
+                                                                    <Button Name="ZMinusButton1"
                                                                     Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}"
-                                                                    ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                    Command="{Binding PointMotionCommand}" CommandParameter="Z-">
+ ToolTip="Z轴负方向"
+            Command="{Binding ZMinusCommand1}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -174,26 +175,15 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Z-</TextBlock>
                                                                 </StackPanel>
 
-                                                                <StackPanel Grid.Row="1" Grid.Column="1">
 
-                                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y-</TextBlock>
-                                                                    <Button
-                                                            Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding PointMotionCommand}" CommandParameter="Y-">
-                                                                        <materialDesign:PackIcon
-                                                                        Width="34"
-                                                                        Height="34"
-                                                                        Kind="ArrowLeft" />
-                                                                    </Button>
-                                                                </StackPanel>
                                                                 <StackPanel Grid.Column="2">
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">X+</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="XPlusButton1"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding PointMotionCommand}" CommandParameter="X+">
+  ToolTip="X轴正方向"
+            Command="{Binding XPlusCommand1}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -202,10 +192,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 </StackPanel>
 
                                                                 <StackPanel Grid.Column="4">
-                                                                    <Button
+                                                                    <Button Name="ZPlusButton1"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding PointMotionCommand}" CommandParameter="Z+">
+ ToolTip="Z轴正方向"
+            Command="{Binding ZPlusCommand1}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -218,10 +209,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 <StackPanel Grid.Row="1" Grid.Column="1" >
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y-</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="YMinusButton1"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding PointMotionCommand}" CommandParameter="Y-">
+ ToolTip="Y轴负方向"
+            Command="{Binding YMinusCommand1}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -232,10 +224,10 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 <StackPanel Grid.Row="1" Grid.Column="3">
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y+</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="YPlusButton1"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding PointMotionCommand}" CommandParameter="Y+">
+            ToolTip="Y轴正方向"
+            Command="{Binding YPlusCommand1}">
                                                                         <materialDesign:PackIcon
                                                                 Width="34"
                                                                 Height="34"
@@ -243,11 +235,12 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     </Button>
                                                                 </StackPanel>
                                                                 <StackPanel Grid.Row="2" Grid.Column="2">
-                                                                    <Button
+                                                                    <Button Name="XMinusButton1"
                                                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding PointMotionCommand}" CommandParameter="X-">
+ ToolTip="X轴负方向"
+            Command="{Binding XMinusCommand1}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -355,10 +348,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     <RowDefinition></RowDefinition>
                                                                 </Grid.RowDefinitions>
                                                                 <StackPanel>
-                                                                    <Button
+                                                                    <Button Name="ZMinusButton2"
                                                                     Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}"
-                                                                    ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                    Command="{Binding ArmPoseCommand}" CommandParameter="Z-">
+  ToolTip="Z轴负方向"
+            Command="{Binding ZMinusCommand2}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -367,26 +361,15 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Z-</TextBlock>
                                                                 </StackPanel>
 
-                                                                <StackPanel Grid.Row="1" Grid.Column="1">
 
-                                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y-</TextBlock>
-                                                                    <Button
-                                                            Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding ArmPoseCommand}" CommandParameter="Y-">
-                                                                        <materialDesign:PackIcon
-                                                                        Width="34"
-                                                                        Height="34"
-                                                                        Kind="ArrowLeft" />
-                                                                    </Button>
-                                                                </StackPanel>
                                                                 <StackPanel Grid.Column="2">
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">X+</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="XPlusButton2"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding ArmPoseCommand}" CommandParameter="X+">
+ToolTip="X轴正方向"
+            Command="{Binding XPlusCommand2}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -395,10 +378,10 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 </StackPanel>
 
                                                                 <StackPanel Grid.Column="4">
-                                                                    <Button
+                                                                    <Button Name="ZPlusButton2"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                            ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                            Command="{Binding ArmPoseCommand}" CommandParameter="Z+">
+                                                            ToolTip="Z轴正方向"
+            Command="{Binding ZPlusCommand2}">
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -411,10 +394,9 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 <StackPanel Grid.Row="1" Grid.Column="1" >
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y-</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="YMinusButton2"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding ArmPoseCommand}" CommandParameter="Y-">
+                                                                ToolTip="Y轴负方向" Command="{Binding YMinusCommand2}">
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -425,10 +407,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                 <StackPanel Grid.Row="1" Grid.Column="3">
 
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">Y+</TextBlock>
-                                                                    <Button
+                                                                    <Button Name="YPlusButton2"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding ArmPoseCommand}" CommandParameter="Y+">
+                                                                ToolTip="Y轴正方向"
+Command="{Binding YPlusCommand2}">
+
                                                                         <materialDesign:PackIcon
                                                                 Width="34"
                                                                 Height="34"
@@ -436,11 +419,11 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                                     </Button>
                                                                 </StackPanel>
                                                                 <StackPanel Grid.Row="2" Grid.Column="2">
-                                                                    <Button
+                                                                    <Button Name="XMinusButton2"
                                                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-                                                                ToolTip="MaterialDesignFloatingActionSecondaryDarkButton"
-                                                                Command="{Binding ArmPoseCommand}" CommandParameter="X-">
+                                                                ToolTip="X轴负方向"  Command="{Binding XMinusCommand2}">
+
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -522,10 +505,13 @@ ToolTip="MaterialDesignIconButton" Command="{Binding CloseWindowCommand}">
                                                         </GroupBox>
                                                     </StackPanel>
 
+
+
                                                     <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Left" Margin="122,0,0,0" >
-                                                        <Button Width="150" Height="50"
-Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding HomeCommand}">
+                                                        <Button Name="ResetToZeroButton" 
+ Width="150" Height="50"
+Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZeroCommand}">
+
                                                             <StackPanel Orientation="Horizontal">
                                                                 <materialDesign:PackIcon
         Kind="ApproximatelyEqual" 
@@ -534,9 +520,10 @@ Command="{Binding HomeCommand}">
         Text="回零" />
                                                             </StackPanel>
                                                         </Button>
-                                                        <Button Width="150" Height="50" Margin="30 0"
-    Style="{StaticResource MaterialDesignRaisedButton}"
-    Command="{Binding LoadCommand}">
+                                                        <Button Name="LoadButton" 
+ Width="150" Height="50" Margin="30 0"
+    Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadCommand}">
+
                                                             <StackPanel Orientation="Horizontal">
                                                                 <materialDesign:PackIcon
             Kind="CellphoneArrowDownVariant" 
@@ -545,9 +532,9 @@ Command="{Binding HomeCommand}">
             Text="装载" />
                                                             </StackPanel>
                                                         </Button>
-                                                        <Button Width="150" Height="50"
-    Style="{StaticResource MaterialDesignRaisedButton}"
-    Command="{Binding SendCommand}">
+                                                        <Button Name="SendButton" 
+ Width="150" Height="50"
+    Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding SendCommand}">
                                                             <StackPanel Orientation="Horizontal">
                                                                 <materialDesign:PackIcon
             Kind="Send" 
@@ -559,6 +546,8 @@ Command="{Binding HomeCommand}">
                                                     </StackPanel>
 
                                                 </StackPanel>
+
+                                                <!--画弧-->
                                                 <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsArcMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
@@ -569,14 +558,14 @@ Command="{Binding HomeCommand}">
                                                             <RowDefinition Height="60"></RowDefinition>
                                                             <RowDefinition Height="70"></RowDefinition>
                                                         </Grid.RowDefinitions>
-                                                   
-                                                    <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
-                                                        <GroupBox.Header >
-                                                            <StackPanel Orientation="Horizontal">
+
+                                                        <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
+                                                            <GroupBox.Header >
+                                                                <StackPanel Orientation="Horizontal">
                                                                     <TextBlock Foreground="White"  Margin="8,0,0,0" Text="起点（长度单位：mm）" />
                                                                 </StackPanel>
-                                                        </GroupBox.Header>
-                                                            <Grid Margin="20"> 
+                                                            </GroupBox.Header>
+                                                            <Grid Margin="20">
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition></RowDefinition>
                                                                     <RowDefinition></RowDefinition>
@@ -653,7 +642,7 @@ FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
                                                             </Grid>
-                                                           
+
                                                         </GroupBox>
                                                         <GroupBox Grid.Row="1" Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                             <GroupBox.Header >
@@ -755,7 +744,7 @@ FormatString="F2"  Height="40"
                                                                     <ColumnDefinition></ColumnDefinition>
                                                                     <ColumnDefinition></ColumnDefinition>
                                                                     <ColumnDefinition></ColumnDefinition>
-                                                                </grid.ColumnDefinitions>
+                                                                </Grid.ColumnDefinitions>
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
@@ -842,8 +831,9 @@ Style="{StaticResource MaterialDesignOutlinedComboBox}"
 ItemsSource="{StaticResource Position}"
                                 SelectedIndex="1"
 />
-                                                                <Button  Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"
-                                                                         Command="{Binding LoadArcMotionCommand}">
+                                                                <Button Name="LoadInstructionPointButton"
+  Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"   Command="{Binding LoadInstructionPointCommand}">
+
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <materialDesign:PackIcon
 Kind="UploadNetwork" 
@@ -852,8 +842,8 @@ Margin="0 0 8 0" />
 Text="装载" />
                                                                     </StackPanel>
                                                                 </Button>
-                                                                <Button  Grid.Column="3" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0"
-                                                                         Command="{Binding SendArcMotionCommand}">
+                                                                <Button Name="SendInstructionPointButton"  Grid.Column="3" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 0 0" Command="{Binding SendInstructionPointCommand}">
+
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <materialDesign:PackIcon
 Kind="Send" 
@@ -865,8 +855,8 @@ Text="发送" />
                                                             </Grid>
                                                         </StackPanel>
 
-                                                        <Button  Grid.Row="5" Width="500"  Grid.ColumnSpan="3" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 0 0"
-                                                                 Command="{Binding DrawArcCommand}">
+                                                        <Button Name="DrawArcButton"
+ Grid.Row="5" Width="500"  Grid.ColumnSpan="3" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 0 0" Command="{Binding DrawArcCommand}">
                                                             <StackPanel Orientation="Horizontal">
                                                                 <materialDesign:PackIcon
 Kind="Send" 
@@ -877,11 +867,14 @@ Text="画弧" />
                                                         </Button>
                                                     </Grid>
                                                 </StackPanel>
+
+                                                <!--JointMotionVisible-->
+
                                                 <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsJointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
-                                                        <GroupBox.Header >
+                                                        <GroupBox.Header>
                                                             <StackPanel Orientation="Horizontal">
-                                                                <TextBlock Foreground="White"  Margin="8,0,0,0" Text="关节度数" />
+                                                                <TextBlock Foreground="White" Margin="8,0,0,0" Text="关节度数" />
                                                             </StackPanel>
                                                         </GroupBox.Header>
                                                         <Grid Margin="20">
@@ -900,159 +893,154 @@ Text="画弧" />
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                                 <ColumnDefinition Width="70"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
+
+                                                            <!-- 关节1 -->
                                                             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 1：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J1-">
-                                                                            <materialDesign:PackIcon
-                                                                                    Width="32" 
-                                                                                    Height="32" 
-                                                                                    Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节1：</TextBlock>
+                                                                <Button Name="Joint1DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint1DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-
-  materialDesign:HintAssist.Hint="0.000">
-                                                                    
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J1+">
-                                                                    <materialDesign:PackIcon
-                                                                                    Width="32" 
-                                                                                    Height="32" 
-                                                                                    Kind="Plus" />
+                                                                <TextBox Name="Joint1TextBox" Width="400"
+                         Text="{Binding Joint1Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint1IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint1IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 关节2 -->
                                                             <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 2：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J2-">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节2：</TextBlock>
+                                                                <Button Name="Joint2DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint2DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J2+">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                                <TextBox Name="Joint2TextBox" Width="400"
+                         Text="{Binding Joint2Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint2IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint2IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 关节3 -->
                                                             <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 3：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J3-">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节3：</TextBlock>
+                                                                <Button Name="Joint3DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint3DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J3+">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                                <TextBox Name="Joint3TextBox" Width="400"
+                         Text="{Binding Joint3Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint3IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint3IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 关节4 -->
                                                             <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 4：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J4-">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节4：</TextBlock>
+                                                                <Button Name="Joint4DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint4DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J4+">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                                <TextBox Name="Joint4TextBox" Width="400"
+                         Text="{Binding Joint4Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint4IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint4IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 关节5 -->
                                                             <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 5：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J5-">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节5：</TextBlock>
+                                                                <Button Name="Joint5DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint5DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J5+">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                                <TextBox Name="Joint5TextBox" Width="400"
+                         Text="{Binding Joint5Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint5IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint5IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 关节6 -->
                                                             <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> 关节 6：</TextBlock>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J6-">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节6：</TextBlock>
+                                                                <Button Name="Joint6DecreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint6DecreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                                 </Button>
-                                                                <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                                </TextBox>
-                                                                <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                        Command="{Binding AdjustJointDegreeCommand}" CommandParameter="J6+">
-                                                                    <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                                <TextBox Name="Joint6TextBox" Width="400"
+                         Text="{Binding Joint6Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="0.000"/>
+                                                                <Button Name="Joint6IncreaseButton"
+                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        Margin="0 0 10 0"
+                        Command="{Binding Joint6IncreaseCommand}">
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                                 </Button>
                                                             </StackPanel>
+
+                                                            <!-- 底部按钮 -->
                                                             <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center">
-                                                                <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 30 0"
-                                                                        Command="{Binding HomeJointCommand}">
+                                                                <Button Name="JointResetToZeroButton"
+                        Width="300" Height="50" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        Margin="0 0 30 0"
+                        Command="{Binding JointResetToZeroCommand}">
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <materialDesign:PackIcon
-Kind="ChartLineVariant" 
-Margin="0 0 8 0" />
-                                                                        <TextBlock
-Text="回零" />
+                                                                        <materialDesign:PackIcon Kind="ChartLineVariant" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="回零" />
                                                                     </StackPanel>
                                                                 </Button>
-                                                                <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                                        Command="{Binding EditJointCommand}">
+                                                                <Button Name="JointEditButton"
+                        Width="300" Height="50" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Command="{Binding JointEditCommand}">
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <materialDesign:PackIcon
-Kind="LinkEdit" 
-Margin="0 0 8 0" />
-                                                                        <TextBlock
-Text="编辑" />
+                                                                        <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="编辑" />
                                                                     </StackPanel>
                                                                 </Button>
                                                             </StackPanel>
                                                         </Grid>
-
                                                     </GroupBox>
                                                 </StackPanel>
+                                                <!--StraightLineMotionVisible-->
+
                                                 <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsStraightLineMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid Margin="20 50 20 20">
                                                         <Grid.RowDefinitions>
@@ -1070,157 +1058,152 @@ Text="编辑" />
                                                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                             <ColumnDefinition Width="70"></ColumnDefinition>
                                                         </Grid.ColumnDefinitions>
+
+                                                        <!-- X坐标 -->
                                                         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> X(mm)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="X-">
-                                                                <materialDesign:PackIcon
-                                                                                    Width="32" 
-                                                                                    Height="32" 
-                                                                                    Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">X(mm)：</TextBlock>
+                                                            <Button Name="XDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding XDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-  materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="X+">
-                                                                <materialDesign:PackIcon
-                                                                                    Width="32" 
-                                                                                    Height="32" 
-                                                                                    Kind="Plus" />
+                                                            <TextBox Name="XTextBox" Width="400"
+                     Text="{Binding StraightLineX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="XIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding XIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- Y坐标 -->
                                                         <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> Y(mm)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="Y-">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Y(mm)：</TextBlock>
+                                                            <Button Name="YDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding YDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="Y+">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                            <TextBox Name="YTextBox" Width="400"
+                     Text="{Binding StraightLineY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="YIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding YIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- Z坐标 -->
                                                         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> Z(mm)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="Z-">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Z(mm)：</TextBlock>
+                                                            <Button Name="ZDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding ZDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="Z+">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                            <TextBox Name="ZTextBox" Width="400"
+                     Text="{Binding StraightLineZ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="ZIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding ZIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- RX角度 -->
                                                         <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RX(°)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RX-">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">RX(°)：</TextBlock>
+                                                            <Button Name="RxDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RxDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RX+">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                            <TextBox Name="RxTextBox" Width="400"
+                     Text="{Binding StraightLineRx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="RxIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RxIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- RY角度 -->
                                                         <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RY(°)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RY-">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">RY(°)：</TextBlock>
+                                                            <Button Name="RyDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RyDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RY+">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                            <TextBox Name="RyTextBox" Width="400"
+                     Text="{Binding StraightLineRy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="RyIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RyIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- RZ角度 -->
                                                         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0"> RZ(°)：</TextBlock>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RZ-">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Minus" />
+                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">RZ(°)：</TextBlock>
+                                                            <Button Name="RzDecreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RzDecreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
                                                             </Button>
-                                                            <TextBox Width="400"
-materialDesign:HintAssist.Hint="0.000">
-
-                                                            </TextBox>
-                                                            <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" Margin="0 0 10 0"
-                                                                    Command="{Binding AdjustLinearMotionCommand}" CommandParameter="RZ+">
-                                                                <materialDesign:PackIcon
-                                                                                  Width="32" 
-                                                                                  Height="32" 
-                                                                                  Kind="Plus" />
+                                                            <TextBox Name="RzTextBox" Width="400"
+                     Text="{Binding StraightLineRz, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.Hint="0.000"/>
+                                                            <Button Name="RzIncreaseButton"
+                    Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                    Margin="0 0 10 0"
+                    Command="{Binding RzIncreaseCommand}">
+                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
                                                             </Button>
                                                         </StackPanel>
+
+                                                        <!-- 底部按钮 -->
                                                         <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center">
-                                                            <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 30 0"
-                                                                    Command="{Binding HomeLinearCommand}">
+                                                            <Button Name="StraightLineResetToZeroButton"
+                    Width="300" Height="50" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" 
+                    Margin="0 0 30 0"
+                    Command="{Binding StraightLineResetToZeroCommand}">
                                                                 <StackPanel Orientation="Horizontal">
-                                                                    <materialDesign:PackIcon
-Kind="ChartLineVariant" 
-Margin="0 0 8 0" />
-                                                                    <TextBlock
-Text="回零" />
+                                                                    <materialDesign:PackIcon Kind="ChartLineVariant" Margin="0 0 8 0" />
+                                                                    <TextBlock Text="回零" />
                                                                 </StackPanel>
                                                             </Button>
-                                                            <Button Width="300" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                                    Command="{Binding EditLinearCommand}">
+                                                            <Button Name="StraightLineEditButton"
+                    Width="300" Height="50" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Command="{Binding StraightLineEditCommand}">
                                                                 <StackPanel Orientation="Horizontal">
-                                                                    <materialDesign:PackIcon
-Kind="LinkEdit" 
-Margin="0 0 8 0" />
-                                                                    <TextBlock
-Text="编辑" />
+                                                                    <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
+                                                                    <TextBlock Text="编辑" />
                                                                 </StackPanel>
                                                             </Button>
                                                         </StackPanel>
                                                     </Grid>
                                                 </StackPanel>
-                                                
+
                                             </Grid>
                                         </TabItem>
                                         <TabItem
@@ -1281,8 +1264,7 @@ Text="编辑" />
     SelectedItem="{Binding SelectedAddressOffsetMode}"
     Style="{StaticResource MaterialDesignOutlinedComboBox}" Margin="54,0,0,0"
     />
-                                                <Button Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45" Grid.Column="2" Margin="205,0,0,0"
-                                                        Command="{Binding ConfirmLinkageSettingsCommand}">确认</Button>
+                                                <Button Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45" Grid.Column="2" Margin="205,0,0,0">确认</Button>
                                             </Grid>
                                         </TabItem>
                                         <TabItem
@@ -1377,19 +1359,16 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
 
                                                 <TextBlock Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">夹爪状态:</TextBlock>
 
-                                                <Button Grid.Row="5" Grid.Column="1" Width="150" HorizontalAlignment="Right"
-                                                        Command="{Binding DisableClawCommand}">失能</Button>
+                                                <Button Grid.Row="5" Grid.Column="1" Width="150" HorizontalAlignment="Right">失能</Button>
 
                                                 <TextBlock Grid.Row="6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">清除错误:</TextBlock>
 
-                                                <Button Grid.Row="6" Grid.Column="1" Width="150" HorizontalAlignment="Right"
-                                                        Command="{Binding ClearClawErrorCommand}">确认</Button>
+                                                <Button Grid.Row="6" Grid.Column="1" Width="150" HorizontalAlignment="Right">确认</Button>
 
                                                 <TextBlock Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="23" Margin="0 10 10 10">设置零点:</TextBlock>
 
 
-                                                <Button Grid.Row="7" Grid.Column="1" Width="150" HorizontalAlignment="Right"
-                                                        Command="{Binding SetClawZeroPointCommand}">确认</Button>
+                                                <Button Grid.Row="7" Grid.Column="1" Width="150" HorizontalAlignment="Right">确认</Button>
                                             </Grid>
                                         </TabItem>
                                     </TabControl>
@@ -1404,11 +1383,10 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
       Header="电机设置">
                             <uc:MotorConfiguration/>
                         </TabItem>
-                       
+
                     </TabControl>
                 </materialDesign:Card>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 160"
-                        Command="{Binding OpenTrajectoryLibraryCommand}">
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 160" Click="Button_Click_1">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon
 Kind="Bookshelf" 
@@ -1417,12 +1395,8 @@ Margin="0 0 8 0" />
 Text="轨迹库" />
                     </StackPanel>
                 </Button>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80"
-                        Command="{Binding ShowJointStatusCommand}">关节状态</Button>
-
-
-                <Button x:Name="btnUpdate" Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        Command="{Binding UpgradeVersionCommand}">版本升级</Button>
+                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80" Click="Button_Click_2">关节状态</Button>
+                <Button x:Name="btnUpdate" Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnUpdate_Click">版本升级</Button>
             </Grid>
 
             <Grid Grid.Column="1" >
@@ -1443,8 +1417,7 @@ Text="轨迹库" />
                 </helix:HelixViewport3D>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button Width="150" Height="50" Margin="0 0 20 0"
-Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding ResetViewCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="VideoOutline" 
@@ -1454,8 +1427,7 @@ Command="{Binding ResetViewCommand}">
                         </StackPanel>
                     </Button>
                     <Button Width="150" Height="50"
-Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding OpenSettingsCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="CogOutline" 
