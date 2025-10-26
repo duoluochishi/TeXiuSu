@@ -7,6 +7,13 @@ using TeXiuSi.Model;
 
 namespace TeXiuSi.ViewModel
 {
+    // 通用的枚举绑定项类（如果尚未定义）
+    public class EnumBindingItem<T> where T : Enum
+    {
+        public string DisplayName { get; set; }
+        public T Value { get; set; }
+    }
+
     public partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
