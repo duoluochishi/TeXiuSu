@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TeXiuSi.ViewModel;
 
 namespace TeXiuSi.uc
 {
@@ -20,9 +22,12 @@ namespace TeXiuSi.uc
     /// </summary>
     public partial class MotorConfiguration : UserControl
     {
+
+
         public MotorConfiguration()
         {
             InitializeComponent();
+            this.DataContext = new MotorConfigurationViewModel();
         }
 
         internal void ShowDialog()

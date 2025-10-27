@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TeXiuSi.ViewModel;
 
 namespace TeXiuSi.uc
 {
@@ -24,6 +25,7 @@ namespace TeXiuSi.uc
         public ParameterControl()
         {
             InitializeComponent();
+            this.DataContext = new ParameterControlViewModel();
         }
 
         private void btnsportInfo_Click(object sender, RoutedEventArgs e)

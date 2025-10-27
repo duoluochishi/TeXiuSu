@@ -941,5 +941,15 @@ namespace TeXiuSi
             VersionUpgrade versionUpgrade = new VersionUpgrade();
             versionUpgrade.ShowDialog();
         }
+
+        private void btnViewRefresh_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSet_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

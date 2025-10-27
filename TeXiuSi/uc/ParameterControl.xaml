@@ -153,9 +153,17 @@ Text="rand/s∧2" Grid.Row="4" Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left" Margin="0 0 0 0" FontSize="12"
 IsHitTestVisible="False" />
+                        
                         <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0"
-                                 Command="{Binding EditJointLimitParametersCommand}">编辑</Button>
-
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding JointSettingEditorCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+        Kind="ClipboardEditOutline" 
+        Margin="0 0 8 0" />
+                                <TextBlock
+        Text="编辑" />
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </GroupBox>
             </TabItem>
@@ -186,7 +194,7 @@ Style="{StaticResource MaterialDesignOutlinedComboBox}"
 ItemsSource="{StaticResource LoadValues}"
                                 SelectedIndex="1"
 />
-                            <Button Height="45" Width="180" Grid.Column="2" Command="{Binding ConfirmLoadValueCommand}">确定</Button>
+                            <Button Height="45" Width="180" Grid.Column="2" Command="{Binding TerminalSettingConfirmCommand}">确定</Button>
                         </Grid>
                     </GroupBox>
                     <Grid Grid.Row="1">
@@ -270,7 +278,19 @@ Text="rad/s"  Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
+                        
+                        
                     </Grid>
+                    <Button  Grid.Row="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon
+        Kind="ClipboardEditOutline" 
+        Margin="0 0 8 0" />
+                            <TextBlock
+        Text="编辑" />
+                        </StackPanel>
+                    </Button>
                 </Grid>
 
             </TabItem>
@@ -372,9 +392,17 @@ Value="{Binding PopupHorizontalOffset}" >
                                 <materialDesign:PackIcon Kind="MinusCircle " />
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
-                        <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0"
-                                 Command="{Binding EditCollisionProtectionLevelCommand}">编辑</Button>
-
+                       
+                        <Button  Grid.Row="5" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollisionGradeEditor}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon
+        Kind="ClipboardEditOutline" 
+        Margin="0 0 8 0" />
+                                <TextBlock
+        Text="编辑" />
+                            </StackPanel>
+                        </Button>
                     </Grid>
                 </GroupBox>
             </TabItem>

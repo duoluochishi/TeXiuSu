@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,7 +19,17 @@ namespace TeXiuSi.ViewModel
     public partial class MainViewModel : ObservableObject
     {
 
-        #region MainPanel1
+        #region 
+
+        //失能 急停 视角还原 设置（直接）disabled scram
+        public IRelayCommand DisabledCommand { get; }
+
+        public IRelayCommand ScramCommand { get; }
+
+        #endregion
+
+
+        #region motion control
 
 
         public IRelayCommand ZMinusCommand1 { get; }
@@ -196,6 +207,127 @@ namespace TeXiuSi.ViewModel
         public IRelayCommand StraightLineEditCommand { get; }
         #endregion
 
+
+        #region 联动控制
+
+
+        public IRelayCommand LinkageControlCommand { get; }
+
+
+        private EnumBindingItem<LinkageSettings> _selectedLinkageSettingsMode;
+        public EnumBindingItem<LinkageSettings> SelectedLinkageSettingsMode
+        {
+            get { return _selectedLinkageSettingsMode; }
+            set
+            {
+                _selectedLinkageSettingsMode = value;
+                OnPropertyChanged();
+                if (_selectedLinkageSettingsMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedLinkageSettingsMode.DisplayName}，枚举值为: {_selectedLinkageSettingsMode.Value}");
+                }
+            }
+        }
+
+        private EnumBindingItem<FeedbackCommand> _selectedFeedbackCommandMode;
+        public EnumBindingItem<FeedbackCommand> SelectedFeedbackCommandMode
+        {
+            get { return _selectedFeedbackCommandMode; }
+            set
+            {
+                _selectedFeedbackCommandMode = value;
+                OnPropertyChanged();
+                if (_selectedFeedbackCommandMode != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedFeedbackCommandMode.DisplayName}，枚举值为: {_selectedFeedbackCommandMode.Value}");
+                }
+            }
+        }
+
+
+        #endregion
+
+
+        #region 夹爪控制
+
+
+        public IRelayCommand JawControlCommand { get; }
+
+
+
+        private EnumBindingItem<EnergyState> _selectedJawStatus;
+        public EnumBindingItem<EnergyState> SelectedJawStatus
+        {
+            get { return _selectedJawStatus; }
+            set
+            {
+                _selectedJawStatus = value;
+                OnPropertyChanged();
+                if (_selectedJawStatus != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedJawStatus.DisplayName}，枚举值为: {_selectedJawStatus.Value}");
+                }
+            }
+        }
+
+
+        private ObservableCollection<EnumBindingItem<EnergyState>> _jawStatus;
+        public ObservableCollection<EnumBindingItem<EnergyState>> JawStatus
+        {
+            get { return _jawStatus; }
+            set { _jawStatus = value; OnPropertyChanged(); }
+        }
+
+        private EnumBindingItem<YesOrNo> _selectedJClearAbout;
+        public EnumBindingItem<YesOrNo> SelectedClearAbout
+        {
+            get { return _selectedJClearAbout; }
+            set
+            {
+                _selectedJClearAbout = value;
+                OnPropertyChanged();
+                if (_selectedJClearAbout != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedJClearAbout.DisplayName}，枚举值为: {_selectedJClearAbout.Value}");
+                }
+            }
+        }
+
+
+        private ObservableCollection<EnumBindingItem<YesOrNo>> _beClearAboutMistakes;
+        public ObservableCollection<EnumBindingItem<YesOrNo>> BeClearAboutMistakes
+        {
+            get { return _beClearAboutMistakes; }
+            set { _beClearAboutMistakes = value; OnPropertyChanged(); }
+        }
+
+        private EnumBindingItem<YesOrNo> _selectedJSetZero;
+        public EnumBindingItem<YesOrNo> SelectedSetZero
+        {
+            get { return _selectedJSetZero; }
+            set
+            {
+                _selectedJSetZero = value;
+                OnPropertyChanged();
+                if (_selectedJSetZero != null)
+                {
+                    Console.WriteLine($"选择了: {_selectedJSetZero.DisplayName}，枚举值为: {_selectedJSetZero.Value}");
+                }
+            }
+        }
+
+
+        private ObservableCollection<EnumBindingItem<YesOrNo>> _setZero;
+        public ObservableCollection<EnumBindingItem<YesOrNo>> SetZero
+        {
+            get { return _setZero; }
+            set { _setZero = value; OnPropertyChanged(); }
+        }
+
+
+
+        #endregion
+
         // 通用的枚举绑定项类（如果尚未定义）
         public class EnumBindingItem<T> where T : Enum
         {
@@ -286,20 +418,6 @@ namespace TeXiuSi.ViewModel
             set { _linkageSettingsModes = value; OnPropertyChanged(); }
         }
 
-        private EnumBindingItem<LinkageSettings> _selectedLinkageSettingsMode;
-        public EnumBindingItem<LinkageSettings> SelectedLinkageSettingsMode
-        {
-            get { return _selectedLinkageSettingsMode; }
-            set
-            {
-                _selectedLinkageSettingsMode = value;
-                OnPropertyChanged();
-                if (_selectedLinkageSettingsMode != null)
-                {
-                    Console.WriteLine($"选择了: {_selectedLinkageSettingsMode.DisplayName}，枚举值为: {_selectedLinkageSettingsMode.Value}");
-                }
-            }
-        }
 
         private ObservableCollection<EnumBindingItem<FeedbackCommand>> _feedbackCommandModes;
         public ObservableCollection<EnumBindingItem<FeedbackCommand>> FeedbackCommandModes
@@ -308,20 +426,6 @@ namespace TeXiuSi.ViewModel
             set { _feedbackCommandModes = value; OnPropertyChanged(); }
         }
 
-        private EnumBindingItem<FeedbackCommand> _selectedFeedbackCommandMode;
-        public EnumBindingItem<FeedbackCommand> SelectedFeedbackCommandMode
-        {
-            get { return _selectedFeedbackCommandMode; }
-            set
-            {
-                _selectedFeedbackCommandMode = value;
-                OnPropertyChanged();
-                if (_selectedFeedbackCommandMode != null)
-                {
-                    Console.WriteLine($"选择了: {_selectedFeedbackCommandMode.DisplayName}，枚举值为: {_selectedFeedbackCommandMode.Value}");
-                }
-            }
-        }
 
         private ObservableCollection<EnumBindingItem<ControlInstruction>> _controlInstructionModes;
         public ObservableCollection<EnumBindingItem<ControlInstruction>> ControlInstructionModes
@@ -511,6 +615,56 @@ namespace TeXiuSi.ViewModel
             if (AddressOffsetModes.Count > 0)
                 SelectedAddressOffsetMode = AddressOffsetModes[0];
 
+
+            // 初始化夹爪设置指令
+            JawStatus = new ObservableCollection<EnumBindingItem<EnergyState>>();
+            foreach (EnergyState mode in Enum.GetValues(typeof(EnergyState)))
+            {
+                JawStatus.Add(new EnumBindingItem<EnergyState>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (JawStatus.Count > 0)
+                SelectedJawStatus = JawStatus[0];
+
+
+
+            // 清除错误
+            BeClearAboutMistakes = new ObservableCollection<EnumBindingItem<YesOrNo>>();
+            foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
+            {
+                BeClearAboutMistakes.Add(new EnumBindingItem<YesOrNo>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (JawStatus.Count > 0)
+                SelectedClearAbout = BeClearAboutMistakes[0];
+
+
+            // 初始化夹爪设置指令零点
+            SetZero = new ObservableCollection<EnumBindingItem<YesOrNo>>();
+            foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
+            {
+                SetZero.Add(new EnumBindingItem<YesOrNo>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (SetZero.Count > 0)
+                SelectedSetZero = SetZero[0];
+
+
+            #region MainControl
+            DisabledCommand = new RelayCommand(OnDisabled);
+
+            ScramCommand = new RelayCommand(OnScram);
+            #endregion
+
             // 实例化 RelayCommand，传入要执行的方法
             #region MainPanel1
             // 初始化所有命令
@@ -585,6 +739,17 @@ namespace TeXiuSi.ViewModel
             StraightLineResetToZeroCommand = new RelayCommand(OnStraightLineResetToZero);
             StraightLineEditCommand = new RelayCommand(OnStraightLineEdit);
             #endregion
+
+
+            #region 联动控制
+            LinkageControlCommand = new RelayCommand(OnLinkageControl);
+            #endregion
+
+
+            #region 夹爪控制
+            JawControlCommand = new RelayCommand(OnJawageControl);
+
+            #endregion
         }
         private void InitializeDefaultValues()
         {
@@ -600,6 +765,33 @@ namespace TeXiuSi.ViewModel
 
             SelectedInstructionPointIndex = 1;
         }
+
+        #region MainControl
+        private void OnDisabled()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"直线运动回零失败: {ex.Message}");
+            }
+        }
+        private void OnScram()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"直线运动回零失败: {ex.Message}");
+            }
+        }
+
+        #endregion
+
         #region 
         // 第一个GroupBox的命令方法
         private void OnZMinus1()
@@ -1188,6 +1380,34 @@ namespace TeXiuSi.ViewModel
             // 发送直线运动指令到设备
             // 这里需要根据您的具体设备通信协议实现
         }
+
+        #region 联动控制
+        private void OnLinkageControl()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"联动控制失败: {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 夹爪控制
+        private void OnJawageControl()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"联动控制失败: {ex.Message}");
+            }
+        }
+        #endregion
     }
 
     // 直线运动坐标数据结构
@@ -1220,6 +1440,7 @@ namespace TeXiuSi.ViewModel
             return $"X:{X:F3}, Y:{Y:F3}, Z:{Z:F3}, Rx:{Rx:F3}, Ry:{Ry:F3}, Rz:{Rz:F3}";
         }
         #endregion
+
 
     }
     // 辅助类 - 6维坐标点

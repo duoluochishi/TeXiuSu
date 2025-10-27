@@ -169,6 +169,7 @@
     <Compile Include="Model\JointMotionNodeModel.cs" />
     <Compile Include="Model\JointParamenterModel.cs" />
     <Compile Include="Model\JointParameterNodel.cs" />
+    <Compile Include="ViewModel\MotorConfigurationViewModel.cs" />
     <Compile Include="Model\SelectableViewModel.cs" />
     <Compile Include="Model\Sports.cs" />
     <Compile Include="Model\UpDateTableViewModel.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="ViewModel\ListsAndGridsViewModel.cs" />
     <Compile Include="ViewModel\ListsUpdateGridsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ParameterControlViewModel.cs" />
     <Page Include="ConnectPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -134,3 +134,8 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.pdb
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe.config
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\ConnectPage.g.cs
 D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\ConnectPage.baml
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\ShowMeTheXAML.dll
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\TrajectoryLibraryDialog.g.cs
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\VersionUpgrade.g.cs
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\TrajectoryLibraryDialog.baml
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\VersionUpgrade.baml

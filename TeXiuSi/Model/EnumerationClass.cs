@@ -129,4 +129,28 @@ namespace TeXiuSi.Model
     {
         cmode = 0x33 // 示例代码中的控制模式寄存器地址
     }
+
+    /// <summary>
+    /// 关节状态
+    /// </summary>
+    public enum EnergyState
+    {
+        [Description("失能")]
+        MasterArm,
+
+        [Description("使能")]
+        SlaveArm 
+    }
+
+    /// <summary>
+    /// 是否
+    /// </summary>
+    public enum YesOrNo
+    {
+        [Description("否")]
+        No ,
+
+        [Description("是")]
+        Yes 
+    }
 }

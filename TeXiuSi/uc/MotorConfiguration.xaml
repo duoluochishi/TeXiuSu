@@ -69,7 +69,7 @@ SelectedIndex="0"
 />
                         <Button Width="180" Height="50" Grid.Column="3"
 Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding ConfirmMotorStatusCommand}">
+Command="{Binding MotorSettingEditorCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="SendVariantOutline" 
@@ -88,7 +88,7 @@ SelectedIndex="0"
 />
                         <Button Grid.Row="1" Width="180" Height="50" Grid.Column="3"
 Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding ConfirmZeroPointCommand}">
+Command="{Binding ZeroEditorCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="SendVariantOutline" 
@@ -97,8 +97,8 @@ Command="{Binding ConfirmZeroPointCommand}">
         Text="确认" />
                             </StackPanel>
                         </Button>
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 安装设置:</TextBlock>
-                        <ComboBox
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Visibility="Collapsed"> 安装设置:</TextBlock>
+                        <ComboBox Visibility="Collapsed"
 x:Name="Installation"  Grid.Column="2" Grid.Row="2"
 Width="150" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
@@ -107,7 +107,7 @@ SelectedIndex="0"
 />
                         
                         <Button Grid.Row="2" Width="180" Height="50" Grid.Column="3"
-Style="{StaticResource MaterialDesignRaisedButton}"
+Style="{StaticResource MaterialDesignRaisedButton}" Visibility="Collapsed"
 Command="{Binding ConfirmInstallationCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
@@ -117,10 +117,10 @@ Command="{Binding ConfirmInstallationCommand}">
         Text="确认" />
                             </StackPanel>
                         </Button>
-                        <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 清除错误:</TextBlock>
-                        <Button Grid.Row="3" Width="180" Height="50" Grid.Column="3"
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 清除错误:</TextBlock>
+                        <Button Grid.Row="2" Width="180" Height="50" Grid.Column="3"
 Style="{StaticResource MaterialDesignRaisedButton}"
-Command="{Binding ClearMotorErrorCommand}">
+Command="{Binding OnEliminateErrorsEditor}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="SendVariantOutline" 

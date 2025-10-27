@@ -74,6 +74,8 @@
             CanUserResizeRows="False"
             IsReadOnly="True"
             ItemsSource="{Binding Items4}" />
-        
+        <ProgressBar Grid.Row="1" Grid.Column="2"
+  Height="20"
+  Value="5" />
     </Grid>
 </Window>
