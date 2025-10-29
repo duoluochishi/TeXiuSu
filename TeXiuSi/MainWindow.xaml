@@ -1200,6 +1200,16 @@ Text="画弧" />
                                                                     <TextBlock Text="编辑" />
                                                                 </StackPanel>
                                                             </Button>
+                                                            <Button Name="SimulateMotionButton"
+                    Width="150" Height="50"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Margin="10 0 0 0"
+                    Click="SimulateMotionButton_Click">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <materialDesign:PackIcon Kind="Play" Margin="0 0 8 0" />
+                                                                    <TextBlock Text="模拟运动" />
+                                                                </StackPanel>
+                                                            </Button>
                                                         </StackPanel>
                                                     </Grid>
                                                 </StackPanel>
