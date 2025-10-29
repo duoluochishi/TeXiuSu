@@ -47,6 +47,7 @@ namespace TeXiuSi
     {
         #region param
         //provides functionality to 3d models
+        //这是一个Model3DGroup对象，它像一个容器，把机械臂的所有独立部件（如底座、大臂、小臂等）组合在一起，方便统一管理。
         Model3DGroup RA = new Model3DGroup(); //RoboticArm 3d group
         Model3D geom = null; //Debug sphere to check in which point the joint is rotatin
 
@@ -64,12 +65,17 @@ namespace TeXiuSi
         double DistanceThreshold = 20;
         //provides render to model3d objects
         ModelVisual3D RoboticArm = new ModelVisual3D();
+        //这是一个变换组，可以包含旋转、平移、缩放等多种变换
         Transform3DGroup F1;
         Transform3DGroup F2;
         Transform3DGroup F3;
         Transform3DGroup F4;
         Transform3DGroup F5;
         Transform3DGroup F6;
+        //定义一个旋转变换。它需要三个核心参数：
+        //旋转轴(AxisAngleRotation3D) : 一个三维向量，如(0, 0, 1) 表示绕Z轴旋转。
+        //旋转角度(angles[i]) : 从外部传入的该关节需要旋转的角度。
+        //旋转中心(Point3D) : 旋转所围绕的点。
         RotateTransform3D R;
         TranslateTransform3D T;
         Vector3D reachingPoint;
@@ -77,8 +83,8 @@ namespace TeXiuSi
         System.Windows.Forms.Timer timer1;
 
         //真实逻辑
-        
-        
+
+
 
 #if IRB6700
         //directroy of all stl files
@@ -229,10 +235,16 @@ namespace TeXiuSi
             //}
             switchingJoint = false;
         }
+        /// <summary>
+        /// 读取并组合机械臂模型
+        /// </summary>
+        /// <param name="modelsNames"></param>
+        /// <returns></returns>
         private Model3DGroup Initialize_Environment(List<string> modelsNames)
         {
             try
             {
+                //Helix Toolkit提供的类，用于加载各种格式的3D模型文件，这里用来加载.stl文件。
                 ModelImporter import = new ModelImporter();
                 joints = new List<Joint>();
 
@@ -251,6 +263,7 @@ namespace TeXiuSi
                     GeometryModel3D model = link.Children[0] as GeometryModel3D;
                     model.Material = materialGroup;
                     model.BackMaterial = materialGroup;
+                    //这是一个自定义的辅助类，用于封装每个关节（即机械臂的每个可动部件）。它不仅包含Model3D（3D模型），还存储了该关节的旋转角度、旋转轴、旋转中心点等重要信息
                     joints.Add(new Joint(link));
                 }
 
@@ -370,6 +383,7 @@ namespace TeXiuSi
                 RA.Children.Add(joints[9].model);
                 RA.Children.Add(joints[10].model);
 
+                //rotAxis（旋转轴）和rotPoint（旋转中心
                 joints[0].angleMin = -180;
                 joints[0].angleMax = 180;
                 joints[0].rotAxisX = 0;
@@ -542,9 +556,15 @@ namespace TeXiuSi
             //F.Children.Add(joints[sel].model.Transform);
             //geom.Transform = F;
         }
+        /// <summary>
+        /// 这个方法是机械臂能够活动的关键。它根据给定的每个关节的角度，计算出每个部件在3D空间中的最终位置和姿态。这就是所谓的正向运动学 (Forward Kinematics)
+        /// </summary>
+        /// <param name="angles"></param>
+        /// <returns></returns>
         public Vector3D ForwardKinematics(double[] angles)
         {
             //The base only has rotation and is always at the origin, so the only transform in the transformGroup is the rotation R
+            // --- 关节 1 (基座) 的变换 ---
             F1 = new Transform3DGroup();
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[0].rotAxisX, joints[0].rotAxisY, joints[0].rotAxisZ), angles[0]), new Point3D(joints[0].rotPointX, joints[0].rotPointY, joints[0].rotPointZ));
             F1.Children.Add(R);
@@ -555,6 +575,7 @@ namespace TeXiuSi
             //After that, the joint needs to rotate of a certain amount (given by the value in the slider), and the rotation must be executed on a specific point
             //After some testing it looks like the point 175, -200, 500 is the sweet spot to achieve the rotation intended for the joint
             //finally we also need to apply the transformation applied to the base 
+            // --- 关节 2 的变换 ---
             F2 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[1].rotAxisX, joints[1].rotAxisY, joints[1].rotAxisZ), angles[1]), new Point3D(joints[1].rotPointX, joints[1].rotPointY, joints[1].rotPointZ));
@@ -564,6 +585,7 @@ namespace TeXiuSi
 
             //The second joint is attached to the first one. As before I found the sweet spot after testing, and looks like is rotating just fine. No pre-translation as before
             //and again the previous transformation needs to be applied
+            // --- 关节 3 的变换 ---
             F3 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[2].rotAxisX, joints[2].rotAxisY, joints[2].rotAxisZ), angles[2]), new Point3D(joints[2].rotPointX, joints[2].rotPointY, joints[2].rotPointZ));
@@ -571,7 +593,7 @@ namespace TeXiuSi
             F3.Children.Add(R);
             F3.Children.Add(F2);
 
-            //as before
+            // --- 关节 4 的变换 ---
             F4 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0); //1500, 650, 1650
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[3].rotAxisX, joints[3].rotAxisY, joints[3].rotAxisZ), angles[3]), new Point3D(joints[3].rotPointX, joints[3].rotPointY, joints[3].rotPointZ));
@@ -579,7 +601,7 @@ namespace TeXiuSi
             F4.Children.Add(R);
             F4.Children.Add(F3);
 
-            //as before
+            // --- 关节 5 的变换 ---
             F5 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[4].rotAxisX, joints[4].rotAxisY, joints[4].rotAxisZ), angles[4]),
@@ -591,6 +613,7 @@ namespace TeXiuSi
             //NB: I was having a nightmare trying to understand why it was always rotating in a weird way... SO I realized that the order in which
             //you add the Children is actually VERY IMPORTANT in fact before I was applyting F and then T and R, but the previous transformation
             //Should always be applied as last (FORWARD Kinematics)
+            // --- 关节 6 的变换 ---
             F6 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
             R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[5].rotAxisX, joints[5].rotAxisY, joints[5].rotAxisZ), angles[5]), new Point3D(joints[5].rotPointX, joints[5].rotPointY, joints[5].rotPointZ));
@@ -598,7 +621,7 @@ namespace TeXiuSi
             F6.Children.Add(R);
             F6.Children.Add(F5);
 
-
+            //变换的链式关系: 这是运动学的核心。例如，关节2的最终姿态不仅取决于自身的旋转，还取决于其父关节（关节1）的旋转。因此，F2的变换组中包含了F1。这样一层层传递下去，就构成了机械臂的完整运动链
             joints[0].model.Transform = F1; //First joint
             joints[1].model.Transform = F2; //Second joint (the "biceps")
             joints[2].model.Transform = F3; //third joint (the "knee" or "elbow")
@@ -932,7 +955,7 @@ namespace TeXiuSi
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            JointParameterWindow jointParameterWindow=new JointParameterWindow();
+            JointParameterWindow jointParameterWindow = new JointParameterWindow();
             jointParameterWindow.ShowDialog();
         }
 
