@@ -675,6 +675,14 @@ namespace TeXiuSi
             //joint5.Value = joints[4].angle = angles[4];
             //joint6.Value = joints[5].angle = angles[5];
 
+            // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
+            viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
+            viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
+            viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
+            viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
+            viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
+            viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+
             //if ((--movements) <= 0)
             //{
             //    button.Content = "Go to position";
@@ -973,6 +981,28 @@ namespace TeXiuSi
         private void btnSet_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void SimulateMotionButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                double x = double.Parse(viewModel.StraightLineX);
+                double y = double.Parse(viewModel.StraightLineY);
+                double z = double.Parse(viewModel.StraightLineZ);
+                reachingPoint = new Vector3D(x, y, z);
+
+                // 调用现有的启动方法，但传入null参数
+                StartInverseKinematics(null, null);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("请输入有效的X, Y, Z坐标值。", "输入错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"发生未知错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

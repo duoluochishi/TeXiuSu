@@ -52,6 +52,49 @@ namespace TeXiuSi.ViewModel
         public IRelayCommand LoadCommand { get; }
         public IRelayCommand SendCommand { get; }
 
+
+
+        #region 点位运动
+        private string _joint1Angle;
+        public string Joint1Angle
+        {
+            get { return _joint1Angle; }
+            set { _joint1Angle = value; OnPropertyChanged(); }
+        }
+        private string _joint2Angle;
+        public string Joint2Angle
+        {
+            get { return _joint2Angle; }
+            set { _joint2Angle = value; OnPropertyChanged(); }
+        }
+        private string _joint4Angle;
+        public string Joint4Angle
+        {
+            get { return _joint4Angle; }
+            set { _joint4Angle = value; OnPropertyChanged(); }
+        }
+        private string _joint5Angle;
+        public string Joint5Angle
+        {
+            get { return _joint5Angle; }
+            set { _joint5Angle = value; OnPropertyChanged(); }
+        }
+        private string _joint6Angle;
+        public string Joint6Angle
+        {
+            get { return _joint6Angle; }
+            set { _joint6Angle = value; OnPropertyChanged(); }
+        }
+        private string _joint3Angle;
+        public string Joint3Angle
+        {
+            get { return _joint3Angle; }
+            set { _joint3Angle = value; OnPropertyChanged(); }
+        }
+        #endregion
+
+
+
         #endregion
 
         #region ArcMotionVisible
@@ -165,22 +208,22 @@ namespace TeXiuSi.ViewModel
         #region StraightLineMotionVisible
         // 直线运动坐标属性
         [ObservableProperty]
-        private string StraightLineX = "0.000";
+        public string StraightLineX = "0.000";
 
         [ObservableProperty]
-        private string StraightLineY = "0.000";
+        public string StraightLineY = "0.000";
 
         [ObservableProperty]
-        private string StraightLineZ = "0.000";
+        public string StraightLineZ = "0.000";
 
         [ObservableProperty]
-        private string StraightLineRx = "0.000";
+        public string StraightLineRx = "0.000";
 
         [ObservableProperty]
-        private string StraightLineRy = "0.000";
+        public string StraightLineRy = "0.000";
 
         [ObservableProperty]
-        private string StraightLineRz = "0.000";
+        public string StraightLineRz = "0.000";
 
         // 坐标增减步长（mm）
         private const double PositionStepIncrement = 1.0;
