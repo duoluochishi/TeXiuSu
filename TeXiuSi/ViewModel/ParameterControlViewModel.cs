@@ -1,103 +1,102 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace TeXiuSi.ViewModel
 {
     public partial class ParameterControlViewModel : ObservableObject
     {
-
-
-        #region Joint setting
-        public IRelayCommand JointSettingEditorCommand { get; }
-        #endregion
-
-        #region Terminal setting
-        public IRelayCommand TerminalSettingConfirmCommand { get; }
-
-        public IRelayCommand TerminalSettingEditorCommand { get; }
-        #endregion
-
-        #region Collision grade
-
-        #endregion
-
-        public IRelayCommand CollisionGradeEditorCommand { get; }
-        #region Joint information
-
-        #endregion
-
-
         public ParameterControlViewModel()
         {
-            #region Joint setting
-            JointSettingEditorCommand = new RelayCommand(OnJointSettingEditor);
-            #endregion
 
-            #region Terminal setting
-            TerminalSettingConfirmCommand = new RelayCommand(OnTerminalSettingConfirm);
-            TerminalSettingEditorCommand = new RelayCommand(OnTerminalSettingEditor);
-
-            #endregion
-
-            #region Collision grade
-
-            CollisionGradeEditorCommand = new RelayCommand(OnCollisionGradeEditor);
-            #endregion
-
-            #region Joint information
-
-            #endregion
         }
-        private void OnJointSettingEditor()
+
+        // Tab: 关节设置 (Joint Settings)
+        [ObservableProperty]
+        private int _selectedJointIndex;
+
+        [ObservableProperty]
+        private decimal _maxAngleValue;
+
+        [ObservableProperty]
+        private decimal _minAngleValue;
+
+        [ObservableProperty]
+        private decimal _maxVelocityValue;
+
+        [ObservableProperty]
+        private decimal _maxAccelerationValue;
+
+        [RelayCommand]
+        private void JointSettingEditor()
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                
-            }
+            // Method implementation will be added later
         }
 
-        private void OnTerminalSettingConfirm()
+        // Tab: 末端设置 (End Effector Settings)
+        [ObservableProperty]
+        private int _selectedLoadIndex;
+
+        [ObservableProperty]
+        private decimal _maxLinearVelocityValue;
+
+        [ObservableProperty]
+        private decimal _maxAngularVelocityValue;
+
+        [ObservableProperty]
+        private decimal _maxLinearAccelerationValue;
+
+        [ObservableProperty]
+        private decimal _maxAngularAccelerationValue;
+
+        [RelayCommand]
+        private void TerminalSettingConfirm()
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                
-            }
+            // Method implementation will be added later
         }
-        private void OnTerminalSettingEditor()
+
+        [RelayCommand]
+        private void TerminalSettingEditor()
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-
-            }
+            // Method implementation will be added later
         }
-        private void OnCollisionGradeEditor()
+
+        // Tab: 碰撞等级 (Collision Level)
+        [ObservableProperty]
+        private double _collisionLevel1;
+
+        [ObservableProperty]
+        private double _collisionLevel2;
+
+        [ObservableProperty]
+        private double _collisionLevel3;
+
+        [ObservableProperty]
+        private double _collisionLevel4;
+
+        [ObservableProperty]
+        private double _collisionLevel5;
+
+        [ObservableProperty]
+        private double _collisionLevel6;
+
+        [RelayCommand]
+        private void CollisionGradeEditor()
         {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-           
-            }
+            // Method implementation will be added later
         }
 
+        // Tab: 关节信息 (Joint Information)
+        [RelayCommand]
+        private void ViewMotionInformation()
+        {
+            // Method implementation will be added later
+        }
+
+        [RelayCommand]
+        private void ViewStatusInformation()
+        {
+            // Method implementation will be added later
+        }
     }
 }

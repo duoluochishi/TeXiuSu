@@ -7,8 +7,10 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:TeXiuSi.uc"
+             xmlns:viewmodel="clr-namespace:TeXiuSi.ViewModel"
              mc:Ignorable="d" Background="White"
-             d:DesignHeight="850" d:DesignWidth="800">
+             d:DesignHeight="850" d:DesignWidth="800"
+d:DataContext="{d:DesignInstance viewmodel:ParameterControlViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type xctk:DecimalUpDown}" BasedOn="{StaticResource {x:Type xctk:DecimalUpDown}}" x:Key="MaterialLikeDecimalUpDownStyle">
@@ -73,16 +75,17 @@
                         </Grid.RowDefinitions>
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 关节序号:</TextBlock>
                         <ComboBox
-x:Name="Outlined"  Grid.Column="2"
+x:Name="JointComboBox"  Grid.Column="2"
 Width="150" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
 ItemsSource="{StaticResource JointNames}" 
-SelectedIndex="0"
+SelectedIndex="{Binding SelectedJointIndex, Mode=TwoWay}"
 />
                         <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
-                        <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MaxAngleSlider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxAngleValue, Mode=TwoWay}" Minimum="0"/>
                         <xctk:DecimalUpDown 
+                                x:Name="MaxAngleDecimalUpDown"
                                 Grid.Row="1" 
                                 Grid.Column="2" 
                                 Width="150"
@@ -90,12 +93,14 @@ Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Mi
                                 VerticalAlignment="Center"
                                 Increment="0.01" Minimum="0" Maximum="50"
                                 FormatString="F2"  Height="40"
+Value="{Binding MaxAngleValue, Mode=TwoWay}"
                                 />
                         <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最小角度:</TextBlock>
-                        <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MinAngleSlider" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MinAngleValue, Mode=TwoWay}" Minimum="0"/>
 
                         <xctk:DecimalUpDown 
+                                x:Name="MinAngleDecimalUpDown"
                                 Grid.Row="2" 
                                 Grid.Column="2" 
                                 Width="150"
@@ -103,6 +108,7 @@ Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Mi
                                 VerticalAlignment="Center"
                                 Increment="0.1" Minimum="0" Maximum="50"
                                 FormatString="F1"  Height="40"
+Value="{Binding MinAngleValue, Mode=TwoWay}"
                                 >
 
                         </xctk:DecimalUpDown>
@@ -118,10 +124,11 @@ VerticalAlignment="Center"
 HorizontalAlignment="Left" FontSize="18"
 IsHitTestVisible="False" />
                         <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大速度:</TextBlock>
-                        <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MaxVelocitySlider" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxVelocityValue, Mode=TwoWay}" Minimum="0"/>
 
                         <xctk:DecimalUpDown 
+                                x:Name="MaxVelocityDecimalUpDown"
                                 Grid.Row="3" 
                                 Grid.Column="2" 
                                 Width="150"
@@ -129,6 +136,7 @@ Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Mi
                                 VerticalAlignment="Center"
                                 Increment="0.01" Minimum="0" Maximum="50"
                                 FormatString="F2"  Height="40"
+Value="{Binding MaxVelocityValue, Mode=TwoWay}"
                                 >
                         </xctk:DecimalUpDown>
                         <TextBlock 
@@ -137,9 +145,10 @@ VerticalAlignment="Center"
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
                         <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大加速度:</TextBlock>
-                        <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MaxAccelerationSlider" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxAccelerationValue, Mode=TwoWay}" Minimum="0"/>
                         <xctk:DecimalUpDown 
+                                x:Name="MaxAccelerationDecimalUpDown"
                                 Grid.Row="4" 
                                 Grid.Column="2" 
                                 Width="150"
@@ -147,6 +156,7 @@ Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Mi
                                 VerticalAlignment="Center"
                                 Increment="0.01" Minimum="0" Maximum="50"
                                 FormatString="F2"  Height="40"
+Value="{Binding MaxAccelerationValue, Mode=TwoWay}"
                                 />
                         <TextBlock 
 Text="rand/s∧2" Grid.Row="4" Grid.Column="3"
@@ -154,7 +164,7 @@ VerticalAlignment="Center"
 HorizontalAlignment="Left" Margin="0 0 0 0" FontSize="12"
 IsHitTestVisible="False" />
                         
-                        <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0"
+                        <Button x:Name="JointSettingEditorButton" Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0"
 Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding JointSettingEditorCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
@@ -188,13 +198,13 @@ Style="{StaticResource MaterialDesignCardGroupBox}">
                             </Grid.ColumnDefinitions>
                             <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 负载值:</TextBlock>
                             <ComboBox
-x:Name="LoadInfo"  Grid.Column="1" Width="180"
+x:Name="LoadInfoComboBox"  Grid.Column="1" Width="180"
 HorizontalAlignment="Right"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
 ItemsSource="{StaticResource LoadValues}"
-                                SelectedIndex="1"
+SelectedIndex="{Binding SelectedLoadIndex, Mode=TwoWay}"
 />
-                            <Button Height="45" Width="180" Grid.Column="2" Command="{Binding TerminalSettingConfirmCommand}">确定</Button>
+                            <Button x:Name="TerminalSettingConfirmButton" Height="45" Width="180" Grid.Column="2" Command="{Binding TerminalSettingConfirmCommand}">确定</Button>
                         </Grid>
                     </GroupBox>
                     <Grid Grid.Row="1">
@@ -211,50 +221,58 @@ ItemsSource="{StaticResource LoadValues}"
                             <ColumnDefinition Width="50"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大线速度:</TextBlock>
-                        <Slider  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MaxLinearVelocitySlider" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxLinearVelocityValue, Mode=TwoWay}" Minimum="0"/>
 
                         <xctk:DecimalUpDown 
+                                x:Name="MaxLinearVelocityDecimalUpDown"
                                 Grid.Column="2" 
                                 Width="150"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.001" Minimum="0" Maximum="50"
                                 FormatString="F3"  Height="40"
+Value="{Binding MaxLinearVelocityValue, Mode=TwoWay}"
                                 />
                         <TextBlock 
 Text="m/s"  Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
-                        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
-                        <Slider Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角速度:</TextBlock>
+                        <Slider x:Name="MaxAngularVelocitySlider" Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxAngularVelocityValue, Mode=TwoWay}" Minimum="0"/>
 
-                        <xctk:DecimalUpDown  Grid.Row="1"
+                        <xctk:DecimalUpDown
+                                x:Name="MaxAngularVelocityDecimalUpDown"
+                                Grid.Row="1"
                                 Grid.Column="2" 
                                 Width="150"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.001" Minimum="0" Maximum="50"
                                 FormatString="F3"  Height="40"
+Value="{Binding MaxAngularVelocityValue, Mode=TwoWay}"
                                 />
                         <TextBlock Grid.Row="1"
 Text="rad/s"  Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
-                        <Slider Grid.Row="2"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大线加速度:</TextBlock>
+                        <Slider x:Name="MaxLinearAccelerationSlider" Grid.Row="2"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxLinearAccelerationValue, Mode=TwoWay}" Minimum="0"/>
 
-                        <xctk:DecimalUpDown  Grid.Row="2"
+                        <xctk:DecimalUpDown
+                                x:Name="MaxLinearAccelerationDecimalUpDown"
+                                Grid.Row="2"
                                 Grid.Column="2" 
                                 Width="150"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.001" Minimum="0" Maximum="50"
                                 FormatString="F3"  Height="40"
+Value="{Binding MaxLinearAccelerationValue, Mode=TwoWay}"
                                 />
                         <TextBlock Grid.Row="2"
 Text="m/s∧2"  Grid.Column="3"
@@ -262,16 +280,19 @@ VerticalAlignment="Center"
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
                         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角加速度:</TextBlock>
-                        <Slider Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="MaxAngularAccelerationSlider" Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding MaxAngularAccelerationValue, Mode=TwoWay}" Minimum="0"/>
 
-                        <xctk:DecimalUpDown  Grid.Row="3"
+                        <xctk:DecimalUpDown
+                                x:Name="MaxAngularAccelerationDecimalUpDown"
+                                Grid.Row="3"
                                 Grid.Column="2" 
                                 Width="150"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.001" Minimum="0" Maximum="50"
                                 FormatString="F3"  Height="40"
+Value="{Binding MaxAngularAccelerationValue, Mode=TwoWay}"
                                 />
                         <TextBlock Grid.Row="3"
 Text="rad/s"  Grid.Column="3"
@@ -281,7 +302,7 @@ IsHitTestVisible="False" />
                         
                         
                     </Grid>
-                    <Button  Grid.Row="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
+                    <Button x:Name="TerminalSettingEditorButton" Grid.Row="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"
 Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -317,12 +338,14 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
                         </Grid.RowDefinitions>
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 1号:</TextBlock>
 
-                        <Slider  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
-                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+                        <Slider x:Name="CollisionLevel1Slider" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding CollisionLevel1, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown
+x:Name="CollisionLevel1NumericUpDown"
+FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  
  Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding CollisionLevel1, Mode=TwoWay}" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -332,12 +355,14 @@ Value="{Binding PopupHorizontalOffset}" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" >2号:</TextBlock>
-                        <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
-                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+                        <Slider x:Name="CollisionLevel2Slider" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding CollisionLevel2, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown
+x:Name="CollisionLevel2NumericUpDown"
+FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="1" 
  Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding CollisionLevel2, Mode=TwoWay}" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -347,12 +372,14 @@ Value="{Binding PopupHorizontalOffset}" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 3号:</TextBlock>
-                        <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="CollisionLevel3Slider" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding CollisionLevel3, Mode=TwoWay}" Minimum="0"/>
 
-                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+                        <materialDesign:NumericUpDown
+x:Name="CollisionLevel3NumericUpDown"
+FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50" Grid.Row="2" Grid.Column="3"
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding CollisionLevel3, Mode=TwoWay}" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -362,13 +389,15 @@ Value="{Binding PopupHorizontalOffset}" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 4号:</TextBlock>
-                        <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+                        <Slider x:Name="CollisionLevel4Slider" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding CollisionLevel4, Mode=TwoWay}" Minimum="0"/>
 
-                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+                        <materialDesign:NumericUpDown
+x:Name="CollisionLevel4NumericUpDown"
+FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="3" 
  Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding CollisionLevel4, Mode=TwoWay}" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -378,12 +407,14 @@ Value="{Binding PopupHorizontalOffset}" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 5号:</TextBlock>
-                        <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
-                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+                        <Slider x:Name="CollisionLevel5Slider" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+Maximum="50" Width="330"  Value="{Binding CollisionLevel5, Mode=TwoWay}" Minimum="0"/>
+                        <materialDesign:NumericUpDown
+x:Name="CollisionLevel5NumericUpDown"
+FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="4" 
  Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding CollisionLevel5, Mode=TwoWay}" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -393,8 +424,8 @@ Value="{Binding PopupHorizontalOffset}" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                        
-                        <Button  Grid.Row="5" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollisionGradeEditor}">
+                        <Button x:Name="CollisionGradeEditorButton" Grid.Row="5" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding CollisionGradeEditorCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="ClipboardEditOutline" 
@@ -418,7 +449,7 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollis
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 20 0"> 运动信息:</TextBlock>
-                    <Button x:Name="btnsportInfo" Width="280" Height="50" Grid.Column="1"
+                    <Button x:Name="ViewMotionInformationButton" Width="280" Height="50" Grid.Column="1"
 Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewMotionInformationCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
@@ -430,7 +461,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewMotion
                     </Button>
                     <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 状态信息:</TextBlock>
 
-                    <Button x:Name="btnConditionInfo" Grid.Row="1" Width="280" Height="50" Grid.Column="1"
+                    <Button x:Name="ViewStatusInformationButton" Grid.Row="1" Width="280" Height="50" Grid.Column="1"
 Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewStatusInformationCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
