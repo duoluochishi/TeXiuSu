@@ -1,102 +1,344 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TeXiuSi.ViewModel
 {
     public partial class ParameterControlViewModel : ObservableObject
     {
+
+        private bool _IsEditing = false;
+
+        public bool IsEditing
+        {
+            get => _IsEditing;
+            set => SetProperty(ref _IsEditing, value);
+
+        }
+
+        #region Joint setting
+
+        private double _maximumAngle = 0.0; // 初始值
+        public double MaximumAngle
+        {
+            get => _maximumAngle;
+            set => SetProperty(ref _maximumAngle, value);
+        }
+
+        private double _minimumAngle = 0; // 初始值
+        public double MinimumAngle
+        {
+            get => _minimumAngle;
+            set => SetProperty(ref _minimumAngle, value);
+        }
+        private double _minimumSpeed = 0; // 初始值
+        public double MinimumSpeed
+        {
+            get => _minimumSpeed;
+            set => SetProperty(ref _minimumSpeed, value);
+        }
+        private double _minimumAcceleration = 0; // 初始值
+        public double MinimumAcceleration
+        {
+            get => _minimumAcceleration;
+            set => SetProperty(ref _minimumAcceleration, value);
+        }
+
+
+        private bool _jointIsEditing = true;
+
+        public bool JointIsEditing
+        {
+            get => _jointIsEditing;
+            set => SetProperty(ref _jointIsEditing, value);
+
+        }
+
+        public IRelayCommand JointSettingEditorCommand { get; }
+
+        public IRelayCommand CancelCommand { get; }
+
+        public IRelayCommand Initializationommand { get; }
+
+        public IRelayCommand SaveCommand { get; }
+
+
+        #endregion
+
+        #region Terminal setting
+
+        private bool _terminalIsEditing = true;
+
+        public bool TerminalIsEditing
+        {
+            get => _terminalIsEditing;
+            set => SetProperty(ref _terminalIsEditing, value);
+
+        }
+
+        // 新生成的属性 (1. 最大线速度)
+        private double _maximumLinearVelocity = 0;
+        public double MaximumLinearVelocity
+        {
+            get => _maximumLinearVelocity;
+            set => SetProperty(ref _maximumLinearVelocity, value);
+        }
+
+        // 新生成的属性 (2. 最大角速度)
+        private double _maximumAngularVelocity = 0;
+        public double MaximumAngularVelocity
+        {
+            get => _maximumAngularVelocity;
+            set => SetProperty(ref _maximumAngularVelocity, value);
+        }
+
+        // 新生成的属性 (3. 最大线加速度)
+        private double _maximumLinearAcceleration = 0;
+        public double MaximumLinearAcceleration
+        {
+            get => _maximumLinearAcceleration;
+            set => SetProperty(ref _maximumLinearAcceleration, value);
+        }
+
+        // 新生成的属性 (4. 最大角加速度)
+        private double _maximumAngularAcceleration = 0;
+        public double MaximumAngularAcceleration
+        {
+            get => _maximumAngularAcceleration;
+            set => SetProperty(ref _maximumAngularAcceleration, value);
+        }
+        public IRelayCommand TerminalSettingConfirmCommand { get; }
+
+        public IRelayCommand TerminalSettingEditorCommand { get; }
+
+
+        public IRelayCommand TerminalCancelCommand { get; }
+
+        public IRelayCommand TerminalInitializationommand { get; }
+
+        public IRelayCommand TerminalSaveCommand { get; }
+        #endregion
+
+        #region Collision grade
+
+
+        public IRelayCommand CollisionGradeEditorCommand { get; }
+
+        public IRelayCommand CollisionCancelCommand { get; }
+
+
+        public IRelayCommand CollisionSaveCommand { get; }
+        #endregion
+
+
+        #region Joint information
+
+
+
+
+        #endregion
+
+
         public ParameterControlViewModel()
         {
+            #region Joint setting
+            JointSettingEditorCommand = new RelayCommand(OnJointSettingEditor);
 
+            CancelCommand = new RelayCommand(CancleJoint);
+
+            Initializationommand = new RelayCommand(InitializationJoint);
+
+            SaveCommand = new RelayCommand(SaveJoint);
+
+
+            #endregion
+
+            #region Terminal setting
+            TerminalSettingConfirmCommand = new RelayCommand(OnTerminalSettingConfirm);
+
+            TerminalSettingEditorCommand = new RelayCommand(OnTerminalSettingEditor);
+
+
+            TerminalCancelCommand = new RelayCommand(TerminalCancleJoint);
+
+            TerminalInitializationommand = new RelayCommand(TerminalInitializationJoint);
+
+            TerminalSaveCommand = new RelayCommand(TerminalSaveJoint);
+
+            #endregion
+
+            #region Collision grade
+
+            CollisionGradeEditorCommand = new RelayCommand(OnCollisionGradeEditor);
+            #endregion
+
+            #region Joint information
+
+            #endregion
         }
-
-        // Tab: 关节设置 (Joint Settings)
-        [ObservableProperty]
-        private int _selectedJointIndex;
-
-        [ObservableProperty]
-        private decimal _maxAngleValue;
-
-        [ObservableProperty]
-        private decimal _minAngleValue;
-
-        [ObservableProperty]
-        private decimal _maxVelocityValue;
-
-        [ObservableProperty]
-        private decimal _maxAccelerationValue;
-
-        [RelayCommand]
-        private void JointSettingEditor()
+        #region Joint setting
+        private void OnJointSettingEditor()
         {
-            // Method implementation will be added later
+            try
+            {
+                JointIsEditing = false;
+
+                IsEditing = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
-        // Tab: 末端设置 (End Effector Settings)
-        [ObservableProperty]
-        private int _selectedLoadIndex;
-
-        [ObservableProperty]
-        private decimal _maxLinearVelocityValue;
-
-        [ObservableProperty]
-        private decimal _maxAngularVelocityValue;
-
-        [ObservableProperty]
-        private decimal _maxLinearAccelerationValue;
-
-        [ObservableProperty]
-        private decimal _maxAngularAccelerationValue;
-
-        [RelayCommand]
-        private void TerminalSettingConfirm()
+        private void CancleJoint()
         {
-            // Method implementation will be added later
-        }
+            try
+            {
+                //当前界面visual切换
+                JointIsEditing = true;
+                //tab封锁 
 
-        [RelayCommand]
-        private void TerminalSettingEditor()
+
+                IsEditing=false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void InitializationJoint()
         {
-            // Method implementation will be added later
+            try
+            {
+                //当前界面visual切换
+                JointIsEditing = true;
+                //tab封锁 
+
+                IsEditing = false;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
-
-        // Tab: 碰撞等级 (Collision Level)
-        [ObservableProperty]
-        private double _collisionLevel1;
-
-        [ObservableProperty]
-        private double _collisionLevel2;
-
-        [ObservableProperty]
-        private double _collisionLevel3;
-
-        [ObservableProperty]
-        private double _collisionLevel4;
-
-        [ObservableProperty]
-        private double _collisionLevel5;
-
-        [ObservableProperty]
-        private double _collisionLevel6;
-
-        [RelayCommand]
-        private void CollisionGradeEditor()
+        private void SaveJoint()
         {
-            // Method implementation will be added later
+            try
+            {
+                //当前界面visual切换
+                JointIsEditing = true;
+                //tab封锁 
+
+                IsEditing = false;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+
+        #region Terminal setting
+
+        private void OnTerminalSettingConfirm()
+        {
+            try
+            {
+                TerminalIsEditing = false;
+                IsEditing = true;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void OnTerminalSettingEditor()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
-        // Tab: 关节信息 (Joint Information)
-        [RelayCommand]
-        private void ViewMotionInformation()
+        private void TerminalCancleJoint()
         {
-            // Method implementation will be added later
+            try
+            {
+                //当前界面visual切换
+                TerminalIsEditing = true;
+                //tab封锁 
+                IsEditing = false;
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void TerminalInitializationJoint()
+        {
+            try
+            {
+                //当前界面visual切换
+                TerminalIsEditing = true;
+                //tab封锁 
+
+                IsEditing = false;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void TerminalSaveJoint()
+        {
+            try
+            {
+                //当前界面visual切换
+                TerminalIsEditing = true;
+                //tab封锁 
+                IsEditing = false;
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        #endregion
+
+        #region Joint information
+
+        #endregion
+
+        private void OnCollisionGradeEditor()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
-        [RelayCommand]
-        private void ViewStatusInformation()
-        {
-            // Method implementation will be added later
-        }
+        //公共enable
+
     }
 }

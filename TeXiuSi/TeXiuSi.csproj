@@ -154,6 +154,8 @@
     <Compile Include="ConnectPage.xaml.cs">
       <DependentUpon>ConnectPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Convert\BooleanNegationConverter.cs" />
+    <Compile Include="Convert\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Convert\PercentageConverter.cs" />
     <Compile Include="EnumExtensions.cs" />
     <Compile Include="Helper\BooleanToVisibilityConverter.cs" />
