@@ -55,41 +55,129 @@ namespace TeXiuSi.ViewModel
 
 
         #region 点位运动
-        private string _joint1Angle;
-        public string Joint1Angle
+        //private string _joint1Angle;
+        //public string Joint1Angle
+        //{
+        //    get { return _joint1Angle; }
+        //    set { _joint1Angle = value; OnPropertyChanged(); }
+        //}
+        //private string _joint2Angle;
+        //public string Joint2Angle
+        //{
+        //    get { return _joint2Angle; }
+        //    set { _joint2Angle = value; OnPropertyChanged(); }
+        //}
+        //private string _joint4Angle;
+        //public string Joint4Angle
+        //{
+        //    get { return _joint4Angle; }
+        //    set { _joint4Angle = value; OnPropertyChanged(); }
+        //}
+        //private string _joint5Angle;
+        //public string Joint5Angle
+        //{
+        //    get { return _joint5Angle; }
+        //    set { _joint5Angle = value; OnPropertyChanged(); }
+        //}
+        //private string _joint6Angle;
+        //public string Joint6Angle
+        //{
+        //    get { return _joint6Angle; }
+        //    set { _joint6Angle = value; OnPropertyChanged(); }
+        //}
+        //private string _joint3Angle;
+        //public string Joint3Angle
+        //{
+        //    get { return _joint3Angle; }
+        //    set { _joint3Angle = value; OnPropertyChanged(); }
+        //}
+
+        private double _xvalue = 1; // 初始值
+        public double XValue
         {
-            get { return _joint1Angle; }
-            set { _joint1Angle = value; OnPropertyChanged(); }
+            get => _xvalue;
+            set => SetProperty(ref _xvalue, value);
         }
-        private string _joint2Angle;
-        public string Joint2Angle
+
+        private double _yvalue = 1; // 初始值
+        public double YValue
         {
-            get { return _joint2Angle; }
-            set { _joint2Angle = value; OnPropertyChanged(); }
+            get => _yvalue;
+            set => SetProperty(ref _yvalue, value);
         }
-        private string _joint4Angle;
-        public string Joint4Angle
+
+        private double _zvalue = 1; // 初始值
+        public double ZValue
         {
-            get { return _joint4Angle; }
-            set { _joint4Angle = value; OnPropertyChanged(); }
+            get => _zvalue;
+            set => SetProperty(ref _zvalue, value);
         }
-        private string _joint5Angle;
-        public string Joint5Angle
+
+        private double _rollvalue = 1; // 初始值
+        public double Rollvalue
         {
-            get { return _joint5Angle; }
-            set { _joint5Angle = value; OnPropertyChanged(); }
+            get => _rollvalue;
+            set => SetProperty(ref _rollvalue, value);
         }
-        private string _joint6Angle;
-        public string Joint6Angle
+
+        private double _pitchvalue = 1; // 初始值
+        public double Pitchvalue
         {
-            get { return _joint6Angle; }
-            set { _joint6Angle = value; OnPropertyChanged(); }
+            get => _pitchvalue;
+            set => SetProperty(ref _pitchvalue, value);
         }
-        private string _joint3Angle;
-        public string Joint3Angle
+
+        private double _yawvalue = 1; // 初始值
+        public double YawValue
         {
-            get { return _joint3Angle; }
-            set { _joint3Angle = value; OnPropertyChanged(); }
+            get => _yawvalue;
+            set => SetProperty(ref _yawvalue, value);
+        }
+
+       
+
+        // 设置步长变量
+        private int _stepXValue = 1;
+        public int StepXValue
+        {
+            get => _stepXValue;
+            set => SetProperty(ref _stepXValue, value);
+        }
+
+
+        private double _stepYvalue = 1; // 初始值
+        public double StepYValue
+        {
+            get => _stepYvalue;
+            set => SetProperty(ref _stepYvalue, value);
+        }
+
+        private double _stepZvalue = 1; // 初始值
+        public double StepZValue
+        {
+            get => _stepZvalue;
+            set => SetProperty(ref _stepZvalue, value);
+        }
+
+        private double _stepRollvalue = 1; // 初始值
+        public double StepRollvalue
+        {
+            get => _stepRollvalue;
+            set => SetProperty(ref _stepRollvalue, value);
+        }
+
+        private double _stepPitchvalue = 1; // 初始值
+        public double StepPitchvalue
+        {
+            get => _stepPitchvalue;
+            set => SetProperty(ref _stepPitchvalue, value);
+        }
+
+        private double _stepYawvalue = 1; // 初始值
+        public double StepYawValue
+        {
+            get => _stepYawvalue;
+            set => SetProperty(ref _stepYawvalue, value);
         }
         #endregion
 
@@ -103,60 +191,60 @@ namespace TeXiuSi.ViewModel
         public IRelayCommand SendInstructionPointCommand { get; }
         public IRelayCommand DrawArcCommand { get; }
 
-        // 坐标点属性（用于绑定DecimalUpDown的值）
+        // 坐标点属性（用于绑定doubleUpDown的值）
         [ObservableProperty]
-        private decimal StartPointX;
+        private double StartPointX;
 
         [ObservableProperty]
-        private decimal StartPointY;
+        private double StartPointY;
 
         [ObservableProperty]
-        private decimal StartPointZ;
+        private double StartPointZ;
 
         [ObservableProperty]
-        private decimal StartPointRx;
+        private double StartPointRx;
 
         [ObservableProperty]
-        private decimal StartPointRy;
+        private double StartPointRy;
 
         [ObservableProperty]
-        private decimal StartPointRz;
+        private double StartPointRz;
 
         [ObservableProperty]
-        private decimal MidPointX;
+        private double MidPointX;
 
         [ObservableProperty]
-        private decimal MidPointY;
+        private double MidPointY;
 
         [ObservableProperty]
-        private decimal MidPointZ;
+        private double MidPointZ;
 
         [ObservableProperty]
-        private decimal MidPointRx;
+        private double MidPointRx;
 
         [ObservableProperty]
-        private decimal MidPointRy;
+        private double MidPointRy;
 
         [ObservableProperty]
-        private decimal MidPointRz;
+        private double MidPointRz;
 
         [ObservableProperty]
-        private decimal EndPointX;
+        private double EndPointX;
 
         [ObservableProperty]
-        private decimal EndPointY;
+        private double EndPointY;
 
         [ObservableProperty]
-        private decimal EndPointZ;
+        private double EndPointZ;
 
         [ObservableProperty]
-        private decimal EndPointRx;
+        private double EndPointRx;
 
         [ObservableProperty]
-        private decimal EndPointRy;
+        private double EndPointRy;
 
         [ObservableProperty]
-        private decimal EndPointRz;
+        private double EndPointRz;
 
         [ObservableProperty]
         private int SelectedInstructionPointIndex;
@@ -166,25 +254,25 @@ namespace TeXiuSi.ViewModel
         #region JointMotionVisible
         // 关节角度属性
         [ObservableProperty]
-        private string Joint1Angle = "0.000";
+        public string Joint1Angle = "0.000";
 
         [ObservableProperty]
-        private string Joint2Angle = "0.000";
+        public string Joint2Angle = "0.000";
 
         [ObservableProperty]
-        private string Joint3Angle = "0.000";
+        public string Joint3Angle = "0.000";
 
         [ObservableProperty]
-        private string Joint4Angle = "0.000";
+        public string Joint4Angle = "0.000";
 
         [ObservableProperty]
-        private string Joint5Angle = "0.000";
+        public string Joint5Angle = "0.000";
 
         [ObservableProperty]
-        private string Joint6Angle = "0.000";
+        public string Joint6Angle = "0.000";
 
         // 增减步长
-        private const double StepIncrement = 1.0;
+        public const double StepIncrement = 1.0;
 
         // 关节增减命令
         public IRelayCommand Joint1DecreaseCommand { get; }
@@ -559,9 +647,9 @@ namespace TeXiuSi.ViewModel
         public MainViewModel()
         {
 
-            dmArmHelper dmArmHelper = new dmArmHelper();
+            //dmArmHelper dmArmHelper = new dmArmHelper();
 
-            dmArmHelper.testArm();
+            //dmArmHelper.testArm();
 
             SharedJawValue = 0;
 
@@ -711,19 +799,19 @@ namespace TeXiuSi.ViewModel
             // 实例化 RelayCommand，传入要执行的方法
             #region MainPanel1
             // 初始化所有命令
-            ZMinusCommand1 = new RelayCommand(OnZMinus1);
-            YMinusCommand1 = new RelayCommand(OnYMinus1);
-            XPlusCommand1 = new RelayCommand(OnXPlus1);
-            ZPlusCommand1 = new RelayCommand(OnZPlus1);
-            YPlusCommand1 = new RelayCommand(OnYPlus1);
             XMinusCommand1 = new RelayCommand(OnXMinus1);
+            YMinusCommand1 = new RelayCommand(OnYMinus1);
+            ZMinusCommand1 = new RelayCommand(OnZMinus1);
+            XPlusCommand1 = new RelayCommand(OnXPlus1);
+            YPlusCommand1 = new RelayCommand(OnYPlus1);
+            ZPlusCommand1 = new RelayCommand(OnZPlus1);
 
-            ZMinusCommand2 = new RelayCommand(OnZMinus2);
-            YMinusCommand2 = new RelayCommand(OnYMinus2);
-            XPlusCommand2 = new RelayCommand(OnXPlus2);
-            ZPlusCommand2 = new RelayCommand(OnZPlus2);
-            YPlusCommand2 = new RelayCommand(OnYPlus2);
             XMinusCommand2 = new RelayCommand(OnXMinus2);
+            YMinusCommand2 = new RelayCommand(OnYMinus2);
+            ZMinusCommand2 = new RelayCommand(OnZMinus2);
+            XPlusCommand2 = new RelayCommand(OnXPlus2);
+            YPlusCommand2 = new RelayCommand(OnYPlus2);
+            ZPlusCommand2 = new RelayCommand(OnZPlus2);
 
             ResetToZeroCommand = new RelayCommand(OnResetToZero);
             LoadCommand = new RelayCommand(OnLoad);
@@ -840,68 +928,83 @@ namespace TeXiuSi.ViewModel
         private void OnZMinus1()
         {
             // Z轴负方向逻辑
+            ZValue -= StepZValue <= 0 ? 0 : StepZValue;
         }
 
         private void OnYMinus1()
         {
             // Y轴负方向逻辑
+            YValue -= StepYValue<=0?0: StepYValue;
         }
 
         private void OnXPlus1()
         {
             // X轴正方向逻辑
+            XValue += StepXValue <= 0 ? 0 : StepXValue;
         }
 
         private void OnZPlus1()
         {
             // Z轴正方向逻辑
+            ZValue += StepZValue <= 0 ? 0 : StepZValue;
         }
 
         private void OnYPlus1()
         {
             // Y轴正方向逻辑
+            YValue += StepYValue <= 0 ? 0 : StepYValue;
         }
 
         private void OnXMinus1()
         {
             // X轴负方向逻辑
+            XValue -= StepXValue <= 0 ? 0 : StepXValue;
         }
 
         // 第二个GroupBox的命令方法
         private void OnZMinus2()
         {
             // Z轴负方向逻辑
+            YawValue -= StepYawValue <= 0 ? 0 : StepYawValue;
         }
 
         private void OnYMinus2()
         {
             // Y轴负方向逻辑
+            Pitchvalue -= StepPitchvalue <= 0 ? 0 : StepPitchvalue;
         }
 
         private void OnXPlus2()
         {
             // X轴正方向逻辑
+            Rollvalue += StepRollvalue <= 0 ? 0 : StepRollvalue;
         }
 
         private void OnZPlus2()
         {
             // Z轴正方向逻辑
+            YawValue += StepYawValue <= 0 ? 0 : StepYawValue;
         }
 
         private void OnYPlus2()
         {
             // Y轴正方向逻辑
+            Pitchvalue += StepPitchvalue <= 0 ? 0 : StepPitchvalue;
         }
 
         private void OnXMinus2()
         {
             // X轴负方向逻辑
+            Rollvalue -= StepRollvalue <= 0 ? 0 : StepRollvalue;
         }
 
         // 底部按钮命令方法
         private void OnResetToZero()
         {
             // 回零逻辑
+            Rollvalue=0; YawValue=0; Pitchvalue=0;  
+            XValue=0;YawValue=0;ZValue=0;
+
         }
 
         private void OnLoad()
@@ -1010,6 +1113,9 @@ namespace TeXiuSi.ViewModel
             // 实现执行圆弧运动的逻辑
             // 这里需要根据您的具体运动控制需求实现
         }
+
+
+
         #endregion
 
 
@@ -1489,14 +1595,14 @@ namespace TeXiuSi.ViewModel
     // 辅助类 - 6维坐标点
     public class Point6D
     {
-        public decimal X { get; set; }
-        public decimal Y { get; set; }
-        public decimal Z { get; set; }
-        public decimal Rx { get; set; }
-        public decimal Ry { get; set; }
-        public decimal Rz { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public double Rx { get; set; }
+        public double Ry { get; set; }
+        public double Rz { get; set; }
 
-        public Point6D(decimal x, decimal y, decimal z, decimal rx, decimal ry, decimal rz)
+        public Point6D(double x, double y, double z, double rx, double ry, double rz)
         {
             X = x;
             Y = y;

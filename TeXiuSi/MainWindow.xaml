@@ -136,7 +136,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
     DisplayMemberPath="DisplayName"
     Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.ColumnSpan="2" Margin="188,0,0,0"
     />
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsPointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
                                                     <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Margin="10,10,10,10">
                                                         <GroupBox Padding="8" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                             <GroupBox.Header >
@@ -254,7 +254,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲X:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"   Width="130"
                                                                 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
-                                                                Value="{Binding PopupHorizontalOffset}" >
+                                                                Value="{Binding StepXValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay} "  >
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -269,7 +269,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲Y:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"  Width="130"
      Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
-     Value="{Binding PopupHorizontalOffset}" Margin="0 20">
+     Value="{Binding StepYValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay} " Margin="0 20">
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -283,7 +283,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 10 10" FontSize="16">▲Z:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"  Width="130"
  Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
- Value="{Binding PopupHorizontalOffset}" >
+  Value="{Binding StepZValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay} " >
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -300,21 +300,21 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                 <StackPanel Grid.Column="6" Grid.RowSpan="6" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0"  FontSize="16">X:</TextBlock>
-                                                                        <TextBox                                                             
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"                                                   
+                                                                        <TextBox Text="{Binding XValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"                                                          
+                                                             Width="130" Height="50"                                                   
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                                                                     </StackPanel>
 
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16"  Margin="0 10 10 10">Y:</TextBlock>
-                                                                        <TextBox                                                             
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"                                                    
+                                                                        <TextBox   Text="{Binding YValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"                                                          
+                                                             Width="130" Height="50"                                                    
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0 20"/>
                                                                     </StackPanel>
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16" Margin="0 0 10 0">Z:</TextBlock>
-                                                                        <TextBox  
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"
+                                                                        <TextBox  Text="{Binding ZValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                                                             Width="130" Height="50"
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                                                                     </StackPanel>
 
@@ -350,8 +350,8 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                 <StackPanel>
                                                                     <Button Name="ZMinusButton2"
                                                                     Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}"
-  ToolTip="Z轴负方向"
-            Command="{Binding ZMinusCommand2}">
+                                                                        ToolTip="Z轴负方向"
+                                                                        Command="{Binding ZMinusCommand2}">
 
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
@@ -367,8 +367,8 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 5 0 0">X+</TextBlock>
                                                                     <Button Name="XPlusButton2"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
-ToolTip="X轴正方向"
-            Command="{Binding XPlusCommand2}">
+                                                            ToolTip="X轴正方向"
+                                                            Command="{Binding XPlusCommand2}">
 
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
@@ -381,7 +381,7 @@ ToolTip="X轴正方向"
                                                                     <Button Name="ZPlusButton2"
                                                             Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
                                                             ToolTip="Z轴正方向"
-            Command="{Binding ZPlusCommand2}">
+                                                            Command="{Binding ZPlusCommand2}">
                                                                         <materialDesign:PackIcon
                                                                         Width="34"
                                                                         Height="34"
@@ -410,7 +410,7 @@ ToolTip="X轴正方向"
                                                                     <Button Name="YPlusButton2"
                                                                 Style="{StaticResource MaterialDesignFloatingActionSecondaryDarkButton}" 
                                                                 ToolTip="Y轴正方向"
-Command="{Binding YPlusCommand2}">
+                                                                Command="{Binding YPlusCommand2}">
 
                                                                         <materialDesign:PackIcon
                                                                 Width="34"
@@ -434,10 +434,10 @@ Command="{Binding YPlusCommand2}">
 
                                                                 <StackPanel Grid.Column="5" Orientation="Vertical" Grid.RowSpan="4" Margin="10 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲X:</TextBlock>
+                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲Rx:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"   Width="130"
                                                                 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
-                                                                Value="{Binding PopupHorizontalOffset}" >
+                                                                Value="{Binding StepRollvalue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" >
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -448,10 +448,10 @@ Command="{Binding YPlusCommand2}">
                                                                         </materialDesign:NumericUpDown>
                                                                     </StackPanel>
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲Y:</TextBlock>
+                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Margin="0 10 10 10">▲Ry:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"  Width="130"
-     Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
-     Value="{Binding PopupHorizontalOffset}" Margin="0 20">
+                                                                            Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
+                                                                            Value="{Binding StepPitchvalue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay} " Margin="0 20">
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -462,10 +462,10 @@ Command="{Binding YPlusCommand2}">
                                                                         </materialDesign:NumericUpDown>
                                                                     </StackPanel>
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 10 10" FontSize="16">▲Z:</TextBlock>
+                                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 10 10 10" FontSize="16">▲Rz:</TextBlock>
                                                                         <materialDesign:NumericUpDown  FontSize="20"  Width="130"
- Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
- Value="{Binding PopupHorizontalOffset}" >
+                                                                    Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"
+                                                                    Value="{Binding StepYawValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay} " >
                                                                             <materialDesign:NumericUpDown.IncreaseContent>
                                                                                 <materialDesign:PackIcon Kind="PlusCircle" />
                                                                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -481,22 +481,22 @@ Command="{Binding YPlusCommand2}">
 
                                                                 <StackPanel Grid.Column="6" Grid.RowSpan="6" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0"  FontSize="16">X:</TextBlock>
-                                                                        <TextBox                                                             
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"                                                   
+                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 10 0"  FontSize="16">Rx:</TextBlock>
+                                                                        <TextBox   Text="{Binding Rollvalue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"                                                          
+                                                             Width="130" Height="50"                                                   
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                                                                     </StackPanel>
 
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16"  Margin="0 10 10 10">Y:</TextBlock>
-                                                                        <TextBox                                                             
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"                                                    
+                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16"  Margin="0 10 10 10">Ry:</TextBlock>
+                                                                        <TextBox    Text="{Binding Pitchvalue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"                                                         
+                                                             Width="130" Height="50"                                                    
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" Margin="0 20"/>
                                                                     </StackPanel>
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16" Margin="0 0 10 0">Z:</TextBlock>
-                                                                        <TextBox  
-                                                            materialDesign:HintAssist.Hint="0.00" Width="130" Height="50"
+                                                                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="16" Margin="0 0 10 0">Rz:</TextBlock>
+                                                                        <TextBox  Text="{Binding YawValue, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                                                             Width="130" Height="50"
                                                             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
                                                                     </StackPanel>
 
@@ -548,7 +548,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
                                                 </StackPanel>
 
                                                 <!--画弧-->
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsArcMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>
@@ -581,40 +581,40 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
                                                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
+                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"   > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
                                                                 <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
+                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"  > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
                                                                 <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 20 0 0">
-                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
+                                                                    <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"  > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -625,7 +625,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -636,7 +636,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding StartPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -666,7 +666,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -677,7 +677,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -688,7 +688,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -699,7 +699,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -710,7 +710,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -721,7 +721,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding MidPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -751,7 +751,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -762,7 +762,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -773,7 +773,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -784,7 +784,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -795,7 +795,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -806,7 +806,7 @@ FormatString="F2"  Height="40"
 
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
-VerticalAlignment="Center"
+VerticalAlignment="Center" Text="{Binding EndPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="0" Maximum="50"
 FormatString="F2"  Height="40"
 />
@@ -832,7 +832,7 @@ ItemsSource="{StaticResource Position}"
                                 SelectedIndex="1"
 />
                                                                 <Button Name="LoadInstructionPointButton"
-  Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"   Command="{Binding LoadInstructionPointCommand}">
+Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"   Command="{Binding LoadInstructionPointCommand}">
 
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <materialDesign:PackIcon
@@ -870,7 +870,7 @@ Text="画弧" />
 
                                                 <!--JointMotionVisible-->
 
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsJointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
                                                     <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                         <GroupBox.Header>
                                                             <StackPanel Orientation="Horizontal">
@@ -1041,7 +1041,7 @@ Text="画弧" />
                                                 </StackPanel>
                                                 <!--StraightLineMotionVisible-->
 
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsStraightLineMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
                                                     <Grid Margin="20 50 20 20">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>

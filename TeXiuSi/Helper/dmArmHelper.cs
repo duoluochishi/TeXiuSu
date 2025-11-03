@@ -64,14 +64,14 @@ namespace TeXiuSi.Helper
             //var a = Add(1,2);
             //Console.WriteLine($"Calling : Result = {a.ToString()}");
 
-            _motorHandle = create_dm_motor();
-            if (_motorHandle == IntPtr.Zero)
-            {
-                throw new InvalidOperationException("Failed to create DmMotor instance.");
-            }
+            //_motorHandle = create_dm_motor();
+            //if (_motorHandle == IntPtr.Zero)
+            //{
+            //    throw new InvalidOperationException("Failed to create DmMotor instance.");
+            //}
 
 
-            Init();
+            //Init();
             //var str = init_motor();
 
             //Console.WriteLine($"The result of  {str}");
