@@ -455,8 +455,25 @@ namespace TeXiuSi.ViewModel
             set { _setZero = value; OnPropertyChanged(); }
         }
 
+        private double _scalePercentage = 100.0; // 默认值设为 100
 
+        // 用于 NumericUpDown 绑定的属性
+        public double ScalePercentage
+        {
+            get => _scalePercentage;
+            set
+            {
+                // 在 Setter 中可以额外检查，但 NumericUpDown 的 Minimum 属性会处理大部分限制
+                // 为了更稳健，可以在这里添加额外的逻辑，但对于简单的最小值限制，NumericUpDown 的 Minimum 属性足够
+                if (value >= 100.0)
+                {
+                    SetProperty(ref _scalePercentage, value);
+                }
+            }
+        }
 
+        [ObservableProperty]
+        private int AssistanceLevel;
         #endregion
 
         // 通用的枚举绑定项类（如果尚未定义）
