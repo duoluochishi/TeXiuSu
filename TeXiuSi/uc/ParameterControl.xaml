@@ -318,7 +318,7 @@ IsHitTestVisible="False" />
                         
                     </Grid>
                     <Button  Grid.Row="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}" Visibility="{Binding TerminalIsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}" Visibility="{Binding TerminalIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="ClipboardEditOutline" 
@@ -382,15 +382,16 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 1号:</TextBlock>
 
                         <Slider  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+Maximum="8" Width="330"  Value="{Binding ImpactLevel1, Mode=TwoWay}"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
                         <materialDesign:NumericUpDown  FontSize="20"  Width="20"
-Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  
- Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Grid.Column="2"  Value="{Binding ImpactLevel1, Mode=TwoWay}"
+Minimum="0" Maximum="8" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -401,11 +402,12 @@ Value="{Binding PopupHorizontalOffset}" >
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" >2号:</TextBlock>
                         <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+Maximum="8" Width="330"  Value="{Binding ImpactLevel2, Mode=TwoWay}" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
                         <materialDesign:NumericUpDown  FontSize="20"  Width="20"
-Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="1" 
- Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="1" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Grid.Column="2" 
+Value="{Binding ImpactLevel2, Mode=TwoWay}"
+Minimum="0" Maximum="8" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -416,11 +418,12 @@ Value="{Binding PopupHorizontalOffset}" >
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 3号:</TextBlock>
                         <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+Maximum="8" Width="330"  Value="{Binding ImpactLevel3, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}" />
 
                         <materialDesign:NumericUpDown  FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50" Grid.Row="2" Grid.Column="3"
-Value="{Binding PopupHorizontalOffset}" >
+Value="{Binding ImpactLevel3, Mode=TwoWay}"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Minimum="0" Maximum="8" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -431,12 +434,13 @@ Value="{Binding PopupHorizontalOffset}" >
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 4号:</TextBlock>
                         <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+Maximum="8" Width="330"  Value="{Binding ImpactLevel4, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <materialDesign:NumericUpDown  FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="3" 
- Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Grid.Column="2" 
+Value="{Binding ImpactLevel4, Mode=TwoWay}"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Minimum="0" Maximum="8" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -447,11 +451,12 @@ Value="{Binding PopupHorizontalOffset}" >
                         </materialDesign:NumericUpDown>
                         <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 5号:</TextBlock>
                         <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="50" Width="330"  Value="{Binding SharedJawTorqueValue, Mode=TwoWay}" Minimum="0"/>
+Maximum="50" Width="330"  Value="{Binding ImpactLevel5, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
                         <materialDesign:NumericUpDown  FontSize="20"  Width="20"
 Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="4" 
- Grid.Column="2" 
-Value="{Binding PopupHorizontalOffset}" >
+Grid.Column="2" 
+Value="{Binding ImpactLevel5, Mode=TwoWay}"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Minimum="0" Maximum="8" >
                             <materialDesign:NumericUpDown.IncreaseContent>
                                 <materialDesign:PackIcon Kind="PlusCircle" />
                             </materialDesign:NumericUpDown.IncreaseContent>
@@ -460,9 +465,24 @@ Value="{Binding PopupHorizontalOffset}" >
                                 <materialDesign:PackIcon Kind="MinusCircle " />
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
-                       
-                        <Button  Grid.Row="5" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollisionGradeEditor}">
+                        <TextBlock  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 5号:</TextBlock>
+                        <Slider Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
+Maximum="50" Width="330"  Value="{Binding ImpactLevel6, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
+                        <materialDesign:NumericUpDown  FontSize="20"  Width="20"
+Style="{StaticResource MaterialDesignFilledNumericUpDown}" Height="50"  Grid.Row="5" 
+ Grid.Column="2" 
+Value="{Binding ImpactLevel6, Mode=TwoWay}"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+Minimum="0" Maximum="8" >
+                            <materialDesign:NumericUpDown.IncreaseContent>
+                                <materialDesign:PackIcon Kind="PlusCircle" />
+                            </materialDesign:NumericUpDown.IncreaseContent>
+
+                            <materialDesign:NumericUpDown.DecreaseContent>
+                                <materialDesign:PackIcon Kind="MinusCircle " />
+                            </materialDesign:NumericUpDown.DecreaseContent>
+                        </materialDesign:NumericUpDown>
+                        <Button  Grid.Row="6" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollisionGradeEditor}" Visibility="{Binding CollisionIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="ClipboardEditOutline" 
@@ -471,6 +491,29 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollis
         Text="编辑" />
                             </StackPanel>
                         </Button>
+                        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding CollisionIsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                            <Button  HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" Height="45"  
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalCancelCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon
+        Kind="KeyboardReturn" 
+        Margin="0 0 8 0" />
+                                    <TextBlock
+        Text="取消" />
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button  HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" Height="45" Margin="20 0 0 0" 
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSaveCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon
+        Kind="ContentSave" 
+        Margin="0 0 8 0" />
+                                    <TextBlock
+        Text="保存" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
             </TabItem>

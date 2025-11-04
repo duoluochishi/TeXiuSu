@@ -126,6 +126,50 @@ namespace TeXiuSi.ViewModel
         #region Collision grade
 
 
+        private bool _collisionIsEditing = true;
+
+        public bool CollisionIsEditing
+        {
+            get => _collisionIsEditing;
+            set => SetProperty(ref _collisionIsEditing, value);
+
+        }
+        private double _impactLevel1 = 0; // 初始值
+        public double ImpactLevel1
+        {
+            get => _impactLevel1;
+            set => SetProperty(ref _impactLevel1, value);
+        }
+        private double _impactLevel2 = 0; // 初始值
+        public double ImpactLevel2
+        {
+            get => _impactLevel2;
+            set => SetProperty(ref _impactLevel2, value);
+        }
+        private double _impactLevel3 = 0; // 初始值
+        public double ImpactLevel3
+        {
+            get => _impactLevel3;
+            set => SetProperty(ref _impactLevel3, value);
+        }
+        private double _impactLevel4 = 0; // 初始值
+        public double ImpactLevel4
+        {
+            get => _impactLevel4;
+            set => SetProperty(ref _impactLevel4, value);
+        }
+        private double _impactLevel5 = 0; // 初始值
+        public double ImpactLevel5
+        {
+            get => _impactLevel5;
+            set => SetProperty(ref _impactLevel5, value);
+        }
+        private double _impactLevel6 = 0; // 初始值
+        public double ImpactLevel6
+        {
+            get => _impactLevel6;
+            set => SetProperty(ref _impactLevel6, value);
+        }
         public IRelayCommand CollisionGradeEditorCommand { get; }
 
         public IRelayCommand CollisionCancelCommand { get; }
