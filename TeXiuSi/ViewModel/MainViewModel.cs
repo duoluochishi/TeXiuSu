@@ -192,84 +192,383 @@ namespace TeXiuSi.ViewModel
         public IRelayCommand DrawArcCommand { get; }
 
         // 坐标点属性（用于绑定doubleUpDown的值）
-        [ObservableProperty]
-        private double StartPointX;
+       private double _startPointX;
+/// <summary>
+/// 起点X坐标
+/// </summary>
+public double StartPointX
+{
+    get { return _startPointX; }
+    set 
+    { 
+        if (Equals(_startPointX, value)) return; 
+        _startPointX = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double StartPointY;
+private double _startPointY;
+/// <summary>
+/// 起点Y坐标
+/// </summary>
+public double StartPointY
+{
+    get { return _startPointY; }
+    set 
+    { 
+        if (Equals(_startPointY, value)) return; 
+        _startPointY = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double StartPointZ;
+private double _startPointZ;
+/// <summary>
+/// 起点Z坐标
+/// </summary>
+public double StartPointZ
+{
+    get { return _startPointZ; }
+    set 
+    { 
+        if (Equals(_startPointZ, value)) return; 
+        _startPointZ = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double StartPointRx;
+private double _startPointRx;
+/// <summary>
+/// 起点Rx (绕X轴旋转)
+/// </summary>
+public double StartPointRx
+{
+    get { return _startPointRx; }
+    set 
+    { 
+        if (Equals(_startPointRx, value)) return; 
+        _startPointRx = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double StartPointRy;
+private double _startPointRy;
+/// <summary>
+/// 起点Ry (绕Y轴旋转)
+/// </summary>
+public double StartPointRy
+    {
+    get { return _startPointRy; }
+    set 
+    { 
+        if (Equals(_startPointRy, value)) return; 
+        _startPointRy = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double StartPointRz;
+private double _startPointRz;
+/// <summary>
+/// 起点Rz (绕Z轴旋转)
+/// </summary>
+public double StartPointRz
+{
+    get { return _startPointRz; }
+    set 
+    { 
+        if (Equals(_startPointRz, value)) return; 
+        _startPointRz = value; 
+        OnPropertyChanged(); 
+    }
+}
 
-        [ObservableProperty]
-        private double MidPointX;
+        private double _midPointX;
+        /// <summary>
+        /// 中点X坐标
+        /// </summary>
+        public double MidPointX
+        {
+            get { return _midPointX; }
+            set
+            {
+                if (Equals(_midPointX, value)) return;
+                _midPointX = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double MidPointY;
+        private double _midPointY;
+        /// <summary>
+        /// 中点Y坐标
+        /// </summary>
+        public double MidPointY
+        {
+            get { return _midPointY; }
+            set
+            {
+                if (Equals(_midPointY, value)) return;
+                _midPointY = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double MidPointZ;
+        private double _midPointZ;
+        /// <summary>
+        /// 中点Z坐标
+        /// </summary>
+        public double MidPointZ
+        {
+            get { return _midPointZ; }
+            set
+            {
+                if (Equals(_midPointZ, value)) return;
+                _midPointZ = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double MidPointRx;
+        private double _midPointRx;
+        /// <summary>
+        /// 中点Rx (绕X轴旋转)
+        /// </summary>
+        public double MidPointRx
+        {
+            get { return _midPointRx; }
+            set
+            {
+                if (Equals(_midPointRx, value)) return;
+                _midPointRx = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double MidPointRy;
+        private double _midPointRy;
+        /// <summary>
+        /// 中点Ry (绕Y轴旋转)
+        /// </summary>
+        public double MidPointRy
+        {
+            get { return _midPointRy; }
+            set
+            {
+                if (Equals(_midPointRy, value)) return;
+                _midPointRy = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double MidPointRz;
+        private double _midPointRz;
+        /// <summary>
+        /// 中点Rz (绕Z轴旋转)
+        /// </summary>
+        public double MidPointRz
+        {
+            get { return _midPointRz; }
+            set
+            {
+                if (Equals(_midPointRz, value)) return;
+                _midPointRz = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointX;
+        private double _endPointX;
+        /// <summary>
+        /// 终点X坐标
+        /// </summary>
+        public double EndPointX
+        {
+            get { return _endPointX; }
+            set
+            {
+                if (Equals(_endPointX, value)) return;
+                _endPointX = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointY;
+        private double _endPointY;
+        /// <summary>
+        /// 终点Y坐标
+        /// </summary>
+        public double EndPointY
+        {
+            get { return _endPointY; }
+            set
+            {
+                if (Equals(_endPointY, value)) return;
+                _endPointY = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointZ;
+        private double _endPointZ;
+        /// <summary>
+        /// 终点Z坐标
+        /// </summary>
+        public double EndPointZ
+        {
+            get { return _endPointZ; }
+            set
+            {
+                if (Equals(_endPointZ, value)) return;
+                _endPointZ = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointRx;
+        private double _endPointRx;
+        /// <summary>
+        /// 终点Rx (绕X轴旋转)
+        /// </summary>
+        public double EndPointRx
+        {
+            get { return _endPointRx; }
+            set
+            {
+                if (Equals(_endPointRx, value)) return;
+                _endPointRx = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointRy;
+        private double _endPointRy;
+        /// <summary>
+        /// 终点Ry (绕Y轴旋转)
+        /// </summary>
+        public double EndPointRy
+        {
+            get { return _endPointRy; }
+            set
+            {
+                if (Equals(_endPointRy, value)) return;
+                _endPointRy = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        private double EndPointRz;
-
-        [ObservableProperty]
-        private int SelectedInstructionPointIndex;
+        private double _endPointRz;
+        /// <summary>
+        /// 终点Rz (绕Z轴旋转)
+        /// </summary>
+        public double EndPointRz
+        {
+            get { return _endPointRz; }
+            set
+            {
+                if (Equals(_endPointRz, value)) return;
+                _endPointRz = value;
+                OnPropertyChanged();
+            }
+        }
+        private int _selectedInstructionPointIndex;
+        /// <summary>
+        /// 选中的指令点索引
+        /// </summary>
+        public int SelectedInstructionPointIndex
+        {
+            get { return _selectedInstructionPointIndex; }
+            set
+            {
+                if (_selectedInstructionPointIndex == value) return;
+                _selectedInstructionPointIndex = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
 
         #region JointMotionVisible
         // 关节角度属性
-        [ObservableProperty]
-        public string Joint1Angle = "0.000";
+        private string _joint1Angle = "0.000";
+        /// <summary>
+        /// 关节1的角度值
+        /// </summary>
+        public string Joint1Angle
+        {
+            get { return _joint1Angle; }
+            set
+            {
+                if (_joint1Angle == value) return;
+                _joint1Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string Joint2Angle = "0.000";
+        private string _joint2Angle = "0.000";
+        /// <summary>
+        /// 关节2的角度值
+        /// </summary>
+        public string Joint2Angle
+        {
+            get { return _joint2Angle; }
+            set
+            {
+                if (_joint2Angle == value) return;
+                _joint2Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string Joint3Angle = "0.000";
+        private string _joint3Angle = "0.000";
+        /// <summary>
+        /// 关节3的角度值
+        /// </summary>
+        public string Joint3Angle
+        {
+            get { return _joint3Angle; }
+            set
+            {
+                if (_joint3Angle == value) return;
+                _joint3Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string Joint4Angle = "0.000";
+        private string _joint4Angle = "0.000";
+        /// <summary>
+        /// 关节4的角度值
+        /// </summary>
+        public string Joint4Angle
+        {
+            get { return _joint4Angle; }
+            set
+            {
+                if (_joint4Angle == value) return;
+                _joint4Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string Joint5Angle = "0.000";
+        private string _joint5Angle = "0.000";
+        /// <summary>
+        /// 关节5的角度值
+        /// </summary>
+        public string Joint5Angle
+        {
+            get { return _joint5Angle; }
+            set
+            {
+                if (_joint5Angle == value) return;
+                _joint5Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string Joint6Angle = "0.000";
+        private string _joint6Angle = "0.000";
+        /// <summary>
+        /// 关节6的角度值
+        /// </summary>
+        public string Joint6Angle
+        {
+            get { return _joint6Angle; }
+            set
+            {
+                if (_joint6Angle == value) return;
+                _joint6Angle = value;
+                OnPropertyChanged();
+            }
+        }
 
         // 增减步长
         public const double StepIncrement = 1.0;
@@ -295,23 +594,93 @@ namespace TeXiuSi.ViewModel
 
         #region StraightLineMotionVisible
         // 直线运动坐标属性
-        [ObservableProperty]
-        public string StraightLineX = "0.000";
 
-        [ObservableProperty]
-        public string StraightLineY = "0.000";
+        private string _straightLineX = "0.000";
+        public string StraightLineX
+        {
+            get { return _straightLineX; }
+            set { _straightLineX = value; OnPropertyChanged(); }
+        }
+        //[ObservableProperty]
+        //public string straightLineX = "0.000";
 
-        [ObservableProperty]
-        public string StraightLineZ = "0.000";
+        private string _straightLineY = "0.000";
+        /// <summary>
+        /// 直线移动Y坐标
+        /// </summary>
+        public string StraightLineY
+        {
+            get { return _straightLineY; }
+            set
+            {
+                // 检查值是否变化，避免不必要的UI更新
+                if (_straightLineY == value) return;
 
-        [ObservableProperty]
-        public string StraightLineRx = "0.000";
+                _straightLineY = value;
+                // 关键：通知绑定系统属性已更改
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string StraightLineRy = "0.000";
+        private string _straightLineZ = "0.000";
+        /// <summary>
+        /// 直线移动Z坐标
+        /// </summary>
+        public string StraightLineZ
+        {
+            get { return _straightLineZ; }
+            set
+            {
+                if (_straightLineZ == value) return;
+                _straightLineZ = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [ObservableProperty]
-        public string StraightLineRz = "0.000";
+        private string _straightLineRx = "0.000";
+        /// <summary>
+        /// 直线移动Rx (绕X轴的旋转)
+        /// </summary>
+        public string StraightLineRx
+        {
+            get { return _straightLineRx; }
+            set
+            {
+                if (_straightLineRx == value) return;
+                _straightLineRx = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _straightLineRy = "0.000";
+        /// <summary>
+        /// 直线移动Ry (绕Y轴的旋转)
+        /// </summary>
+        public string StraightLineRy
+        {
+            get { return _straightLineRy; }
+            set
+            {
+                if (_straightLineRy == value) return;
+                _straightLineRy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _straightLineRz = "0.000";
+        /// <summary>
+        /// 直线移动Rz (绕Z轴的旋转)
+        /// </summary>
+        public string StraightLineRz
+        {
+            get { return _straightLineRz; }
+            set
+            {
+                if (_straightLineRz == value) return;
+                _straightLineRz = value;
+                OnPropertyChanged();
+            }
+        }
 
         // 坐标增减步长（mm）
         private const double PositionStepIncrement = 1.0;
@@ -1392,7 +1761,7 @@ namespace TeXiuSi.ViewModel
                     }
 
                     // 触发坐标变化事件
-                    OnCoordinateChanged(coordinateType, newValue);
+                    //OnCoordinateChanged(coordinateType, newValue);
                 }
             }
             catch (Exception ex)

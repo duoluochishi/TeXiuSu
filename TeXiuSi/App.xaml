@@ -8,11 +8,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="BlueGrey" SecondaryColor="Lime" />-->
-
+                <materialDesign:BundledTheme BaseTheme="Dark" SecondaryColor="Lime" />
+                <!--<ui:ThemesDictionary Theme="Dark" />-->
+                <!--<ui:ControlsDictionary />-->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-                <ui:ThemesDictionary Theme="Dark" />
-                <ui:ControlsDictionary />
+
             </ResourceDictionary.MergedDictionaries>
             <!-- 可选的附加颜色自定义 -->
             <!--<SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#FF80D6FF" />

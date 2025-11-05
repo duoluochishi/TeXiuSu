@@ -24,6 +24,9 @@ namespace TeXiuSi.uc
         {
             InitializeComponent();
             ApplicationThemeManager.Apply(this);
+
+
+            Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
         }
     }
 }

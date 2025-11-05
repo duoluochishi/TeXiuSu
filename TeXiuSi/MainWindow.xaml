@@ -13,7 +13,7 @@
         xmlns:helper="clr-namespace:TeXiuSi.Helper"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="None"
-        Title="MainWindow" Height="1000" Width="1600" Background="#6a7f95">
+        Title="MainWindow" Height="1000" Width="1600" >
     <Window.Resources>
         <ResourceDictionary>
             <helper:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>

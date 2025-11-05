@@ -137,10 +137,12 @@ namespace TeXiuSi
 
             ApplicationThemeManager.Apply(this);
 
+
             viewModel = new MainViewModel();
 
             this.DataContext = viewModel;
 
+            //Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
             #region Init
             basePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models\\";
             List<string> modelsNames = new List<string>();
