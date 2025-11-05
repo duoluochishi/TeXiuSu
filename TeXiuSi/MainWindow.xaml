@@ -138,7 +138,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
     DisplayMemberPath="DisplayName"
     Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.ColumnSpan="2" Margin="188,0,0,0"
     />
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsPointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Margin="10,10,10,10">
                                                         <GroupBox Padding="8" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                             <GroupBox.Header >
@@ -550,7 +550,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
                                                 </StackPanel>
 
                                                 <!--画弧-->
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsArcMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>
@@ -872,7 +872,7 @@ Text="画弧" />
 
                                                 <!--JointMotionVisible-->
 
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="Collapsed">
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" Visibility="{Binding IsJointMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <GroupBox Padding="8" Margin="10" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}">
                                                         <GroupBox.Header>
                                                             <StackPanel Orientation="Horizontal">
@@ -1043,7 +1043,7 @@ Text="画弧" />
                                                 </StackPanel>
                                                 <!--StraightLineMotionVisible-->
 
-                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3" >
+                                                <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3"  Visibility="{Binding IsStraightLineMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                     <Grid Margin="20 50 20 20">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition></RowDefinition>
