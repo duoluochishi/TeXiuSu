@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
+using Wpf.Ui.Appearance;
 
 namespace TeXiuSi
 {
@@ -133,6 +134,8 @@ namespace TeXiuSi
         public MainWindow()
         {
             InitializeComponent();
+
+            ApplicationThemeManager.Apply(this);
 
             viewModel = new MainViewModel();
 

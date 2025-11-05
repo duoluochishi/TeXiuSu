@@ -139,3 +139,11 @@ D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\TrajectoryLibraryDialog.g.cs
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\VersionUpgrade.g.cs
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\TrajectoryLibraryDialog.baml
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\VersionUpgrade.baml
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.Abstractions.dll
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.dll
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.pdb
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.xml
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.Abstractions.pdb
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\Wpf.Ui.Abstractions.xml
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\WPFUITest.g.cs
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\uc\WPFUITest.baml
