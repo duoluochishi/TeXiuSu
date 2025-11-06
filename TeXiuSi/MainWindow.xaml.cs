@@ -1,4 +1,5 @@
 ﻿using HelixToolkit.Wpf;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -115,18 +116,11 @@ namespace TeXiuSi
             modelsNames.Add(MODEL_PATH8);
             modelsNames.Add(MODEL_PATH9);
             modelsNames.Add(MODEL_PATH10);
-            modelsNames.Add(MODEL_PATH11);//Until here for the 4600
-#if IRB6700
-            modelsNames.Add(MODEL_PATH12);
-            modelsNames.Add(MODEL_PATH13);
-            modelsNames.Add(MODEL_PATH14);
-            modelsNames.Add(MODEL_PATH15);
-            modelsNames.Add(MODEL_PATH16);
-            modelsNames.Add(MODEL_PATH17);
-            modelsNames.Add(MODEL_PATH18);
-            modelsNames.Add(MODEL_PATH19);
-            modelsNames.Add(MODEL_PATH20);
-#endif
+
+            Log.Information("主窗口已初始化。");
+            Log.Debug("用户 {@User} 尝试点击按钮。");
+            Log.Error("用户 {@User} 尝试点击按钮。");
+
             RoboticArm.Content = Initialize_Environment(modelsNames);
 
             /** Debug sphere to check in which point the joint is rotating**/
@@ -241,99 +235,13 @@ namespace TeXiuSi
                 RA.Children.Add(joints[7].model);
                 RA.Children.Add(joints[8].model);
                 RA.Children.Add(joints[9].model);
-                RA.Children.Add(joints[10].model);
-#if IRB6700
-                RA.Children.Add(joints[11].model);
-                RA.Children.Add(joints[12].model);
-                RA.Children.Add(joints[13].model);
-                RA.Children.Add(joints[14].model);
-                RA.Children.Add(joints[15].model);
-                RA.Children.Add(joints[16].model);
-                RA.Children.Add(joints[17].model);
-                RA.Children.Add(joints[18].model);
-                RA.Children.Add(joints[19].model);
-#endif
+                //RA.Children.Add(joints[10].model);
 
-#if IRB6700
-                Color cableColor = Colors.DarkSlateGray;
-                changeModelColor(joints[6], cableColor);
-                changeModelColor(joints[7], cableColor);
-                changeModelColor(joints[8], cableColor);
-                changeModelColor(joints[9], cableColor);
-                changeModelColor(joints[10], cableColor);
-                changeModelColor(joints[11], cableColor);
-                changeModelColor(joints[12], cableColor);
-                changeModelColor(joints[13], cableColor);
-
-                changeModelColor(joints[14], Colors.Gray);
-
-                changeModelColor(joints[15], Colors.Red);
-                changeModelColor(joints[16], Colors.Red);
-                changeModelColor(joints[17], Colors.Red);
-
-                changeModelColor(joints[18], Colors.Gray);
-                changeModelColor(joints[19], Colors.Gray);
-
-                joints[0].angleMin = -180;
-                joints[0].angleMax = 180;
-                joints[0].rotAxisX = 0;
-                joints[0].rotAxisY = 0;
-                joints[0].rotAxisZ = 1;
-                joints[0].rotPointX = 0;
-                joints[0].rotPointY = 0;
-                joints[0].rotPointZ = 0;
-
-                joints[1].angleMin = -100;
-                joints[1].angleMax = 60;
-                joints[1].rotAxisX = 0;
-                joints[1].rotAxisY = 1;
-                joints[1].rotAxisZ = 0;
-                joints[1].rotPointX = 348;
-                joints[1].rotPointY = -243;
-                joints[1].rotPointZ = 775;
-
-                joints[2].angleMin = -90;
-                joints[2].angleMax = 90;
-                joints[2].rotAxisX = 0;
-                joints[2].rotAxisY = 1;
-                joints[2].rotAxisZ = 0;
-                joints[2].rotPointX = 347;
-                joints[2].rotPointY = -376;
-                joints[2].rotPointZ = 1923;
-
-                joints[3].angleMin = -180;
-                joints[3].angleMax = 180;
-                joints[3].rotAxisX = 1;
-                joints[3].rotAxisY = 0;
-                joints[3].rotAxisZ = 0;
-                joints[3].rotPointX = 60;
-                joints[3].rotPointY = 0;
-                joints[3].rotPointZ = 2125;
-
-                joints[4].angleMin = -115;
-                joints[4].angleMax = 115;
-                joints[4].rotAxisX = 0;
-                joints[4].rotAxisY = 1;
-                joints[4].rotAxisZ = 0;
-                joints[4].rotPointX = 1815;
-                joints[4].rotPointY = 0;
-                joints[4].rotPointZ = 2125;
-
-                joints[5].angleMin = -180;
-                joints[5].angleMax = 180;
-                joints[5].rotAxisX = 1;
-                joints[5].rotAxisY = 0;
-                joints[5].rotAxisZ = 0;
-                joints[5].rotPointX = 2008;
-                joints[5].rotPointY = 0;
-                joints[5].rotPointZ = 2125;
-
-#else
                 changeModelColor(joints[6], Colors.Red);
                 changeModelColor(joints[7], Colors.Black);
                 changeModelColor(joints[8], Colors.Black);
                 changeModelColor(joints[9], Colors.Black);
-                changeModelColor(joints[10], Colors.Gray);
+                //changeModelColor(joints[10], Colors.Gray);
 
                 RA.Children.Add(joints[0].model);
                 RA.Children.Add(joints[1].model);
@@ -401,11 +309,11 @@ namespace TeXiuSi
                 joints[5].rotPointX = 1405;
                 joints[5].rotPointY = 0;
                 joints[5].rotPointZ = 1765;
-#endif
+
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception Error:" + e.StackTrace);
+                Log.Error("Exception Error:" + e.StackTrace);
             }
             return RA;
         }

@@ -1,4 +1,4 @@
-﻿using Kvaser.CanLib;
+﻿//using Kvaser.CanLib;
 using System;
 using System;
 using System.Collections.Generic;
@@ -10,12 +10,12 @@ namespace TeXiuSi.Controls
 {
     public class KvaserArmController
     {
-        Canlib.canStatus R;
+        //Canlib.canStatus R;
         int V;
 
         public KvaserArmController() {
 
-            Canlib.canInitializeLibrary();
+            //Canlib.canInitializeLibrary();
         }
 
 
