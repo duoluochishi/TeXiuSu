@@ -17,29 +17,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TeXiuSi.Helper;
+using TeXiuSi.Model;
 using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
 
 namespace TeXiuSi
 {
-    class Joint
-    {
-        public Model3D model = null;
-        public double angle = 0;
-        public double angleMin = -180;
-        public double angleMax = 180;
-        public int rotPointX = 0;
-        public int rotPointY = 0;
-        public int rotPointZ = 0;
-        public int rotAxisX = 0;
-        public int rotAxisY = 0;
-        public int rotAxisZ = 0;
 
-        public Joint(Model3D pModel)
-        {
-            model = pModel;
-        }
-    }
+
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -55,6 +41,8 @@ namespace TeXiuSi
 
         bool switchingJoint = false;
         bool isAnimating = false;
+
+        RobotDynamicsHelper robotDynamicsHelper = null;
 
         Color oldColor = Colors.White;
         GeometryModel3D oldSelectedModel = null;
@@ -85,31 +73,6 @@ namespace TeXiuSi
         //真实逻辑
 
 
-
-#if IRB6700
-        //directroy of all stl files
-        private const string MODEL_PATH1 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01_CAD.stl";
-        private const string MODEL_PATH2 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02_CAD.stl";
-        private const string MODEL_PATH3 = "IRB6700-MH3_245-300_IRC5_rev02_LINK03_CAD.stl";
-        private const string MODEL_PATH4 = "IRB6700-MH3_245-300_IRC5_rev01_LINK04_CAD.stl";
-        private const string MODEL_PATH5 = "IRB6700-MH3_245-300_IRC5_rev01_LINK05_CAD.stl";
-        private const string MODEL_PATH6 = "IRB6700-MH3_245-300_IRC5_rev01_LINK06_CAD.stl";
-        private const string MODEL_PATH7 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01_CABLE.stl";
-        private const string MODEL_PATH8 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01m_CABLE.stl";
-        private const string MODEL_PATH9 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02_CABLE.stl";
-        private const string MODEL_PATH10 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02m_CABLE.stl";
-        private const string MODEL_PATH11 = "IRB6700-MH3_245-300_IRC5_rev00_LINK03a_CABLE.stl";
-        private const string MODEL_PATH12 = "IRB6700-MH3_245-300_IRC5_rev00_LINK03b_CABLE.stl";
-        private const string MODEL_PATH13 = "IRB6700-MH3_245-300_IRC5_rev02_LINK03m_CABLE.stl";
-        private const string MODEL_PATH14 = "IRB6700-MH3_245-300_IRC5_rev01_LINK04_CABLE.stl";
-        private const string MODEL_PATH15 = "IRB6700-MH3_245-300_IRC5_rev00_ROD_CAD.stl";
-        private const string MODEL_PATH16 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO1_CAD.stl";
-        private const string MODEL_PATH17 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO2_CAD.stl";
-        private const string MODEL_PATH18 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO3_CAD.stl";
-        private const string MODEL_PATH19 = "IRB6700-MH3_245-300_IRC5_rev01_BASE_CAD.stl";
-        private const string MODEL_PATH20 = "IRB6700-MH3_245-300_IRC5_rev00_CYLINDER_CAD.stl";
-#else
-
         private const string MODEL_PATH1 = "IRB4600_20kg-250_LINK1_CAD_rev04.stl";
         private const string MODEL_PATH2 = "IRB4600_20kg-250_LINK2_CAD_rev04.stl";
         private const string MODEL_PATH3 = "IRB4600_20kg-250_LINK3_CAD_rev005.stl";
@@ -121,9 +84,6 @@ namespace TeXiuSi
         private const string MODEL_PATH9 = "IRB4600_20kg-250_CABLES_LINK2_rev03.stl";
         private const string MODEL_PATH10 = "IRB4600_20kg-250_CABLES_LINK3_rev03.stl";
         private const string MODEL_PATH11 = "IRB4600_20kg-250_BASE_CAD_rev04.stl";
-#endif
-
-
 
         #endregion
 
@@ -136,7 +96,7 @@ namespace TeXiuSi
 
             //ApplicationThemeManager.Apply(this);
 
-
+            robotDynamicsHelper=new RobotDynamicsHelper();
             viewModel = new MainViewModel();
 
             this.DataContext = viewModel;
@@ -640,30 +600,13 @@ namespace TeXiuSi
             //Ty_Copy.Content = geom.Bounds.Location.Y;
             //Tz_Copy.Content = geom.Bounds.Location.Z;
 
-#if IRB6700
-            joints[6].model.Transform = F1;
-            joints[7].model.Transform = F1;
-            joints[19].model.Transform = F1;
-            joints[14].model.Transform = F1;
 
-            joints[8].model.Transform = F2;
-            joints[9].model.Transform = F2;
-
-            joints[10].model.Transform = F3;
-            joints[11].model.Transform = F3;
-            joints[12].model.Transform = F3;
-            joints[16].model.Transform = F3;
-
-            joints[13].model.Transform = F4;
-            joints[17].model.Transform = F4;
-#else
             joints[7].model.Transform = F1; //Cables
 
             joints[8].model.Transform = F2; //Cables
 
             joints[6].model.Transform = F3; //The ABB writing
             joints[9].model.Transform = F3; //Cables
-#endif
 
             return new Vector3D(joints[5].model.Bounds.Location.X, joints[5].model.Bounds.Location.Y, joints[5].model.Bounds.Location.Z);
         }

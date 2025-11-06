@@ -142,3 +142,6 @@ D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.csproj.CoreCompileInputs.ca
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.csproj.Up2Date
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe
 D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.pdb
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\TeXiuSi.exe.config
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\RobotDynamics.dll
+D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\bin\Debug\RobotDynamics.pdb
