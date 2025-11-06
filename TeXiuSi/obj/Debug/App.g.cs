@@ -33,10 +33,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
 using TeXiuSi;
-using Wpf.Ui;
-using Wpf.Ui.Controls;
-using Wpf.Ui.Converters;
-using Wpf.Ui.Markup;
 
 
 namespace TeXiuSi {

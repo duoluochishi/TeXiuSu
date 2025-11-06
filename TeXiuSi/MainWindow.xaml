@@ -7,13 +7,12 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:TeXiuSi"
-        
         xmlns:cvt="clr-namespace:TeXiuSi.Convert"
         xmlns:uc="clr-namespace:TeXiuSi.uc"
         xmlns:helper="clr-namespace:TeXiuSi.Helper"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="None"
-        Title="MainWindow" Height="1000" Width="1600" >
+        Title="MainWindow" Height="1000" Width="1600" Background="#00c2cc">
     <Window.Resources>
         <ResourceDictionary>
             <helper:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -98,7 +97,7 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
     Style="{StaticResource MaterialDesignFilledTabControl}"
     TabStripPlacement="Left">
                         <TabItem
-      Header="用户操作区">
+      Header="用户操作区" >
                             <ScrollViewer>
                                 <materialDesign:Card>
                                     <TabControl
@@ -1436,7 +1435,7 @@ Text="轨迹库" />
                     <helix:HelixViewport3D.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF060A13" Offset="0"/>
-                            <GradientStop Color="#008000" Offset="1"/>
+                            <GradientStop Color="#FF1D64FF" Offset="1"/>
                         </LinearGradientBrush>
                     </helix:HelixViewport3D.Background>
                     <!-- Remember to add light to the scene -->

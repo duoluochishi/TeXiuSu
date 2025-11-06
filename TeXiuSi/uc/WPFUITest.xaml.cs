@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Wpf.Ui.Appearance;
+//using Wpf.Ui.Appearance;
 
 namespace TeXiuSi.uc
 {
@@ -23,10 +23,10 @@ namespace TeXiuSi.uc
         public WPFUITest()
         {
             InitializeComponent();
-            ApplicationThemeManager.Apply(this);
+            //ApplicationThemeManager.Apply(this);
 
 
-            Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
+            //Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
         }
     }
 }

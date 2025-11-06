@@ -9,11 +9,11 @@
         Title="WPFUITest" Height="450" Width="800" >
 
     <Grid >
-        <StackPanel>
+        <!--<StackPanel>
             <ui:TitleBar Title="WPF UI"/>
             <ui:Card Margin="8">
                 <ui:Button Content="Hello World" Icon="{ui:SymbolIcon Fluent24}" />
             </ui:Card>
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </Window>

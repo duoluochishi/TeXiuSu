@@ -19,7 +19,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
-using Wpf.Ui.Appearance;
 
 namespace TeXiuSi
 {
@@ -135,7 +134,7 @@ namespace TeXiuSi
         {
             InitializeComponent();
 
-            ApplicationThemeManager.Apply(this);
+            //ApplicationThemeManager.Apply(this);
 
 
             viewModel = new MainViewModel();
@@ -1008,6 +1007,20 @@ namespace TeXiuSi
             {
                 MessageBox.Show($"发生未知错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+
+        // 这是一个概念性的方法，需要您进行复杂的数学推导
+        public double[] InverseKinematics(double x, double y, double z, double alpha, double beta, double gamma)
+        {
+            // 1. 进行复杂的代数或几何运算
+            // 2. 求解出六个关节的角度
+
+            // ... 大量的 IK 解算代码 ...
+
+            // 返回计算出的六个关节角度
+            //return new double[] { theta1, theta2, theta3, theta4, theta5, theta6 };
+            return null;
         }
     }
 }
