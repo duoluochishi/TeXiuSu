@@ -10,6 +10,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
@@ -24,6 +25,29 @@ namespace TeXiuSi.ViewModel
         public double[] doubleAngles;
 
         private RobotDynamicsHelper robotDynamicsHelper;
+
+        #region 位移参数
+
+        // 类级别的成员变量 (在您的主窗口或ViewModel中定义)
+        public bool isMoving = false;
+        public int totalMovementSteps = 5000; // 总步数，与 movements 对应
+        public int currentStep = 0;
+
+        // 起点位姿
+        public Vector3D startPosition; // X, Y, Z
+        public double startRoll;      // Rx
+        public double startPitch;     // Ry
+        public double startYaw;       // Rz
+
+        // 终点位姿
+        public Vector3D targetPosition; // X, Y, Z
+        public double targetRoll;       // Rx
+        public double targetPitch;      // Ry
+        public double targetYaw;        // Rz
+
+        #endregion
+
+
         #region 
 
         //失能 急停 视角还原 设置（直接）disabled scram

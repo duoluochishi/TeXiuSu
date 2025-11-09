@@ -669,69 +669,158 @@ namespace TeXiuSi
 
             return new Vector3D(joints[5].model.Bounds.Location.X, joints[5].model.Bounds.Location.Y, joints[5].model.Bounds.Location.Z);
         }
+        public double[] GetCurrentEndEffectorPose(){
 
-        public void timer1_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+            double[] eulerAngles = { 0, 0, 0, 0,0,0 };
 
 
-                #region 之前的关节角度计算
-                if (robotDynamicsHelper.MainRobot == null)
-                {
-                    return;
-                }
-                Vector3D reachinCopyPoint = new Vector3D(viewModel.XValue, viewModel.YawValue, viewModel.ZValue);
-                // 获取最佳关节角结果
-                //double[] jointAnglesRad = result.q;
-                angles = InverseKinematics(reachinCopyPoint, angles);
-                //angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(reachingPoint.X, reachingPoint.Y, reachingPoint.Z, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
-                if (angles == null && angles.Length == 0)
-                {
-                    Log.Information("计算失败");
-                    return;
-                }
-                joint1.Value = joints[0].angle = angles[0];
-                joint2.Value = joints[1].angle = angles[1];
-                joint3.Value = joints[2].angle = angles[2];
-                joint4.Value = joints[3].angle = angles[3];
-                joint5.Value = joints[4].angle = angles[4];
-                joint6.Value = joints[5].angle = angles[5];
 
-                #endregion
-                //RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
-                //var doubleAngles = robotDynamicsHelper.UserMethod(viewModel.XValue, viewModel.YValue, viewModel.ZValue, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
-                //joint1.Value = joints[0].angle =doubleAngles[0];
-                //joint2.Value = joints[1].angle =doubleAngles[1];
-                //joint3.Value = joints[2].angle =doubleAngles[2];
-                //joint4.Value = joints[3].angle =doubleAngles[3];
-                //joint5.Value = joints[4].angle =doubleAngles[4];
-                //joint6.Value = joints[5].angle =doubleAngles[5];
 
-                // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
-                viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
-                viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
-                viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
-                viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
-                viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
-                viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+            return eulerAngles;
 
-                if ((--movements) <= 0)
-                {
-                    //button.Content = "Go to position";
-                    isAnimating = false;
-                    timer1.Stop();
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error("计算失败"+ex.Message);
-
-                timer1.Stop();
-            }
-           
         }
+
+
+        // 假设您将其重命名为 GetCurrentEndEffectorPose 并返回包含 6 个值的数组
+        public double[] GetCurrentEndEffectorPose(double[] angles)
+        {
+            // ... (保留您所有的 F1 到 F6 的变换计算代码，这些代码是必需的) ...
+            //The base only has rotation and is always at the origin, so the only transform in the transformGroup is the rotation R
+            // --- 关节 1 (基座) 的变换 ---
+            F1 = new Transform3DGroup();
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[0].rotAxisX, joints[0].rotAxisY, joints[0].rotAxisZ), angles[0]), new Point3D(joints[0].rotPointX, joints[0].rotPointY, joints[0].rotPointZ));
+            F1.Children.Add(R);
+
+            //This moves the first joint attached to the base, it may translate and rotate. Since the joint are already in the right position (the .stl model also store the joints position
+            //in the virtual world when they were first created, so if you load all the .stl models of the joint they will be automatically positioned in the right locations)
+            //so in all of these cases the first translation is always 0, I just left it for future purposes if something need to be moved
+            //After that, the joint needs to rotate of a certain amount (given by the value in the slider), and the rotation must be executed on a specific point
+            //After some testing it looks like the point 175, -200, 500 is the sweet spot to achieve the rotation intended for the joint
+            //finally we also need to apply the transformation applied to the base 
+            // --- 关节 2 的变换 ---
+            F2 = new Transform3DGroup();
+            T = new TranslateTransform3D(0, 0, 0);
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[1].rotAxisX, joints[1].rotAxisY, joints[1].rotAxisZ), angles[1]), new Point3D(joints[1].rotPointX, joints[1].rotPointY, joints[1].rotPointZ));
+            F2.Children.Add(T);
+            F2.Children.Add(R);
+            F2.Children.Add(F1);
+
+            //The second joint is attached to the first one. As before I found the sweet spot after testing, and looks like is rotating just fine. No pre-translation as before
+            //and again the previous transformation needs to be applied
+            // --- 关节 3 的变换 ---
+            F3 = new Transform3DGroup();
+            T = new TranslateTransform3D(0, 0, 0);
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[2].rotAxisX, joints[2].rotAxisY, joints[2].rotAxisZ), angles[2]), new Point3D(joints[2].rotPointX, joints[2].rotPointY, joints[2].rotPointZ));
+            F3.Children.Add(T);
+            F3.Children.Add(R);
+            F3.Children.Add(F2);
+
+            // --- 关节 4 的变换 ---
+            F4 = new Transform3DGroup();
+            T = new TranslateTransform3D(0, 0, 0); //1500, 650, 1650
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[3].rotAxisX, joints[3].rotAxisY, joints[3].rotAxisZ), angles[3]), new Point3D(joints[3].rotPointX, joints[3].rotPointY, joints[3].rotPointZ));
+            F4.Children.Add(T);
+            F4.Children.Add(R);
+            F4.Children.Add(F3);
+
+            // --- 关节 5 的变换 ---
+            F5 = new Transform3DGroup();
+            T = new TranslateTransform3D(0, 0, 0);
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[4].rotAxisX, joints[4].rotAxisY, joints[4].rotAxisZ), angles[4]),
+                new Point3D(joints[4].rotPointX, joints[4].rotPointY, joints[4].rotPointZ));
+            F5.Children.Add(T);
+            F5.Children.Add(R);
+            F5.Children.Add(F4);
+
+            //NB: I was having a nightmare trying to understand why it was always rotating in a weird way... SO I realized that the order in which
+            //you add the Children is actually VERY IMPORTANT in fact before I was applyting F and then T and R, but the previous transformation
+            //Should always be applied as last (FORWARD Kinematics)
+            // --- 关节 6 的变换 ---
+            F6 = new Transform3DGroup();
+            T = new TranslateTransform3D(0, 0, 0);
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[5].rotAxisX, joints[5].rotAxisY, joints[5].rotAxisZ), angles[5]), new Point3D(joints[5].rotPointX, joints[5].rotPointY, joints[5].rotPointZ));
+            F6.Children.Add(T);
+            F6.Children.Add(R);
+            F6.Children.Add(F5);
+            // --- 提取位置 (X, Y, Z) ---
+            double X = joints[5].model.Bounds.Location.X;
+            double Y = joints[5].model.Bounds.Location.Y;
+            double Z = joints[5].model.Bounds.Location.Z;
+
+            // --- 提取姿态 (Rx, Ry, Rz) ---
+            // 这是最复杂的一步。您需要从最终变换 F6 中获取旋转信息，并将其转换为欧拉角。
+            // 假设 F6.Value 是一个 4x4 矩阵，或者 F6 内部有一个方法可以获取 RotationMatrix
+
+            // 示例伪代码（依赖于库的实现）：
+            RotationMatrix currentRotation = F6.GetRotationMatrix(); // 假设有此方法
+                                                                     // 假设您的 RotationMatrix 类支持 ToEulerAngles(Order)
+            double[] eulerAngles = currentRotation.ToEulerAngles(EulerAngleOrder.Zyx);
+
+            double Rx = eulerAngles[0]; // Roll (可能与您的命名不符，需核对)
+            double Ry = eulerAngles[1]; // Pitch
+            double Rz = eulerAngles[2]; // Yaw
+
+            // 返回完整的 6DOF 位姿
+            return new double[] { X, Y, Z, Rx, Ry, Rz };
+        }
+
+
+        #region 老方法
+        //public void timer1_Tick(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+
+
+        //        #region 之前的关节角度计算
+        //        if (robotDynamicsHelper.MainRobot == null)
+        //        {
+        //            return;
+        //        }
+        //        Vector3D reachinCopyPoint = new Vector3D(viewModel.XValue, viewModel.YawValue, viewModel.ZValue);
+        //        // 获取最佳关节角结果
+        //        //double[] jointAnglesRad = result.q;
+        //        angles = InverseKinematics(reachinCopyPoint, angles);
+        //        //angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(reachingPoint.X, reachingPoint.Y, reachingPoint.Z, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
+        //        if (angles == null && angles.Length == 0)
+        //        {
+        //            Log.Information("计算失败");
+        //            return;
+        //        }
+        //        joint1.Value = joints[0].angle = angles[0];
+        //        joint2.Value = joints[1].angle = angles[1];
+        //        joint3.Value = joints[2].angle = angles[2];
+        //        joint4.Value = joints[3].angle = angles[3];
+        //        joint5.Value = joints[4].angle = angles[4];
+        //        joint6.Value = joints[5].angle = angles[5];
+
+        //        #endregion
+        //        // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
+        //        viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
+        //        viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
+        //        viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
+        //        viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
+        //        viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
+        //        viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+
+        //        if ((--movements) <= 0)
+        //        {
+        //            //button.Content = "Go to position";
+        //            isAnimating = false;
+        //            timer1.Stop();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Error("计算失败" + ex.Message);
+
+        //        timer1.Stop();
+        //    }
+
+        //}
+        #endregion
+
         public double[] InverseKinematics(Vector3D target, double[] angles)
         {
             if (DistanceFromTarget(target, angles) < DistanceThreshold)
@@ -762,6 +851,91 @@ namespace TeXiuSi
 
             return angles;
         }
+
+        #region 新位移策略 
+
+        public void timer1_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!viewModel.isMoving)
+                {
+                    timer1.Stop();
+                    return;
+                }
+
+                double t = (double)viewModel.currentStep / viewModel.totalMovementSteps; // 归一化时间 t (从 0.0 到 1.0)
+
+                // --- 1. 笛卡尔空间位置线性插值 (X, Y, Z) ---
+                // P_next = P_start + t * (P_target - P_start)
+                double nextX = viewModel.startPosition.X + t * (viewModel.targetPosition.X - viewModel.startPosition.X);
+                double nextY = viewModel.startPosition.Y + t * (viewModel.targetPosition.Y - viewModel.startPosition.Y);
+                double nextZ = viewModel.startPosition.Z + t * (viewModel.targetPosition.Z - viewModel.startPosition.Z);
+
+                // --- 2. 姿态线性插值 (Rx, Ry, Rz) ---
+                // 注意：欧拉角线性插值可能导致非均匀旋转或万向锁问题，
+                // 但对于小角度运动，它比四元数 Slerp 实现更简单。
+                double nextRoll = viewModel.startRoll + t * (viewModel.targetRoll - viewModel.startRoll);
+                double nextPitch = viewModel.startPitch + t * (viewModel.targetPitch - viewModel.startPitch);
+                double nextYaw = viewModel.startYaw + t * (viewModel.targetYaw - viewModel.startYaw);
+
+                // --- 3. 调用 IK 求解器计算下一帧的关节角度 ---
+
+                double[] currentAngles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+
+                // 调用包含 Rx, Ry, Rz 的新方法
+                double[] angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(
+                    nextX, nextY, nextZ,
+                    nextRoll, nextPitch, nextYaw
+                );
+
+                // 检查并更新关节角度 (与您原有的逻辑相同)
+                if (angles == null || angles.Length == 0)
+                {
+                    Log.Information("IK 计算失败，终止运动");
+                    viewModel.isMoving = false;
+                    return;
+                }
+
+                // ... 将 angles 赋值给 joints[i].angle 和 UI 控件 (与您原有代码相同) ...
+                joint1.Value = joints[0].angle = angles[0];
+                joint1.Value = joints[0].angle = angles[0];
+                joint2.Value = joints[1].angle = angles[1];
+                joint3.Value = joints[2].angle = angles[2];
+                joint4.Value = joints[3].angle = angles[3];
+                joint5.Value = joints[4].angle = angles[4];
+                joint6.Value = joints[5].angle = angles[5];
+
+          
+                // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
+                viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
+                viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
+                viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
+                viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
+                viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
+                viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+
+
+                // --- 4. 步进和终止条件 ---
+                viewModel.currentStep++;
+
+                if (viewModel.currentStep >= viewModel.totalMovementSteps)
+                {
+                    viewModel.isMoving = false;
+                    // 可选：确保最终位置被精确设置一次
+                    // angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(targetX, targetY, targetZ, targetRoll, targetPitch, targetYaw);
+                    // ... 再次更新关节角度 ...
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error("轨迹计算失败:" + ex.Message);
+                viewModel.isMoving = false;
+                timer1.Stop();
+            }
+        }
+        #endregion
 
         public bool checkAngles(double[] oldAngles, double[] angles)
         {
@@ -879,6 +1053,33 @@ namespace TeXiuSi
                 isAnimating = true;
                 timer1.Start();
             }
+        }
+
+        public void StartMovement(double x, double y, double z, double roll, double pitch, double yaw)
+        {
+            // 1. 记录起点：从当前模型获取
+            // 假设您能从当前关节角度通过正运动学 (FK) 获取当前 X,Y,Z,Rx,Ry,Rz
+            // 如果不能直接获取 Rx, Ry, Rz，您需要先通过 FK 拿到 RotationMatrix 并转换为欧拉角。
+
+            // 假设 get_current_pose() 能返回当前位姿的六个值
+            double[] currentPose = GetCurrentEndEffectorPose();
+
+            viewModel.startPosition = new Vector3D(currentPose[0], currentPose[1], currentPose[2]);
+            viewModel.startRoll = currentPose[3];
+            viewModel.startPitch = currentPose[4];
+            viewModel.startYaw = currentPose[5];
+
+            // 2. 记录终点
+            viewModel.targetPosition = new Vector3D(x, y, z);
+            viewModel.targetRoll = roll;
+            viewModel.targetPitch = pitch;
+            viewModel.targetYaw = yaw;
+
+            // 3. 重置步数并启动
+            viewModel.currentStep = 0;
+            viewModel.isMoving = true;
+            // 确保 timer1 已经启动
+            timer1.Start();
         }
         #endregion
 
