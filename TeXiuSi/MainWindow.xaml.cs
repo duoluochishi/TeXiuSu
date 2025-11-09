@@ -564,14 +564,14 @@ namespace TeXiuSi
         }
         private void updateSpherePosition()
         {
-            int sel = ((int)jointSelector.Value) - 1;
-            if (sel < 0)
-                return;
+            //int sel = ((int)jointSelector.Value) - 1;
+            //if (sel < 0)
+            //    return;
 
-            Transform3DGroup F = new Transform3DGroup();
-            F.Children.Add(new TranslateTransform3D(joints[sel].rotPointX, joints[sel].rotPointY, joints[sel].rotPointZ));
-            F.Children.Add(joints[sel].model.Transform);
-            geom.Transform = F;
+            //Transform3DGroup F = new Transform3DGroup();
+            //F.Children.Add(new TranslateTransform3D(joints[sel].rotPointX, joints[sel].rotPointY, joints[sel].rotPointZ));
+            //F.Children.Add(joints[sel].model.Transform);
+            //geom.Transform = F;
         }
         /// <summary>
         /// 这个方法是机械臂能够活动的关键。它根据给定的每个关节的角度，计算出每个部件在3D空间中的最终位置和姿态。这就是所谓的正向运动学 (Forward Kinematics)
@@ -698,7 +698,7 @@ namespace TeXiuSi
 
             if ((--movements) <= 0)
             {
-                button.Content = "Go to position";
+                //button.Content = "Go to position";
                 isAnimating = false;
                 timer1.Stop();
             }
@@ -813,7 +813,7 @@ namespace TeXiuSi
             if (switchingJoint)
                 return;
 
-            int sel = ((int)jointSelector.Value) - 1;
+            //int sel = ((int)jointSelector.Value) - 1;
             //joints[sel].rotAxisX = jointXAxis.IsChecked.Value ? 1 : 0;
             //joints[sel].rotAxisY = jointYAxis.IsChecked.Value ? 1 : 0;
             //joints[sel].rotAxisZ = jointZAxis.IsChecked.Value ? 1 : 0;
@@ -827,14 +827,14 @@ namespace TeXiuSi
             //joints[sel].rotPointX = (int)jointX.Value;
             //joints[sel].rotPointY = (int)jointY.Value;
             //joints[sel].rotPointZ = (int)jointZ.Value;
-            updateSpherePosition();
+            //updateSpherePosition();
         }
 
         public void StartInverseKinematics(object sender, RoutedEventArgs e)
         {
             if (timer1.Enabled)
             {
-                button.Content = "Go to position";
+                //button.Content = "Go to position";
                 isAnimating = false;
                 timer1.Stop();
                 movements = 0;
@@ -843,7 +843,7 @@ namespace TeXiuSi
             {
                 geom.Transform = new TranslateTransform3D(reachingPoint);
                 movements = 5000;
-                button.Content = "STOP";
+                //button.Content = "STOP";
                 isAnimating = true;
                 timer1.Start();
             }
@@ -1044,5 +1044,38 @@ namespace TeXiuSi
             //return new double[] { theta1, theta2, theta3, theta4, theta5, theta6 };
             return null;
         }
+
+        // 1. 限制输入字符（只允许数字、小数点和负号）
+        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            string fullText = textBox.Text.Insert(textBox.CaretIndex, e.Text); // 预测输入后的完整文本
+
+            // 使用正则表达式匹配：
+            // ^-?：允许开头的负号
+            // \d*：任意数量的数字
+            // (\.\d{0,2})?：可选的小数点，后面最多跟两位数字
+            // $：结束
+            Regex regex = new Regex(@"^-?\d*(\.\d{0,2})?$");
+
+            // 如果输入后的完整文本不匹配这个模式，就取消事件（即阻止输入）
+            if (!regex.IsMatch(fullText))
+            {
+                e.Handled = true;
+            }
+
+            // 额外的处理：如果已经是负号了，不再允许输入负号
+            if (e.Text == "-" && textBox.Text.Contains("-"))
+            {
+                e.Handled = true;
+            }
+
+            // 额外的处理：如果已经是小数点，不再允许输入小数点
+            if (e.Text == "." && textBox.Text.Contains("."))
+            {
+                e.Handled = true;
+            }
+        }
+
     }
 }

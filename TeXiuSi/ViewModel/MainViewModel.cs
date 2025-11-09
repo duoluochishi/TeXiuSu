@@ -138,7 +138,7 @@ namespace TeXiuSi.ViewModel
             set => SetProperty(ref _yawvalue, value);
         }
 
-       
+
 
         // 设置步长变量
         private int _stepXValue = 1;
@@ -196,95 +196,95 @@ namespace TeXiuSi.ViewModel
         public IRelayCommand DrawArcCommand { get; }
 
         // 坐标点属性（用于绑定doubleUpDown的值）
-       private double _startPointX;
-/// <summary>
-/// 起点X坐标
-/// </summary>
-public double StartPointX
-{
-    get { return _startPointX; }
-    set 
-    { 
-        if (Equals(_startPointX, value)) return; 
-        _startPointX = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointX;
+        /// <summary>
+        /// 起点X坐标
+        /// </summary>
+        public double StartPointX
+        {
+            get { return _startPointX; }
+            set
+            {
+                if (Equals(_startPointX, value)) return;
+                _startPointX = value;
+                OnPropertyChanged();
+            }
+        }
 
-private double _startPointY;
-/// <summary>
-/// 起点Y坐标
-/// </summary>
-public double StartPointY
-{
-    get { return _startPointY; }
-    set 
-    { 
-        if (Equals(_startPointY, value)) return; 
-        _startPointY = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointY;
+        /// <summary>
+        /// 起点Y坐标
+        /// </summary>
+        public double StartPointY
+        {
+            get { return _startPointY; }
+            set
+            {
+                if (Equals(_startPointY, value)) return;
+                _startPointY = value;
+                OnPropertyChanged();
+            }
+        }
 
-private double _startPointZ;
-/// <summary>
-/// 起点Z坐标
-/// </summary>
-public double StartPointZ
-{
-    get { return _startPointZ; }
-    set 
-    { 
-        if (Equals(_startPointZ, value)) return; 
-        _startPointZ = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointZ;
+        /// <summary>
+        /// 起点Z坐标
+        /// </summary>
+        public double StartPointZ
+        {
+            get { return _startPointZ; }
+            set
+            {
+                if (Equals(_startPointZ, value)) return;
+                _startPointZ = value;
+                OnPropertyChanged();
+            }
+        }
 
-private double _startPointRx;
-/// <summary>
-/// 起点Rx (绕X轴旋转)
-/// </summary>
-public double StartPointRx
-{
-    get { return _startPointRx; }
-    set 
-    { 
-        if (Equals(_startPointRx, value)) return; 
-        _startPointRx = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointRx;
+        /// <summary>
+        /// 起点Rx (绕X轴旋转)
+        /// </summary>
+        public double StartPointRx
+        {
+            get { return _startPointRx; }
+            set
+            {
+                if (Equals(_startPointRx, value)) return;
+                _startPointRx = value;
+                OnPropertyChanged();
+            }
+        }
 
-private double _startPointRy;
-/// <summary>
-/// 起点Ry (绕Y轴旋转)
-/// </summary>
-public double StartPointRy
-    {
-    get { return _startPointRy; }
-    set 
-    { 
-        if (Equals(_startPointRy, value)) return; 
-        _startPointRy = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointRy;
+        /// <summary>
+        /// 起点Ry (绕Y轴旋转)
+        /// </summary>
+        public double StartPointRy
+        {
+            get { return _startPointRy; }
+            set
+            {
+                if (Equals(_startPointRy, value)) return;
+                _startPointRy = value;
+                OnPropertyChanged();
+            }
+        }
 
-private double _startPointRz;
-/// <summary>
-/// 起点Rz (绕Z轴旋转)
-/// </summary>
-public double StartPointRz
-{
-    get { return _startPointRz; }
-    set 
-    { 
-        if (Equals(_startPointRz, value)) return; 
-        _startPointRz = value; 
-        OnPropertyChanged(); 
-    }
-}
+        private double _startPointRz;
+        /// <summary>
+        /// 起点Rz (绕Z轴旋转)
+        /// </summary>
+        public double StartPointRz
+        {
+            get { return _startPointRz; }
+            set
+            {
+                if (Equals(_startPointRz, value)) return;
+                _startPointRz = value;
+                OnPropertyChanged();
+            }
+        }
 
         private double _midPointX;
         /// <summary>
@@ -483,6 +483,24 @@ public double StartPointRz
 
 
         #region JointMotionVisible
+
+        /// <summary>
+        /// 控制编辑
+        /// </summary>
+        private bool _isJointMotionEnable = false;
+
+        public bool IsJointMotionEnable
+        {
+            get { return _isJointMotionEnable; }
+            set
+            {
+                if (_isJointMotionEnable == value) return;
+                _isJointMotionEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         // 关节角度属性
         private string _joint1Angle = "0.000";
         /// <summary>
@@ -594,6 +612,10 @@ public double StartPointRz
         // 底部按钮命令
         public IRelayCommand JointResetToZeroCommand { get; }
         public IRelayCommand JointEditCommand { get; }
+
+
+        public IRelayCommand CancleCommand { get; }
+        public IRelayCommand JointSendCommand { get; }
         #endregion
 
         #region StraightLineMotionVisible
@@ -1237,6 +1259,8 @@ public double StartPointRz
             // 初始化底部按钮命令
             JointResetToZeroCommand = new RelayCommand(OnJointResetToZero);
             JointEditCommand = new RelayCommand(OnJointEdit);
+            CancleCommand = new RelayCommand(OnJointCancleEdit);
+            JointSendCommand = new RelayCommand(OnJointSendEdit);
             #endregion
 
 
@@ -1324,7 +1348,7 @@ public double StartPointRz
         private void OnYMinus1()
         {
             // Y轴负方向逻辑
-            YValue -= StepYValue<=0?0: StepYValue;
+            YValue -= StepYValue <= 0 ? 0 : StepYValue;
         }
 
         private void OnXPlus1()
@@ -1391,10 +1415,27 @@ public double StartPointRz
         // 底部按钮命令方法
         private void OnResetToZero()
         {
-            // 回零逻辑
-            Rollvalue=0; YawValue=0; Pitchvalue=0;  
-            XValue=0; YValue = 0; YawValue =0;ZValue=0;
+            
+            try
+            {
+                // 回零逻辑
+                Rollvalue = 0; YawValue = 0; Pitchvalue = 0;
+                XValue = 0; YValue = 0; YawValue = 0; ZValue = 0;
+                // 将所有关节角度重置为零
+                Joint1Angle = "0.000";
+                Joint2Angle = "0.000";
+                Joint3Angle = "0.000";
+                Joint4Angle = "0.000";
+                Joint5Angle = "0.000";
+                Joint6Angle = "0.000";
 
+                // 执行回零操作
+                ExecuteJointResetToZero();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"关节回零失败: {ex.Message}");
+            }
         }
 
         private void OnLoad()
@@ -1406,7 +1447,7 @@ public double StartPointRz
         {
             // 发送逻辑
             RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
-            doubleAngles= robotDynamicsHelper.UserMethod(XValue,YValue,ZValue,Rollvalue,Pitchvalue,YawValue);
+            doubleAngles = robotDynamicsHelper.UserMethod(XValue, YValue, ZValue, Rollvalue, Pitchvalue, YawValue);
 
             AngleChangeEvent?.Invoke(this, EventArgs.Empty);
         }
@@ -1613,6 +1654,28 @@ public double StartPointRz
         {
             try
             {
+                IsJointMotionEnable = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"关节编辑失败: {ex.Message}");
+            }
+        }
+        private void OnJointCancleEdit()
+        {
+            try
+            {
+                IsJointMotionEnable = false;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void OnJointSendEdit()
+        {
+            try
+            {
                 // 验证关节角度数据
                 if (!ValidateJointAngles())
                 {
@@ -1628,7 +1691,6 @@ public double StartPointRz
                 System.Diagnostics.Debug.WriteLine($"关节编辑失败: {ex.Message}");
             }
         }
-
         // 验证关节角度数据
         private bool ValidateJointAngles()
         {

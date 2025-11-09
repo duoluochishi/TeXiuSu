@@ -9,6 +9,7 @@
         xmlns:local="clr-namespace:TeXiuSi"
         xmlns:cvt="clr-namespace:TeXiuSi.Convert"
         xmlns:uc="clr-namespace:TeXiuSi.uc"
+        xmlns:converters="clr-namespace:TeXiuSi.Convert"
         xmlns:helper="clr-namespace:TeXiuSi.Helper"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" WindowState="Normal" WindowStartupLocation="CenterScreen" WindowStyle="None"
@@ -16,6 +17,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <helper:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
             <cvt:PercentageConverter x:Key="PercentConverter"/>
             <x:Array x:Key="JointNames" Type="sys:String">
                 <sys:String>1</sys:String>
@@ -890,133 +892,86 @@ Text="画弧" />
                                                             </Grid.RowDefinitions>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="70"></ColumnDefinition>
-                                                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                                                                 <ColumnDefinition Width="70"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
 
                                                             <!-- 关节1 -->
-                                                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
+                                                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节1：</TextBlock>
-                                                                <Button Name="Joint1DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint1DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint1TextBox" Width="400"
+                                                                <Slider x:Name="joint1" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint1Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint1TextBox" Width="100"
                          Text="{Binding Joint1Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint1IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint1IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000" PreviewTextInput="TextBox_PreviewTextInput"
+                        />
+
                                                             </StackPanel>
 
                                                             <!-- 关节2 -->
-                                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节2：</TextBlock>
-                                                                <Button Name="Joint2DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint2DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint2TextBox" Width="400"
+                                                                <Slider x:Name="joint2" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint2Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint2TextBox" Width="100"
                          Text="{Binding Joint2Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint2IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint2IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000"  PreviewTextInput="TextBox_PreviewTextInput"
+                         />
+
+
                                                             </StackPanel>
 
                                                             <!-- 关节3 -->
-                                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节3：</TextBlock>
-                                                                <Button Name="Joint3DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint3DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint3TextBox" Width="400"
+                                                                <Slider x:Name="joint3" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint3Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint3TextBox" Width="100"
                          Text="{Binding Joint3Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint3IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint3IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000" PreviewTextInput="TextBox_PreviewTextInput"
+                         />
+                                                               
                                                             </StackPanel>
 
                                                             <!-- 关节4 -->
-                                                            <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节4：</TextBlock>
-                                                                <Button Name="Joint4DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint4DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint4TextBox" Width="400"
+                                                                <Slider x:Name="joint4" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint4Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint4TextBox" Width="100"
                          Text="{Binding Joint4Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint4IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint4IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000" PreviewTextInput="TextBox_PreviewTextInput"
+                         />
+                                                               
                                                             </StackPanel>
 
                                                             <!-- 关节5 -->
-                                                            <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节5：</TextBlock>
-                                                                <Button Name="Joint5DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint5DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint5TextBox" Width="400"
+                                                                <Slider x:Name="joint5" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint5Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint5TextBox" Width="100"
                          Text="{Binding Joint5Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint5IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint5IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000" PreviewTextInput="TextBox_PreviewTextInput"
+                         />
+
                                                             </StackPanel>
 
                                                             <!-- 关节6 -->
-                                                            <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                            <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20" IsEnabled="{Binding IsJointMotionEnable,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">关节6：</TextBlock>
-                                                                <Button Name="Joint6DecreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint6DecreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                                </Button>
-                                                                <TextBox Name="Joint6TextBox" Width="400"
+                                                                <Slider x:Name="joint6" HorizontalAlignment="Center" Margin="40 0" VerticalAlignment="Center" Width="410"  Maximum="180" Minimum="-180" Value="{Binding Joint6Angle,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" />
+
+                                                                <TextBox Name="Joint6TextBox" Width="100"
                          Text="{Binding Joint6Angle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         materialDesign:HintAssist.Hint="0.000"/>
-                                                                <Button Name="Joint6IncreaseButton"
-                        Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
-                        Margin="0 0 10 0"
-                        Command="{Binding Joint6IncreaseCommand}">
-                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                                </Button>
+                         materialDesign:HintAssist.Hint="0.000" PreviewTextInput="TextBox_PreviewTextInput"
+                         />
+                                                                
                                                             </StackPanel>
 
                                                             <!-- 底部按钮 -->
-                                                            <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsJointMotionEnable, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                                                                 <Button Name="JointResetToZeroButton"
                         Width="300" Height="50" 
                         HorizontalAlignment="Center" VerticalAlignment="Center" 
@@ -1034,6 +989,27 @@ Text="画弧" />
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
                                                                         <TextBlock Text="编辑" />
+                                                                    </StackPanel>
+                                                                </Button>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding IsJointMotionEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                                <Button Name="JointCancleButton"
+Width="300" Height="50" 
+HorizontalAlignment="Center" VerticalAlignment="Center" 
+Margin="0 0 30 0"
+Command="{Binding CancleCommand}">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <materialDesign:PackIcon Kind="ChartLineVariant" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="取消" />
+                                                                    </StackPanel>
+                                                                </Button>
+                                                                <Button Name="JointSendButton"
+Width="300" Height="50" 
+HorizontalAlignment="Center" VerticalAlignment="Center"
+Command="{Binding JointSendCommand}">
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="发送" />
                                                                     </StackPanel>
                                                                 </Button>
                                                             </StackPanel>
@@ -1444,12 +1420,12 @@ Text="轨迹库" />
                 </helix:HelixViewport3D>
 
                 <Rectangle Fill="#FFFBFBFB" HorizontalAlignment="Left" Height="414" Stroke="Black" VerticalAlignment="Top" Width="306" StrokeThickness="0.5" Margin="4,4,0,0" Visibility="Collapsed"/>
-                <Slider x:Name="joint1" HorizontalAlignment="Left" Margin="46,133,0,0" VerticalAlignment="Top" Width="210"  Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" Visibility="Collapsed"/>
+                <!--<Slider x:Name="joint11" HorizontalAlignment="Left" Margin="46,133,0,0" VerticalAlignment="Top" Width="210"  Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22" Visibility="Collapsed"/>
                 <Slider x:Name="joint2" HorizontalAlignment="Left" Margin="46,181,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22"  Visibility="Collapsed"/>
                 <Slider x:Name="joint3" HorizontalAlignment="Left" Margin="45,229,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22"  Visibility="Collapsed"/>
                 <Slider x:Name="joint4" HorizontalAlignment="Left" Margin="45,279,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22"  Visibility="Collapsed"/>
                 <Slider x:Name="joint5" HorizontalAlignment="Left" Margin="45,331,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" LargeChange="0.1" TickFrequency="0.1" Height="22"  Visibility="Collapsed"/>
-                <Slider x:Name="joint6" HorizontalAlignment="Left" Margin="46,378,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" Height="22" TickFrequency="0.1" Visibility="Collapsed"/>
+                <Slider x:Name="joint6" HorizontalAlignment="Left" Margin="46,378,0,0" VerticalAlignment="Top" Width="210" Maximum="180" Minimum="-180" ValueChanged="joint_ValueChanged" Height="22" TickFrequency="0.1" Visibility="Collapsed"/>-->
                 <TextBox x:Name="TbX" Text="1500" HorizontalAlignment="Left" Height="23" Margin="30,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" TextChanged="ReachingPoint_TextChanged" Visibility="Collapsed"/>
                 <TextBox x:Name="TbY" Text="0" HorizontalAlignment="Left" Height="24" Margin="100,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="51" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" TextChanged="ReachingPoint_TextChanged" Visibility="Collapsed"/>
                 <TextBox x:Name="TbZ" Text="1750" HorizontalAlignment="Left" Height="24" Margin="172,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top"  Width="50" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" TextChanged="ReachingPoint_TextChanged" Visibility="Collapsed"/>
@@ -1480,8 +1456,8 @@ Text="轨迹库" />
                 <Label x:Name="Ty_Copy" HorizontalAlignment="Left" Margin="120,83,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="67" ContentStringFormat="{}{0:0.##}"/>
                 <Label Content="Z:" HorizontalAlignment="Left" Margin="199,83,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" />
                 <Label x:Name="Tz_Copy" HorizontalAlignment="Left" Margin="216,83,0,0" VerticalAlignment="Top" Foreground="Black" Height="25" Width="62" ContentStringFormat="{}{0:0.##}"/>
-                <Button x:Name="button" Content="Go to position" HorizontalAlignment="Left" Margin="230,10,0,0" VerticalAlignment="Top" Width="75" Height="28" FontSize="11" Click="SimulateMotionButton_Click" Visibility="Collapsed"/>
-                <Slider x:Name="jointSelector" HorizontalAlignment="Left" Margin="68,445,0,0" VerticalAlignment="Top" Width="210"  Maximum="6" ValueChanged="jointSelector_ValueChanged" Height="22" SmallChange="1" IsSnapToTickEnabled="True"  Visibility="Collapsed"/>
+                <!--<Button x:Name="button" Content="Go to position" HorizontalAlignment="Left" Margin="230,10,0,0" VerticalAlignment="Top" Width="75" Height="28" FontSize="11" Click="SimulateMotionButton_Click" Visibility="Collapsed"/>-->
+                <!--<Slider x:Name="jointSelector" HorizontalAlignment="Left" Margin="68,445,0,0" VerticalAlignment="Top" Width="210"  Maximum="6" ValueChanged="jointSelector_ValueChanged" Height="22" SmallChange="1" IsSnapToTickEnabled="True"  Visibility="Collapsed"/>-->
 
 
 
