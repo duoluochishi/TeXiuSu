@@ -23,6 +23,7 @@ namespace TeXiuSi.ViewModel
 
         public double[] doubleAngles;
 
+        private RobotDynamicsHelper robotDynamicsHelper;
         #region 
 
         //失能 急停 视角还原 设置（直接）disabled scram
@@ -1058,7 +1059,7 @@ namespace TeXiuSi.ViewModel
         public double MaxValue { get; set; } = 50;
         public MainViewModel()
         {
-
+            robotDynamicsHelper = new RobotDynamicsHelper();
             //dmArmHelper dmArmHelper = new dmArmHelper();
 
             //dmArmHelper.testArm();
@@ -1447,7 +1448,7 @@ namespace TeXiuSi.ViewModel
         {
             // 发送逻辑
             RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
-            doubleAngles = robotDynamicsHelper.UserMethod(XValue, YValue, ZValue, Rollvalue, Pitchvalue, YawValue);
+            doubleAngles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(XValue, YValue, ZValue, Rollvalue, Pitchvalue, YawValue);
 
             AngleChangeEvent?.Invoke(this, EventArgs.Empty);
         }

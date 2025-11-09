@@ -1,6 +1,8 @@
 ﻿#define IRB6700
 
 using HelixToolkit.Wpf;
+using RobotDynamics.MathUtilities;
+using RobotDynamics.Robots;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -69,7 +71,8 @@ namespace TeXiuSi
         //旋转中心(Point3D) : 旋转所围绕的点。
         RotateTransform3D R;
         TranslateTransform3D T;
-        Vector3D reachingPoint;
+        //Vector3D reachingPoint;
+        RobotDynamics.MathUtilities.Vector reachingPoint;
         int movements = 10;
         System.Windows.Forms.Timer timer1;
 
@@ -120,6 +123,7 @@ namespace TeXiuSi
             //ApplicationThemeManager.Apply(this);
 
             robotDynamicsHelper = new RobotDynamicsHelper();
+
             viewModel = new MainViewModel();
 
 
@@ -181,6 +185,8 @@ namespace TeXiuSi
             timer1 = new System.Windows.Forms.Timer();
             timer1.Interval = 5;
             timer1.Tick += new System.EventHandler(timer1_Tick);
+
+            robotDynamicsHelper.ConfigureRobot();
             #endregion
         }
 
@@ -666,42 +672,65 @@ namespace TeXiuSi
 
         public void timer1_Tick(object sender, EventArgs e)
         {
-            double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
-
-
-            #region 之前的关节角度计算
-            angles = InverseKinematics(reachingPoint, angles);
-            joint1.Value = joints[0].angle = angles[0];
-            joint2.Value = joints[1].angle = angles[1];
-            joint3.Value = joints[2].angle = angles[2];
-            joint4.Value = joints[3].angle = angles[3];
-            joint5.Value = joints[4].angle = angles[4];
-            joint6.Value = joints[5].angle = angles[5];
-
-            #endregion
-            //RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
-            //var doubleAngles = robotDynamicsHelper.UserMethod(viewModel.XValue, viewModel.YValue, viewModel.ZValue, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
-            //joint1.Value = joints[0].angle =doubleAngles[0];
-            //joint2.Value = joints[1].angle =doubleAngles[1];
-            //joint3.Value = joints[2].angle =doubleAngles[2];
-            //joint4.Value = joints[3].angle =doubleAngles[3];
-            //joint5.Value = joints[4].angle =doubleAngles[4];
-            //joint6.Value = joints[5].angle =doubleAngles[5];
-
-            // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
-            viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
-            viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
-            viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
-            viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
-            viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
-            viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
-
-            if ((--movements) <= 0)
+            try
             {
-                //button.Content = "Go to position";
-                isAnimating = false;
+                double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+
+
+                #region 之前的关节角度计算
+                if (robotDynamicsHelper.MainRobot == null)
+                {
+                    return;
+                }
+                Vector3D reachinCopyPoint = new Vector3D(viewModel.XValue, viewModel.YawValue, viewModel.ZValue);
+                // 获取最佳关节角结果
+                //double[] jointAnglesRad = result.q;
+                angles = InverseKinematics(reachinCopyPoint, angles);
+                //angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(reachingPoint.X, reachingPoint.Y, reachingPoint.Z, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
+                if (angles == null && angles.Length == 0)
+                {
+                    Log.Information("计算失败");
+                    return;
+                }
+                joint1.Value = joints[0].angle = angles[0];
+                joint2.Value = joints[1].angle = angles[1];
+                joint3.Value = joints[2].angle = angles[2];
+                joint4.Value = joints[3].angle = angles[3];
+                joint5.Value = joints[4].angle = angles[4];
+                joint6.Value = joints[5].angle = angles[5];
+
+                #endregion
+                //RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
+                //var doubleAngles = robotDynamicsHelper.UserMethod(viewModel.XValue, viewModel.YValue, viewModel.ZValue, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
+                //joint1.Value = joints[0].angle =doubleAngles[0];
+                //joint2.Value = joints[1].angle =doubleAngles[1];
+                //joint3.Value = joints[2].angle =doubleAngles[2];
+                //joint4.Value = joints[3].angle =doubleAngles[3];
+                //joint5.Value = joints[4].angle =doubleAngles[4];
+                //joint6.Value = joints[5].angle =doubleAngles[5];
+
+                // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
+                viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
+                viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
+                viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
+                viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
+                viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
+                viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+
+                if ((--movements) <= 0)
+                {
+                    //button.Content = "Go to position";
+                    isAnimating = false;
+                    timer1.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("计算失败"+ex.Message);
+
                 timer1.Stop();
             }
+           
         }
         public double[] InverseKinematics(Vector3D target, double[] angles)
         {
@@ -841,7 +870,10 @@ namespace TeXiuSi
             }
             else
             {
-                geom.Transform = new TranslateTransform3D(reachingPoint);
+                Vector3D reachingPointCopy = new Vector3D(reachingPoint.X, reachingPoint.Y, reachingPoint.Z);
+
+
+                geom.Transform = new TranslateTransform3D(reachingPointCopy);
                 movements = 5000;
                 //button.Content = "STOP";
                 isAnimating = true;
@@ -1016,7 +1048,7 @@ namespace TeXiuSi
                 double x = viewModel.XValue;
                 double y = viewModel.YValue;
                 double z = viewModel.ZValue;
-                reachingPoint = new Vector3D(x, y, z);
+                reachingPoint = new RobotDynamics.MathUtilities.Vector(x, y, z);
 
                 // 调用现有的启动方法，但传入null参数
                 StartInverseKinematics(null, null);

@@ -15,7 +15,9 @@ namespace TeXiuSi.Helper
     {
         // 定义常量：弧度到度数的转换因子
         private const double RadToDeg = 180.0 / Math.PI;
-        private static Robot ConfigureRobot()
+
+        public Robot MainRobot = null;
+        public Robot ConfigureRobot()
         {
             // 这是一个通用的 6DOF 机械臂配置示例，基于 DH 参数的理解。
             // 请务必替换为您的机械臂的准确 DH 参数。
@@ -64,7 +66,7 @@ namespace TeXiuSi.Helper
             // 假设工具从 P5 处沿 X 轴延伸 100mm
             // .Links.Add(Link.Fixed(new Vector(100, 0, 0))); // 仅作示例
             // -----------------------------------------------------
-           
+            MainRobot = Ro;
             return Ro;
 
 
@@ -80,7 +82,7 @@ namespace TeXiuSi.Helper
         /// <param name="pitch">绕 Y 轴旋转，弧度</param>
         /// <param name="yaw">绕 Z 轴旋转，弧度</param>
         /// <returns>3x3 旋转矩阵</returns>
-        private static RotationMatrix GetRotationMatrixFromZYX(double roll, double pitch, double yaw)
+        public static RotationMatrix GetRotationMatrixFromZYX(double roll, double pitch, double yaw)
         {
             double cosR = Math.Cos(roll), sinR = Math.Sin(roll);
             double cosP = Math.Cos(pitch), sinP = Math.Sin(pitch);
@@ -111,7 +113,7 @@ namespace TeXiuSi.Helper
             return new RotationMatrix(rotationArray);
         }
 
-        public double[] UserMethod(double targetPositionX, double targetPositionY, double targetPositionZ, double targetRollDegInfo, double targetPitchDegInfo, double targetYawDegInfo)
+        public double[] UserComputeInverseKinematicsMethod(double targetPositionX, double targetPositionY, double targetPositionZ, double targetRollDegInfo, double targetPitchDegInfo, double targetYawDegInfo)
         {
             double[] douAngle = new double[6];
 
@@ -151,7 +153,7 @@ namespace TeXiuSi.Helper
             Console.WriteLine($"目标位置 I_r_IE: ({targetPosition.X:F1}, {targetPosition.Y:F1}, {targetPosition.Z:F1})");
             Console.WriteLine($"目标姿态 (Pitch={targetPitchDeg} 度, Roll={targetRollDeg} 度, Yaw={targetYawDeg} 度)");
 
-           
+
             Log.Information("\n--- 求解目标 ---");
             Log.Information($"目标位置 I_r_IE: ({targetPosition.X:F1}, {targetPosition.Y:F1}, {targetPosition.Z:F1})");
             Log.Information($"目标姿态 (Pitch={targetPitchDeg} 度, Roll={targetRollDeg} 度, Yaw={targetYawDeg} 度)");
@@ -176,15 +178,17 @@ namespace TeXiuSi.Helper
                 Console.WriteLine("\n--- 逆运动学求解结果 ---");
                 Console.WriteLine($"迭代次数: {result.numberOfIterationsPerfomred}");
 
+
                 if (result.DidConverge)
                 {
                     Console.WriteLine("状态: 成功收敛到目标位姿。");
+                    Log.Information("状态: 成功收敛到目标位姿。");
                 }
                 else
                 {
                     Console.WriteLine("状态: 未完全收敛（可能达到最大迭代次数）。");
+                    Log.Error("状态: 未完全收敛（可能达到最大迭代次数）。");
                 }
-
                 // 获取最佳关节角结果
                 double[] jointAnglesRad = result.q;
 
@@ -195,13 +199,13 @@ namespace TeXiuSi.Helper
                     double angleInDegrees = jointAnglesRad[i] * RadToDeg;
                     Console.WriteLine($"  关节 {i + 1}: {angleInDegrees:F2} 度");
                     Log.Information($"  关节 {i + 1}: {angleInDegrees:F2} 度");
-                    douAngle[i]= angleInDegrees;
+                    douAngle[i] = angleInDegrees;
                 }
                 return douAngle;
             }
             catch (Exception ex)
             {
-                
+
                 // 捕获 IK 内部抛出的异常（例如：初始 q 长度错误）
                 Console.WriteLine("\n--- 运行时错误 ---");
                 Console.WriteLine($"逆运动学求解发生异常: {ex.Message}");
