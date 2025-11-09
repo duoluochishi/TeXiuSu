@@ -19,6 +19,10 @@ namespace TeXiuSi.ViewModel
     public partial class MainViewModel : ObservableObject
     {
 
+        public event EventHandler AngleChangeEvent;
+
+        public double[] doubleAngles;
+
         #region 
 
         //失能 急停 视角还原 设置（直接）disabled scram
@@ -1148,7 +1152,7 @@ public double StartPointRz
 
 
 
-            // 清除错误
+            // 清除错
             BeClearAboutMistakes = new ObservableCollection<EnumBindingItem<YesOrNo>>();
             foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
             {
@@ -1389,7 +1393,7 @@ public double StartPointRz
         {
             // 回零逻辑
             Rollvalue=0; YawValue=0; Pitchvalue=0;  
-            XValue=0;YawValue=0;ZValue=0;
+            XValue=0; YValue = 0; YawValue =0;ZValue=0;
 
         }
 
@@ -1401,6 +1405,10 @@ public double StartPointRz
         private void OnSend()
         {
             // 发送逻辑
+            RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
+            doubleAngles= robotDynamicsHelper.UserMethod(XValue,YValue,ZValue,Rollvalue,Pitchvalue,YawValue);
+
+            AngleChangeEvent?.Invoke(this, EventArgs.Empty);
         }
         #endregion
 

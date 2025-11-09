@@ -2,6 +2,7 @@
 using RoboDk.API;
 using RobotDynamics.MathUtilities;
 using RobotDynamics.Robots;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace TeXiuSi.Helper
 {
     public class RobotDynamicsHelper
-    {   
+    {
         // 定义常量：弧度到度数的转换因子
         private const double RadToDeg = 180.0 / Math.PI;
         private static Robot ConfigureRobot()
@@ -20,32 +21,54 @@ namespace TeXiuSi.Helper
             // 请务必替换为您的机械臂的准确 DH 参数。
 
             Robot Ro = new Robot()
-                // Joint 1: Base (Z axis rotation)
-                // DH: a0=0, alpha0=0, d1=300 (height of the base), theta1 (variable)
-                // 库的 AddJoint 定义：旋转轴, 偏移向量(dx, dy, dz)
-                .AddJoint('z', new Vector(0, 0, 300))
 
-                // Joint 2: Shoulder (X axis rotation)
-                // DH: a1=50, alpha1=90/0, d2=0, theta2 (variable)
-                .AddJoint('x', new Vector(0, 50, 330))
+                 // -----------------------------------------------------
+                 // 关节 0：J0 (Base) - 绕 Z 轴旋转
+                 // J0 的旋转点在 (0, 0, 0)。相对偏移为 (0, 0, 0)
+                 // -----------------------------------------------------
+                 .AddJoint('z', new Vector(0, 0, 0)) // P0 偏移
 
-                // Joint 3: Elbow (X axis rotation)
-                // DH: a2=440, alpha2=0, d3=0, theta3 (variable)
-                .AddJoint('x', new Vector(0, 0, 440))
+                 // -----------------------------------------------------
+                 // 关节 1：J1 - 绕 Y 轴旋转
+                 // P1 相对于 P0 的偏移: (348, -243, 775) - (0, 0, 0)
+                 // -----------------------------------------------------
+                 .AddJoint('y', new Vector(348, -243, 775)) // P1 偏移
 
-                // Joint 4: Wrist 1 (Y axis rotation)
-                // DH: a3=0, alpha3=90, d4=35, theta4 (variable)
-                .AddJoint('y', new Vector(0, 100, 35))
+                 // -----------------------------------------------------
+                 // 关节 2：J2 - 绕 Y 轴旋转
+                 // P2 相对于 P1 的偏移: (-1, -133, 1148)
+                 // -----------------------------------------------------
+                 .AddJoint('y', new Vector(-1, -133, 1148)) // P2 偏移
 
-                // Joint 5: Wrist 2 (Z axis rotation)
-                // DH: a4=0, alpha4=90, d5=0, theta5 (variable)
-                .AddJoint('z', new Vector(0, 0, 0))
+                 // -----------------------------------------------------
+                 // 关节 3：J3 - 绕 X 轴旋转 (注意：您的低级设置是 X 轴)
+                 // P3 相对于 P2 的偏移: (-287, 376, 202)
+                 // -----------------------------------------------------
+                 .AddJoint('x', new Vector(-287, 376, 202)) // P3 偏移
 
-                // Joint 6: Wrist 3 / End-Effector (X axis rotation)
-                // DH: a5=0, alpha5=0, d6=100 (tool length), theta6 (variable)
-                .AddJoint('x', new Vector(0, 0, 100));
+                 // -----------------------------------------------------
+                 // 关节 4：J4 - 绕 Y 轴旋转
+                 // P4 相对于 P3 的偏移: (1755, 0, 0)
+                 // -----------------------------------------------------
+                 .AddJoint('y', new Vector(1755, 0, 0)) // P4 偏移
 
+                 // -----------------------------------------------------
+                 // 关节 5：J5 (末端关节) - 绕 X 轴旋转
+                 // P5 相对于 P4 的偏移: (193, 0, 0)
+                 // -----------------------------------------------------
+                 .AddJoint('x', new Vector(193, 0, 0)); // P5 偏移
+
+            // -----------------------------------------------------
+            // 末端执行器/工具中心点 (Tool Center Point - TCP)
+            // 如果 J5 的旋转点到 TCP 还有一个固定连杆，需要添加 Link.Fixed
+            // 假设工具从 P5 处沿 X 轴延伸 100mm
+            // .Links.Add(Link.Fixed(new Vector(100, 0, 0))); // 仅作示例
+            // -----------------------------------------------------
+           
             return Ro;
+
+
+
         }
         // --- 姿态计算辅助函数 ---
         /// <summary>
@@ -88,8 +111,9 @@ namespace TeXiuSi.Helper
             return new RotationMatrix(rotationArray);
         }
 
-        public void UserMethod(double targetPositionX,double targetPositionY,double targetPositionZ,double targetRollDegInfo,double targetPitchDegInfo,double targetYawDegInfo)
+        public double[] UserMethod(double targetPositionX, double targetPositionY, double targetPositionZ, double targetRollDegInfo, double targetPitchDegInfo, double targetYawDegInfo)
         {
+            double[] douAngle = new double[6];
 
             // 1. 配置机械臂模型
             Robot robotArm = ConfigureRobot();
@@ -127,6 +151,10 @@ namespace TeXiuSi.Helper
             Console.WriteLine($"目标位置 I_r_IE: ({targetPosition.X:F1}, {targetPosition.Y:F1}, {targetPosition.Z:F1})");
             Console.WriteLine($"目标姿态 (Pitch={targetPitchDeg} 度, Roll={targetRollDeg} 度, Yaw={targetYawDeg} 度)");
 
+           
+            Log.Information("\n--- 求解目标 ---");
+            Log.Information($"目标位置 I_r_IE: ({targetPosition.X:F1}, {targetPosition.Y:F1}, {targetPosition.Z:F1})");
+            Log.Information($"目标姿态 (Pitch={targetPitchDeg} 度, Roll={targetRollDeg} 度, Yaw={targetYawDeg} 度)");
             // 3. 定义初始关节角 q_0（建议使用）
             // 提供初始值可以帮助迭代算法更快收敛，并可能找到更合理的解。
             // 假设初始所有关节角为 0 弧度。
@@ -166,13 +194,18 @@ namespace TeXiuSi.Helper
                     // 将弧度转换为度数进行输出
                     double angleInDegrees = jointAnglesRad[i] * RadToDeg;
                     Console.WriteLine($"  关节 {i + 1}: {angleInDegrees:F2} 度");
+                    Log.Information($"  关节 {i + 1}: {angleInDegrees:F2} 度");
+                    douAngle[i]= angleInDegrees;
                 }
+                return douAngle;
             }
             catch (Exception ex)
             {
+                
                 // 捕获 IK 内部抛出的异常（例如：初始 q 长度错误）
                 Console.WriteLine("\n--- 运行时错误 ---");
                 Console.WriteLine($"逆运动学求解发生异常: {ex.Message}");
+                return douAngle;
             }
         }
     }

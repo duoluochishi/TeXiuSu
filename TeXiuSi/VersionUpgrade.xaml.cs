@@ -30,5 +30,7 @@ namespace TeXiuSi
         {
             this.Close();
         }
+
+
     }
 }

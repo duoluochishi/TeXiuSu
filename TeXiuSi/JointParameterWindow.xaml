@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeXiuSi"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="关节参数窗口" Height="450" Width="800">
+        Title="关节参数窗口" Height="720" Width="1100">
     <Grid Margin="10 0 0 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"></ColumnDefinition>

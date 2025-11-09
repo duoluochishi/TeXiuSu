@@ -5,8 +5,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TeXiuSi"
-        mc:Ignorable="d" WindowStyle="None"
-         Height="450" Width="800">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+         Height="720" Width="1100">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
@@ -16,7 +16,7 @@
             <ColumnDefinition Width="1*"></ColumnDefinition>
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnReturn" Width='160' Height="45" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0" Command="{Binding ReturnToMainCommand}">返回</Button>
+        <Button x:Name="btnReturn" Width='160' Height="45" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0" Click="btnReturn_Click">返回</Button>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="80"></RowDefinition>
@@ -60,8 +60,8 @@
                     <TextBlock Grid.Row="5" VerticalAlignment="Center" Text="硬件版本:" />
                     <TextBlock Grid.Row="5" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="---" />
 
-                   
-                       </Grid>
+
+                </Grid>
             </GroupBox>
             <StackPanel Grid.Row="2" Orientation="Vertical" Grid.ColumnSpan="2">
                 <Button Width='230' Height="25" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20 10 0 0" Command="{Binding LoadPackageCommand}">加载软件包</Button>

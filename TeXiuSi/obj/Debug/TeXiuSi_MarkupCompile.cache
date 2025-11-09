@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\obj\Debug\
+D:\Project\texiusi\TeXiuSu\TeXiuSi\obj\Debug\
 TeXiuSi
 none
 false
 DEBUG;TRACE
-D:\Project\TeXiuSi\TeXiuSu\TeXiuSi\App.xaml
+D:\Project\texiusi\TeXiuSu\TeXiuSi\App.xaml
 9390265017
 
-43691194085
-1631870350100
+49-113782302
+163227822219
 ConnectPage.xaml;JointMotionParameters.xaml;JointParameterWindow.xaml;MainWindow.xaml;uc\MotorConfiguration.xaml;uc\ParameterControl.xaml;uc\TrajectoryLibraryDialog.xaml;uc\WPFUITest.xaml;VersionUpgrade.xaml;
 
 False
