@@ -30,7 +30,7 @@ namespace TeXiuSi.ViewModel
 
         // 类级别的成员变量 (在您的主窗口或ViewModel中定义)
         public bool isMoving = false;
-        public int totalMovementSteps = 5000; // 总步数，与 movements 对应
+        public int totalMovementSteps = 100; // 总步数，与 movements 对应
         public int currentStep = 0;
 
         // 起点位姿
@@ -803,6 +803,9 @@ namespace TeXiuSi.ViewModel
 
 
         public IRelayCommand JawControlCommand { get; }
+        public IRelayCommand ClearErrorsCommand { get; }
+        public IRelayCommand SetZeroPointCommand { get; }
+        public IRelayCommand GripperDysfunctionalCommand { get; }
 
 
 
@@ -845,12 +848,12 @@ namespace TeXiuSi.ViewModel
         }
 
 
-        private ObservableCollection<EnumBindingItem<YesOrNo>> _beClearAboutMistakes;
-        public ObservableCollection<EnumBindingItem<YesOrNo>> BeClearAboutMistakes
-        {
-            get { return _beClearAboutMistakes; }
-            set { _beClearAboutMistakes = value; OnPropertyChanged(); }
-        }
+        //private ObservableCollection<EnumBindingItem<YesOrNo>> _beClearAboutMistakes;
+        //public ObservableCollection<EnumBindingItem<YesOrNo>> BeClearAboutMistakes
+        //{
+        //    get { return _beClearAboutMistakes; }
+        //    set { _beClearAboutMistakes = value; OnPropertyChanged(); }
+        //}
 
         private EnumBindingItem<YesOrNo> _selectedJSetZero;
         public EnumBindingItem<YesOrNo> SelectedSetZero
@@ -868,12 +871,12 @@ namespace TeXiuSi.ViewModel
         }
 
 
-        private ObservableCollection<EnumBindingItem<YesOrNo>> _setZero;
-        public ObservableCollection<EnumBindingItem<YesOrNo>> SetZero
-        {
-            get { return _setZero; }
-            set { _setZero = value; OnPropertyChanged(); }
-        }
+        //private ObservableCollection<EnumBindingItem<YesOrNo>> _setZero;
+        //public ObservableCollection<EnumBindingItem<YesOrNo>> SetZero
+        //{
+        //    get { return _setZero; }
+        //    set { _setZero = value; OnPropertyChanged(); }
+        //}
 
         private double _scalePercentage = 100.0; // 默认值设为 100
 
@@ -1051,11 +1054,17 @@ namespace TeXiuSi.ViewModel
             set
             {
                 // 检查值是否真的改变了，避免不必要的更新
-                if (_sharedJawValue != value)
+                // 1. 使用 Math.Max 确保值不小于最小值 (0)
+                double clampedMin = Math.Max(value, 0);
+
+                // 2. 使用 Math.Min 确保值不大于最大值 (100)
+                double clampedValue = Math.Min(clampedMin, 100);
+
+                // 3. 如果经过限制后的值发生了变化，则更新字段并通知 UI
+                if (_sharedJawValue != clampedValue)
                 {
-                    _sharedJawValue = value;
-                    // 通知UI，这个属性的值已经变了！
-                    OnPropertyChanged();
+                    _sharedJawValue = clampedValue;
+                    OnPropertyChanged(nameof(SharedJawValue));
                 }
             }
         }
@@ -1070,11 +1079,18 @@ namespace TeXiuSi.ViewModel
             set
             {
                 // 检查值是否真的改变了，避免不必要的更新
-                if (_sharedJawTorqueValue != value)
+                // 检查值是否真的改变了，避免不必要的更新
+                // 1. 使用 Math.Max 确保值不小于最小值 (0)
+                double clampedMin = Math.Max(value, 0);
+
+                // 2. 使用 Math.Min 确保值不大于最大值 (100)
+                double clampedValue = Math.Min(clampedMin, 30);
+
+                // 3. 如果经过限制后的值发生了变化，则更新字段并通知 UI
+                if (_sharedJawTorqueValue != clampedValue)
                 {
-                    _sharedJawTorqueValue = value;
-                    // 通知UI，这个属性的值已经变了！
-                    OnPropertyChanged();
+                    _sharedJawTorqueValue = clampedValue;
+                    OnPropertyChanged(nameof(_sharedJawTorqueValue));
                 }
             }
         }
@@ -1200,31 +1216,31 @@ namespace TeXiuSi.ViewModel
 
 
             // 清除错
-            BeClearAboutMistakes = new ObservableCollection<EnumBindingItem<YesOrNo>>();
-            foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
-            {
-                BeClearAboutMistakes.Add(new EnumBindingItem<YesOrNo>
-                {
-                    DisplayName = mode.GetDescription(),
-                    Value = mode
-                });
-            }
-            if (JawStatus.Count > 0)
-                SelectedClearAbout = BeClearAboutMistakes[0];
+            //BeClearAboutMistakes = new ObservableCollection<EnumBindingItem<YesOrNo>>();
+            //foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
+            //{
+            //    BeClearAboutMistakes.Add(new EnumBindingItem<YesOrNo>
+            //    {
+            //        DisplayName = mode.GetDescription(),
+            //        Value = mode
+            //    });
+            //}
+            //if (JawStatus.Count > 0)
+            //    SelectedClearAbout = BeClearAboutMistakes[0];
 
 
             // 初始化夹爪设置指令零点
-            SetZero = new ObservableCollection<EnumBindingItem<YesOrNo>>();
-            foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
-            {
-                SetZero.Add(new EnumBindingItem<YesOrNo>
-                {
-                    DisplayName = mode.GetDescription(),
-                    Value = mode
-                });
-            }
-            if (SetZero.Count > 0)
-                SelectedSetZero = SetZero[0];
+            //SetZero = new ObservableCollection<EnumBindingItem<YesOrNo>>();
+            //foreach (YesOrNo mode in Enum.GetValues(typeof(YesOrNo)))
+            //{
+            //    SetZero.Add(new EnumBindingItem<YesOrNo>
+            //    {
+            //        DisplayName = mode.GetDescription(),
+            //        Value = mode
+            //    });
+            //}
+            //if (SetZero.Count > 0)
+            //    SelectedSetZero = SetZero[0];
 
 
             #region MainControl
@@ -1318,7 +1334,9 @@ namespace TeXiuSi.ViewModel
 
             #region 夹爪控制
             JawControlCommand = new RelayCommand(OnJawageControl);
-
+            ClearErrorsCommand = new RelayCommand(OnClearErrorsControl);
+            SetZeroPointCommand = new RelayCommand(OnSetZeroPointControl);
+            GripperDysfunctionalCommand = new RelayCommand(OnGripperDysfunctionalControl);
             #endregion
         }
         private void InitializeDefaultValues()
@@ -2035,6 +2053,39 @@ namespace TeXiuSi.ViewModel
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"联动控制失败: {ex.Message}");
+            }
+        }
+        private void OnClearErrorsControl()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"清除错误失败: {ex.Message}");
+            }
+        }
+        private void OnSetZeroPointControl()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"设置零点失败: {ex.Message}");
+            }
+        }
+        private void OnGripperDysfunctionalControl()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"夹爪失能: {ex.Message}");
             }
         }
         #endregion

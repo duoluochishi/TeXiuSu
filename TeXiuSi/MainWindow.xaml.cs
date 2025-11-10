@@ -669,16 +669,16 @@ namespace TeXiuSi
 
             return new Vector3D(joints[5].model.Bounds.Location.X, joints[5].model.Bounds.Location.Y, joints[5].model.Bounds.Location.Z);
         }
-        public double[] GetCurrentEndEffectorPose(){
+        //public double[] GetCurrentEndEffectorPose(){
 
-            double[] eulerAngles = { 0, 0, 0, 0,0,0 };
-
-
+        //    double[] eulerAngles = { 0, 0, 0, 0,0,0 };
 
 
-            return eulerAngles;
 
-        }
+
+        //    return eulerAngles;
+
+        //}
 
 
         // 假设您将其重命名为 GetCurrentEndEffectorPose 并返回包含 6 个值的数组
@@ -747,18 +747,44 @@ namespace TeXiuSi
             double Y = joints[5].model.Bounds.Location.Y;
             double Z = joints[5].model.Bounds.Location.Z;
 
-            // --- 提取姿态 (Rx, Ry, Rz) ---
-            // 这是最复杂的一步。您需要从最终变换 F6 中获取旋转信息，并将其转换为欧拉角。
-            // 假设 F6.Value 是一个 4x4 矩阵，或者 F6 内部有一个方法可以获取 RotationMatrix
 
-            // 示例伪代码（依赖于库的实现）：
-            RotationMatrix currentRotation = F6.GetRotationMatrix(); // 假设有此方法
-                                                                     // 假设您的 RotationMatrix 类支持 ToEulerAngles(Order)
-            double[] eulerAngles = currentRotation.ToEulerAngles(EulerAngleOrder.Zyx);
+            // --- 3. 提取姿态 (Rx, Ry, Rz) - 困难点，需要矩阵转换 ---
 
-            double Rx = eulerAngles[0]; // Roll (可能与您的命名不符，需核对)
-            double Ry = eulerAngles[1]; // Pitch
-            double Rz = eulerAngles[2]; // Yaw
+            // 3a. 从最终变换组获取 4x4 矩阵
+            Matrix3D M = F6.Value;
+
+            // 3b. 提取旋转子矩阵 (3x3)
+            // M.M11 到 M.M33 构成了旋转矩阵 R
+
+            // 注意：接下来的矩阵到欧拉角转换通常依赖于一个外部数学库，
+            // 或者需要您手动编写数学公式。
+
+            // **假设机械臂使用 Z-Y-X 欧拉角 (Yaw, Pitch, Roll) **
+
+            double cy = Math.Sqrt(M.M11 * M.M11 + M.M21 * M.M21);
+            double Rx, Ry, Rz;
+
+            if (cy > 1e-6) // 非万向锁情况
+            {
+                // Ry (Pitch)
+                Ry = Math.Atan2(-M.M31, cy);
+
+                // Rz (Yaw)
+                Rz = Math.Atan2(M.M21, M.M11);
+
+                // Rx (Roll)
+                Rx = Math.Atan2(M.M32, M.M33);
+            }
+            else // 万向锁 (Gimbal Lock) 情况
+            {
+                // Ry = -M.M31;
+                // 简化：Rz 和 Rx 之一可自由选择
+                Rz = Math.Atan2(-M.M12, M.M22); // 例如，将 Rx 设为 0
+                Ry = Math.Atan2(-M.M31, cy);
+                Rx = 0.0;
+
+                // 通常需要更复杂的万向锁处理或使用四元数
+            }
 
             // 返回完整的 6DOF 位姿
             return new double[] { X, Y, Z, Rx, Ry, Rz };
@@ -896,7 +922,7 @@ namespace TeXiuSi
                     viewModel.isMoving = false;
                     return;
                 }
-
+                ForwardKinematics(angles);
                 // ... 将 angles 赋值给 joints[i].angle 和 UI 控件 (与您原有代码相同) ...
                 joint1.Value = joints[0].angle = angles[0];
                 joint1.Value = joints[0].angle = angles[0];
@@ -1051,7 +1077,8 @@ namespace TeXiuSi
                 movements = 5000;
                 //button.Content = "STOP";
                 isAnimating = true;
-                timer1.Start();
+                //timer1.Start();
+                StartMovement(reachingPoint.X, reachingPoint.Y, reachingPoint.Z,viewModel.Rollvalue,viewModel.Pitchvalue,viewModel.YawValue);
             }
         }
 
@@ -1060,9 +1087,9 @@ namespace TeXiuSi
             // 1. 记录起点：从当前模型获取
             // 假设您能从当前关节角度通过正运动学 (FK) 获取当前 X,Y,Z,Rx,Ry,Rz
             // 如果不能直接获取 Rx, Ry, Rz，您需要先通过 FK 拿到 RotationMatrix 并转换为欧拉角。
-
+            double[] currentAngles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
             // 假设 get_current_pose() 能返回当前位姿的六个值
-            double[] currentPose = GetCurrentEndEffectorPose();
+            double[] currentPose = GetCurrentEndEffectorPose(currentAngles);
 
             viewModel.startPosition = new Vector3D(currentPose[0], currentPose[1], currentPose[2]);
             viewModel.startRoll = currentPose[3];
@@ -1307,6 +1334,87 @@ namespace TeXiuSi
             if (e.Text == "." && textBox.Text.Contains("."))
             {
                 e.Handled = true;
+            }
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            // 允许输入数字 (0-9)
+            Regex regex = new Regex("[^0-9.-]+");
+
+            // 如果输入的字符不是数字、小数点或负号，则阻止输入
+            if (regex.IsMatch(e.Text))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            TextBox textBox = sender as TextBox;
+            if (textBox == null) return;
+
+            // 额外的逻辑：确保只有一个小数点或负号
+            if (e.Text == "." && textBox.Text.Contains("."))
+            {
+                e.Handled = true;
+            }
+            if (e.Text == "-" && (textBox.Text.Contains("-") || textBox.CaretIndex != 0))
+            {
+                e.Handled = true;
+            }
+        }
+
+        // 2. 限制用户粘贴的内容
+        private void PastingNumberValidation(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                string text = (string)e.DataObject.GetData(typeof(string));
+                if (!IsTextAllowed(text))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+
+        private bool IsTextAllowed(string text)
+        {
+            // 允许数字、小数点和负号
+            Regex regex = new Regex("^[0-9.-]+$");
+            return regex.IsMatch(text);
+        }
+
+        // 3. 检查值是否超过 180 的限制
+        private void LimitValue_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox == null) return;
+
+            if (double.TryParse(textBox.Text, out double value))
+            {
+                // 限制不能大于 180
+                if (value > 180.0)
+                {
+                    // 将值强制设置为 180.0
+                    textBox.Text = "180.00";
+
+                    // 提示用户 (可选)
+                    // MessageBox.Show("输入值不能大于 180。", "验证错误");
+                }
+
+                // 额外的逻辑：如果您的机械臂角度通常在 -180 到 180 之间，您也可以添加下限
+                // if (value < -180.0) 
+                // { 
+                //     textBox.Text = "-180.00"; 
+                // }
+            }
+            else
+            {
+                // 如果解析失败，您可以选择清空或设置为默认值
+                // textBox.Text = "0.00";
             }
         }
 

@@ -5,6 +5,7 @@ using RobotDynamics.Robots;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -165,16 +166,22 @@ namespace TeXiuSi.Helper
             // 4. 调用逆运动学求解器
             try
             {
-                // ComputeInverseKinematics 返回一个 IterationResult 对象
+                // --- 启动计时器 ---
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                // --- 执行 IK 求解（您想测量的步骤） ---
                 IterationResult result = robotArm.ComputeInverseKinematics(
                     I_r_IE: targetPosition,
                     C_IE_des: targetRotation,
                     q_0: q_0_start,
-                    tol: 0.5f,        // 容忍度，调低会更精确，但可能需要更多迭代
-                    max_it: 200       // 增加最大迭代次数
-                                      // lambda 和 alpha 保持默认值通常效果不错
+                    tol: 1f,
+                    max_it: 50
                 );
 
+                // --- 停止计时器 ---
+                stopwatch.Stop();
+                Log.Information($"IK 求解耗时: {stopwatch.Elapsed.TotalMilliseconds:F3} ms");
                 Console.WriteLine("\n--- 逆运动学求解结果 ---");
                 Console.WriteLine($"迭代次数: {result.numberOfIterationsPerfomred}");
 
