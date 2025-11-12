@@ -598,7 +598,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -609,7 +609,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -620,7 +620,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -631,7 +631,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -642,7 +642,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -653,7 +653,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -683,7 +683,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -694,7 +694,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -705,7 +705,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -716,7 +716,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -727,7 +727,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -738,7 +738,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -768,7 +768,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -779,7 +779,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -790,7 +790,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -801,7 +801,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -812,7 +812,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -823,7 +823,7 @@ FormatString="F2"  Height="40"
 Width="130" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-Increment="0.01" Minimum="0" Maximum="50"
+Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
@@ -844,8 +844,8 @@ FormatString="F2"  Height="40"
 x:Name="LoadInfo"  Grid.Column="1" Width="180"
 HorizontalAlignment="Right"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-ItemsSource="{StaticResource Position}"
-                                SelectedIndex="1"
+ItemsSource="{Binding Positions}"                        
+SelectedItem="{Binding SelectedPoison}"
 />
                                                                 <Button Name="LoadInstructionPointButton"
 Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"   Command="{Binding LoadInstructionPointCommand}">

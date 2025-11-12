@@ -9,6 +9,7 @@ using System.Net;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
@@ -504,6 +505,9 @@ namespace TeXiuSi.ViewModel
                 OnPropertyChanged();
             }
         }
+
+
+
         #endregion
 
 
@@ -855,17 +859,39 @@ namespace TeXiuSi.ViewModel
         //    set { _beClearAboutMistakes = value; OnPropertyChanged(); }
         //}
 
-        private EnumBindingItem<YesOrNo> _selectedJSetZero;
-        public EnumBindingItem<YesOrNo> SelectedSetZero
+        //private EnumBindingItem<YesOrNo> _selectedJSetZero;
+        //public EnumBindingItem<YesOrNo> SelectedSetZero
+        //{
+        //    get { return _selectedJSetZero; }
+        //    set
+        //    {
+        //        _selectedJSetZero = value;
+        //        OnPropertyChanged();
+        //        if (_selectedJSetZero != null)
+        //        {
+        //            Console.WriteLine($"选择了: {_selectedJSetZero.DisplayName}，枚举值为: {_selectedJSetZero.Value}");
+        //        }
+        //    }
+        //}
+
+        private ObservableCollection<EnumBindingItem<PointPosition>> _positions;
+        public ObservableCollection<EnumBindingItem<PointPosition>> Positions
         {
-            get { return _selectedJSetZero; }
+            get { return _positions; }
+            set { _positions = value; OnPropertyChanged(); }
+        }
+
+        private EnumBindingItem<PointPosition> _selectedPoison;
+        public EnumBindingItem<PointPosition> SelectedPoison
+        {
+            get { return _selectedPoison; }
             set
             {
-                _selectedJSetZero = value;
+                _selectedPoison = value;
                 OnPropertyChanged();
-                if (_selectedJSetZero != null)
+                if (_selectedPoison != null)
                 {
-                    Console.WriteLine($"选择了: {_selectedJSetZero.DisplayName}，枚举值为: {_selectedJSetZero.Value}");
+                    Console.WriteLine($"选择了: {_selectedPoison.DisplayName}，枚举值为: {_selectedPoison.Value}");
                 }
             }
         }
@@ -1242,6 +1268,19 @@ namespace TeXiuSi.ViewModel
             //if (SetZero.Count > 0)
             //    SelectedSetZero = SetZero[0];
 
+            //初始化圆弧运动
+            Positions = new ObservableCollection<EnumBindingItem<PointPosition>>();
+            foreach (PointPosition mode in Enum.GetValues(typeof(PointPosition)))
+            {
+                Positions.Add(new EnumBindingItem<PointPosition>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (Positions.Count > 0)
+                SelectedPoison = Positions[0];
+
 
             #region MainControl
             DisabledCommand = new RelayCommand(OnDisabled);
@@ -1458,7 +1497,7 @@ namespace TeXiuSi.ViewModel
         // 底部按钮命令方法
         private void OnResetToZero()
         {
-            
+
             try
             {
                 // 回零逻辑
@@ -1507,6 +1546,8 @@ namespace TeXiuSi.ViewModel
             {
                 // 根据选择的指令点序号加载对应的坐标数据
                 LoadCoordinateData(SelectedInstructionPointIndex);
+
+                MessageBox.Show($"[{SelectedPoison.DisplayName}]装载成功");
             }
             catch (Exception ex)
             {
@@ -1522,16 +1563,27 @@ namespace TeXiuSi.ViewModel
             // 例如：将当前坐标数据发送到设备
             try
             {
-                var instructionData = new ArcInstructionData
-                {
-                    StartPoint = new Point6D(StartPointX, StartPointY, StartPointZ, StartPointRx, StartPointRy, StartPointRz),
-                    MidPoint = new Point6D(MidPointX, MidPointY, MidPointZ, MidPointRx, MidPointRy, MidPointRz),
-                    EndPoint = new Point6D(EndPointX, EndPointY, EndPointZ, EndPointRx, EndPointRy, EndPointRz),
-                    InstructionPointIndex = SelectedInstructionPointIndex
-                };
 
+                RobotDynamicsHelper robotDynamicsHelper = new RobotDynamicsHelper();
+                robotDynamicsHelper.ConfigureRobot();
+                switch (SelectedPoison.Value)
+                {
+                    case PointPosition.StartPoint:
+                        doubleAngles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(StartPointX, StartPointY, StartPointZ, StartPointRx, StartPointRy, StartPointRz);
+                        break;
+                    case PointPosition.MidPoint:
+                        doubleAngles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(MidPointX, MidPointY, MidPointZ, MidPointRx, MidPointRy, MidPointRz);
+                        break;
+                    case PointPosition.EndPoint:
+                        doubleAngles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(EndPointX, EndPointY, EndPointZ, EndPointRx, EndPointRy, EndPointRz);
+                        break;
+                }
+                //点位运动
+                // 发送逻辑--这里到初
+
+                AngleChangeEvent?.Invoke(this, EventArgs.Empty);
                 // 发送数据到设备
-                SendDataToDevice(instructionData);
+                SendDataToDevice();
             }
             catch (Exception ex)
             {
@@ -1549,12 +1601,23 @@ namespace TeXiuSi.ViewModel
                 // 验证数据
                 if (!ValidateArcData())
                 {
+                    MessageBox.Show("数据设置错误，坐标范围正负1000，角度范围正负180");
                     // 显示错误信息
                     return;
                 }
 
+                var instructionData = new ArcInstructionData
+                {
+                    StartPoint = new Point6D(StartPointX, StartPointY, StartPointZ, StartPointRx, StartPointRy, StartPointRz),
+                    MidPoint = new Point6D(MidPointX, MidPointY, MidPointZ, MidPointRx, MidPointRy, MidPointRz),
+                    EndPoint = new Point6D(EndPointX, EndPointY, EndPointZ, EndPointRx, EndPointRy, EndPointRz),
+                    InstructionPointIndex = SelectedInstructionPointIndex
+                };
                 // 执行画弧操作
-                ExecuteArcMotion();
+                ExecuteArcMotion(instructionData);
+
+
+                //发送指令继承到运动里边吧
             }
             catch (Exception ex)
             {
@@ -1567,11 +1630,36 @@ namespace TeXiuSi.ViewModel
         {
             // 验证坐标数据是否有效
             // 这里可以添加具体的验证逻辑
-            return StartPointX >= 0 && StartPointX <= 50 &&
-                   StartPointY >= 0 && StartPointY <= 50 &&
-                   StartPointZ >= 0 && StartPointZ <= 50 &&
-                   // 其他坐标的验证...
-                   true;
+
+
+            return StartPointX >= -1000 && StartPointX <= 1000 &&
+       StartPointY >= -1000 && StartPointY <= 1000 &&
+       StartPointZ >= -1000 && StartPointZ <= 1000 &&
+
+       // Start Angle (Rx/Ry/Rz) Validation
+       StartPointRx >= -180 && StartPointRx <= 180 &&
+       StartPointRy >= -180 && StartPointRy <= 180 &&
+       StartPointRz >= -180 && StartPointRz <= 180 &&
+
+       // MidPoint (XYZ) Validation
+       MidPointX >= -1000 && MidPointX <= 1000 &&
+       MidPointY >= -1000 && MidPointY <= 1000 &&
+       MidPointZ >= -1000 && MidPointZ <= 1000 &&
+
+       // Mid Angle (Rx/Ry/Rz) Validation
+       MidPointRx >= -180 && MidPointRx <= 180 &&
+       MidPointRy >= -180 && MidPointRy <= 180 &&
+       MidPointRz >= -180 && MidPointRz <= 180 &&
+
+       // EndPoint (XYZ) Validation
+       EndPointX >= -1000 && EndPointX <= 1000 &&
+       EndPointY >= -1000 && EndPointY <= 1000 &&
+       EndPointZ >= -1000 && EndPointZ <= 1000 &&
+
+       // End Angle (Rx/Ry/Rz) Validation
+       EndPointRx >= -180 && EndPointRx <= 180 &&
+       EndPointRy >= -180 && EndPointRy <= 180 &&
+       EndPointRz >= -180 && EndPointRz <= 180;
         }
 
         private void LoadCoordinateData(int pointIndex)
@@ -1580,16 +1668,17 @@ namespace TeXiuSi.ViewModel
             // 这里需要根据您的具体需求实现
         }
 
-        private void SendDataToDevice(ArcInstructionData data)
+        private void SendDataToDevice()
         {
             // 实现发送数据到设备的逻辑
             // 这里需要根据您的具体设备通信协议实现
         }
 
-        private void ExecuteArcMotion()
+        private void ExecuteArcMotion(ArcInstructionData arcInstructionData)
         {
             // 实现执行圆弧运动的逻辑
             // 这里需要根据您的具体运动控制需求实现
+
         }
 
 

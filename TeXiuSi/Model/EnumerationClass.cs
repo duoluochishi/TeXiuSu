@@ -139,7 +139,7 @@ namespace TeXiuSi.Model
         MasterArm,
 
         [Description("使能")]
-        SlaveArm 
+        SlaveArm
     }
 
     /// <summary>
@@ -148,9 +148,23 @@ namespace TeXiuSi.Model
     public enum YesOrNo
     {
         [Description("否")]
-        No ,
+        No,
 
         [Description("是")]
-        Yes 
+        Yes
+    }
+    /// <summary>
+    /// 圆弧运动位置
+    /// </summary>
+    public enum PointPosition
+    {
+        [Description("起点")]
+        StartPoint,
+
+        [Description("中点")]
+        MidPoint,
+
+        [Description("终点")]
+        EndPoint
     }
 }
