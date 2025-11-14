@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.uc;
@@ -71,10 +72,10 @@ namespace TeXiuSi
         //旋转中心(Point3D) : 旋转所围绕的点。
         RotateTransform3D R;
         TranslateTransform3D T;
-        //Vector3D reachingPoint;
         RobotDynamics.MathUtilities.Vector reachingPoint;
         int movements = 10;
-        System.Windows.Forms.Timer timer1;
+        System.Windows.Forms.Timer timerPoint;
+        System.Windows.Forms.Timer _animationTimer;
 
 #if IRB6700
         //directroy of all stl files
@@ -131,7 +132,8 @@ namespace TeXiuSi
 
 
             viewModel.AngleChangeEvent += ViewModel_AngleChangeEvent;
-            //Wpf.Ui.Appearance.ApplicationThemeManager.Apply(Wpf.Ui.Appearance.ApplicationTheme.Dark);
+            viewModel.TrajectoryReady += OnTrajectoryReady;
+
             #region Init
             basePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models\\";
             List<string> modelsNames = new List<string>();
@@ -182,14 +184,100 @@ namespace TeXiuSi
 
             changeSelectedJoint();
 
-            timer1 = new System.Windows.Forms.Timer();
-            timer1.Interval = 5;
-            timer1.Tick += new System.EventHandler(timer1_Tick);
+            #region Timer
+            timerPoint = new System.Windows.Forms.Timer();
+            timerPoint.Interval = 5;
+            timerPoint.Tick += new System.EventHandler(timer1_Tick);
+           
+             _animationTimer = new System.Windows.Forms.Timer();
+            _animationTimer.Tick += AnimationTimer_Tick; // 定时器触发的方法
+            #endregion
+
 
             robotDynamicsHelper.ConfigureRobot();
             #endregion
         }
+        // 接收 ViewModel 发出的“轨迹已准备好”事件
+        private void OnTrajectoryReady(object sender, EventArgs e)
+        {
+            // 设置定时器间隔为规划时使用的 timeStep (转换为 TimeSpan)
+            _animationTimer.Interval = 50;
 
+            // 开始动画模拟
+            _animationTimer.Start();
+        }
+
+        // 定时器触发，每隔 timeStep 执行一次
+        private void AnimationTimer_Tick(object sender, EventArgs e)
+        {
+            // 1. 从 ViewModel 的队列中获取下一个关节角度
+            JointAnglesEventArgs nextPoint = viewModel.GetNextJointAngles();
+
+            if (nextPoint != null)
+            {
+                // 2. 执行运动（调用模拟器 API）
+                MoveAction(nextPoint.Angles);
+
+                // 3. (可选) 更新 UI 状态
+                // UpdateLog($"时间: {nextPoint.CurrentTime:F2}s, 运动中...");
+            }
+            else
+            {
+                // 4. 队列为空，运动完成，停止定时器
+                _animationTimer.Stop();
+                //UpdateLog("圆弧运动模拟完成！");
+            }
+        }
+        /// <summary>
+        /// 圆弧运动通知
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        //private void ViewModel_ArcMotionChangeEvent(object sender, double[] e)
+        //{
+        //    MoveAction(e);
+        //}
+        // 初始化定时器
+        //private new System.Windows.Forms.Timer() _animationTimer;
+        private float _timeStep = 10; // 保持与规划时使用的 timeStep 一致
+       
+        // 订阅事件的响应方法
+        private void OnNewJointAnglesReceived(object sender, JointAnglesEventArgs e)
+        {
+            // 确保 UI 更新操作在主 UI 线程上执行 (WPF 必需)
+            // 尽管事件可能在 UI 线程上触发，但为了安全，使用 Dispatcher 是好习惯。
+            Dispatcher.Invoke(() =>
+            {
+                // 1. 获取 IK 求解出的关节角度
+                double[] jointAngles = e.Angles;
+
+                // 2. 执行运动（调用模拟器 API）
+                MoveAction(jointAngles);
+
+                // 3. (可选) 更新 UI 状态或日志
+                //UpdateLog($"时间: {e.CurrentTime:F2}s, 开始运动到关节角度...");
+
+                // 4. 继续下一个时间步（如果不是使用定时器的话）
+                // 如果您使用计时器来驱动，则不需要这一行
+                // _viewModel.SimulateNextStep();
+            });
+            // *** 必须使用 Dispatcher.Invoke/BeginInvoke 切换回 UI 线程 ***
+            // *** 明确转换为 Action 委托 ***
+            //Dispatcher.BeginInvoke(new Action(() =>
+            //{
+            //    JointAnglesEventArgs nextPoint = viewModel.GetNextJointAngles();
+
+            //    if (nextPoint != null)
+            //    {
+            //        MoveAction(nextPoint.Angles);
+            //    }
+            //    else
+            //    {
+            //        _animationTimer.Stop();
+            //        UpdateLog("圆弧运动模拟完成！");
+            //    }
+            //})); // 注意 Action 的闭合括号
+        }
         private void ViewModel_AngleChangeEvent(object sender, EventArgs e)
         {
             joints[0].angle = viewModel.doubleAngles[0];
@@ -568,17 +656,7 @@ namespace TeXiuSi
             ForwardKinematics(angles);
             //updateSpherePosition();
         }
-        private void updateSpherePosition()
-        {
-            //int sel = ((int)jointSelector.Value) - 1;
-            //if (sel < 0)
-            //    return;
 
-            //Transform3DGroup F = new Transform3DGroup();
-            //F.Children.Add(new TranslateTransform3D(joints[sel].rotPointX, joints[sel].rotPointY, joints[sel].rotPointZ));
-            //F.Children.Add(joints[sel].model.Transform);
-            //geom.Transform = F;
-        }
         /// <summary>
         /// 这个方法是机械臂能够活动的关键。它根据给定的每个关节的角度，计算出每个部件在3D空间中的最终位置和姿态。这就是所谓的正向运动学 (Forward Kinematics)
         /// </summary>
@@ -669,16 +747,6 @@ namespace TeXiuSi
 
             return new Vector3D(joints[5].model.Bounds.Location.X, joints[5].model.Bounds.Location.Y, joints[5].model.Bounds.Location.Z);
         }
-        //public double[] GetCurrentEndEffectorPose(){
-
-        //    double[] eulerAngles = { 0, 0, 0, 0,0,0 };
-
-
-
-
-        //    return eulerAngles;
-
-        //}
 
 
         // 假设您将其重命名为 GetCurrentEndEffectorPose 并返回包含 6 个值的数组
@@ -886,7 +954,7 @@ namespace TeXiuSi
             {
                 if (!viewModel.isMoving)
                 {
-                    timer1.Stop();
+                    timerPoint.Stop();
                     return;
                 }
 
@@ -922,26 +990,8 @@ namespace TeXiuSi
                     viewModel.isMoving = false;
                     return;
                 }
-                ForwardKinematics(angles);
-                // ... 将 angles 赋值给 joints[i].angle 和 UI 控件 (与您原有代码相同) ...
-                joint1.Value = joints[0].angle = angles[0];
-                joint1.Value = joints[0].angle = angles[0];
-                joint2.Value = joints[1].angle = angles[1];
-                joint3.Value = joints[2].angle = angles[2];
-                joint4.Value = joints[3].angle = angles[3];
-                joint5.Value = joints[4].angle = angles[4];
-                joint6.Value = joints[5].angle = angles[5];
-
-          
-                // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
-                viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
-                viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
-                viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
-                viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
-                viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
-                viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
-
-
+               
+                MoveAction(angles);
                 // --- 4. 步进和终止条件 ---
                 viewModel.currentStep++;
 
@@ -958,9 +1008,54 @@ namespace TeXiuSi
             {
                 Log.Error("轨迹计算失败:" + ex.Message);
                 viewModel.isMoving = false;
-                timer1.Stop();
+                timerPoint.Stop();
             }
         }
+
+        public void MoveAction(double[] angles)
+        {
+            ForwardKinematics(angles);
+            // ... 将 angles 赋值给 joints[i].angle 和 UI 控件 (与您原有代码相同) ...
+            joint1.Value = joints[0].angle = angles[0];
+            joint1.Value = joints[0].angle = angles[0];
+            joint2.Value = joints[1].angle = angles[1];
+            joint3.Value = joints[2].angle = angles[2];
+            joint4.Value = joints[3].angle = angles[3];
+            joint5.Value = joints[4].angle = angles[4];
+            joint6.Value = joints[5].angle = angles[5];
+
+
+            // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
+            viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
+            viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
+            viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
+            viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
+            viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
+            viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+        }
+
+        /// <summary>
+        /// 圆弧运动Time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void timerArcMotion_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                //ForwardKinematics(angles);
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error("轨迹计算失败:" + ex.Message);
+                viewModel.isMoving = false;
+
+            }
+        }
+
+
         #endregion
 
         public bool checkAngles(double[] oldAngles, double[] angles)
@@ -1061,11 +1156,11 @@ namespace TeXiuSi
 
         public void StartInverseKinematics(object sender, RoutedEventArgs e)
         {
-            if (timer1.Enabled)
+            if (timerPoint.Enabled)
             {
                 //button.Content = "Go to position";
                 isAnimating = false;
-                timer1.Stop();
+                timerPoint.Stop();
                 movements = 0;
             }
             else
@@ -1078,7 +1173,7 @@ namespace TeXiuSi
                 //button.Content = "STOP";
                 isAnimating = true;
                 //timer1.Start();
-                StartMovement(reachingPoint.X, reachingPoint.Y, reachingPoint.Z,viewModel.Rollvalue,viewModel.Pitchvalue,viewModel.YawValue);
+                StartMovement(reachingPoint.X, reachingPoint.Y, reachingPoint.Z, viewModel.Rollvalue, viewModel.Pitchvalue, viewModel.YawValue);
             }
         }
 
@@ -1106,7 +1201,7 @@ namespace TeXiuSi
             viewModel.currentStep = 0;
             viewModel.isMoving = true;
             // 确保 timer1 已经启动
-            timer1.Start();
+            timerPoint.Start();
         }
         #endregion
 

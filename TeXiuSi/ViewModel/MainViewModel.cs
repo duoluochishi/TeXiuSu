@@ -1,19 +1,24 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Linq;
 using System.Net;
+using System.Numerics;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
-using TeXiuSi.Model;
+using TeXiuSi.Model; 
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace TeXiuSi.ViewModel
@@ -22,6 +27,21 @@ namespace TeXiuSi.ViewModel
     {
 
         public event EventHandler AngleChangeEvent;
+
+        //圆弧运动提示
+
+        //public event EventHandler<double[]> ArcMotionChangeEvent;
+
+        // 事件：当计算出下一组关节角度时触发
+        //public event EventHandler<JointAnglesEventArgs> NewJointAnglesAvailable;
+
+        // 存储完整的关节角度序列，等待 View 消费
+        private Queue<JointAnglesEventArgs> _jointTrajectoryQueue;
+
+        // 事件：现在只触发一次，通知 View 轨迹已准备好
+        public event EventHandler<EventArgs> TrajectoryReady;
+        // 用于追踪当前运动到哪个点
+        private int _currentIndex = 0;
 
         public double[] doubleAngles;
 
@@ -39,6 +59,12 @@ namespace TeXiuSi.ViewModel
         public double startRoll;      // Rx
         public double startPitch;     // Ry
         public double startYaw;       // Rz
+
+        // 中点位姿
+        public Vector3D midPosition; // X, Y, Z
+        public double midRoll;      // Rx
+        public double midPitch;     // Ry
+        public double midYaw;       // Rz
 
         // 终点位姿
         public Vector3D targetPosition; // X, Y, Z
@@ -216,6 +242,39 @@ namespace TeXiuSi.ViewModel
         #endregion
 
         #region ArcMotionVisible
+        RobotController controller;
+        public ArcInstructionData arcInstructionData;
+        // Arc Motion Specific Parameters (需要预先计算和存储)
+        //public Point3D arcCenter { get; set; } // C
+        //public double arcRadius { get; set; } // R
+        //public Vector3D arcNormal { get; set; } // N
+        //public double startAngle { get; set; } // 弧上的起始角度
+        //public double endAngle { get; set; } // 弧上的终止角度
+        //public bool isClockwise { get; set; } // 运动方向
+
+
+
+        // 圆弧几何参数 (在运动开始前计算并存储)
+        public ArcParameters ArcGeometry { get; set; }
+        public double StartAngleRad { get; set; } // 圆弧上的起始角度（弧度）
+        public double EndAngleRad { get; set; }   // 圆弧上的终止角度（弧度）
+
+        // 模拟的关节角度输出（F3 格式）
+        //public string JointF3Angle { get; set; }
+
+
+        /// <summary>
+        /// 存储圆弧几何参数
+        /// </summary>
+        public struct ArcParameters
+        {
+            public Vector3 Center { get; set; }
+            public float Radius { get; set; }
+            public Vector3 Normal { get; set; } // 归一化的圆弧平面法向量
+            public Vector3 E1 { get; set; } // 圆弧平面内的第一个基向量（指向 P_start）
+            public Vector3 E2 { get; set; } // 圆弧平面内的第二个基向量（垂直于 E1 和 N）
+        }
+
         // 圆弧运动相关的命令
         public IRelayCommand LoadInstructionPointCommand { get; }
         public IRelayCommand SendInstructionPointCommand { get; }
@@ -505,6 +564,9 @@ namespace TeXiuSi.ViewModel
                 OnPropertyChanged();
             }
         }
+
+
+        System.Windows.Forms.Timer timerArcMotion;
 
 
 
@@ -925,7 +987,8 @@ namespace TeXiuSi.ViewModel
         private int AssistanceLevel;
         #endregion
 
-        // 通用的枚举绑定项类（如果尚未定义）
+
+        #region 通用的枚举绑定项类（如果尚未定义）
         public class EnumBindingItem<T> where T : Enum
         {
             public string DisplayName { get; set; }
@@ -1123,22 +1186,21 @@ namespace TeXiuSi.ViewModel
         // 我们可以把 Min/Max 值也放在这里，让UI更灵活
         public double MinValue { get; set; } = 0;
         public double MaxValue { get; set; } = 50;
+        #endregion
+
+
         public MainViewModel()
         {
             robotDynamicsHelper = new RobotDynamicsHelper();
-            //dmArmHelper dmArmHelper = new dmArmHelper();
-
-            //dmArmHelper.testArm();
-
+            controller=new RobotController(this);
+            //controller.ArcMotionChangeEvent += ControlArcMotion;
             SharedJawValue = 0;
 
-            //Sports = new ObservableCollection<Sports>();
             OperationModes = new ObservableCollection<EnumBindingItem<OperationType>>();
 
             SportTypes = new ObservableCollection<EnumBindingItem<SportType>>();
 
-
-            // 遍历OperationType枚举的所有值
+            #region init
             foreach (SportType opType in Enum.GetValues(typeof(SportType)))
             {
                 // 创建新的绑定项，并添加到集合中
@@ -1282,6 +1344,10 @@ namespace TeXiuSi.ViewModel
                 SelectedPoison = Positions[0];
 
 
+            #endregion
+
+            // 遍历OperationType枚举的所有值
+
             #region MainControl
             DisabledCommand = new RelayCommand(OnDisabled);
 
@@ -1315,6 +1381,7 @@ namespace TeXiuSi.ViewModel
             LoadInstructionPointCommand = new RelayCommand(OnLoadInstructionPoint);
             SendInstructionPointCommand = new RelayCommand(OnSendInstructionPoint);
             DrawArcCommand = new RelayCommand(OnDrawArc);
+
 
             // 初始化默认值
             InitializeDefaultValues();
@@ -1378,6 +1445,10 @@ namespace TeXiuSi.ViewModel
             GripperDysfunctionalCommand = new RelayCommand(OnGripperDysfunctionalControl);
             #endregion
         }
+
+
+
+        public void Init() { }
         private void InitializeDefaultValues()
         {
             // 设置默认坐标值
@@ -1606,15 +1677,9 @@ namespace TeXiuSi.ViewModel
                     return;
                 }
 
-                var instructionData = new ArcInstructionData
-                {
-                    StartPoint = new Point6D(StartPointX, StartPointY, StartPointZ, StartPointRx, StartPointRy, StartPointRz),
-                    MidPoint = new Point6D(MidPointX, MidPointY, MidPointZ, MidPointRx, MidPointRy, MidPointRz),
-                    EndPoint = new Point6D(EndPointX, EndPointY, EndPointZ, EndPointRx, EndPointRy, EndPointRz),
-                    InstructionPointIndex = SelectedInstructionPointIndex
-                };
+                
                 // 执行画弧操作
-                ExecuteArcMotion(instructionData);
+                ExecuteArcMotion(arcInstructionData);
 
 
                 //发送指令继承到运动里边吧
@@ -1679,10 +1744,103 @@ namespace TeXiuSi.ViewModel
             // 实现执行圆弧运动的逻辑
             // 这里需要根据您的具体运动控制需求实现
 
+
+            _currentIndex = 0;
+
+            arcInstructionData = new ArcInstructionData
+            {
+                StartPoint = new Point6D(StartPointX, StartPointY, StartPointZ, StartPointRx, StartPointRy, StartPointRz),
+                MidPoint = new Point6D(MidPointX, MidPointY, MidPointZ, MidPointRx, MidPointRy, MidPointRz),
+                EndPoint = new Point6D(EndPointX, EndPointY, EndPointZ, EndPointRx, EndPointRy, EndPointRz),
+                InstructionPointIndex = SelectedInstructionPointIndex
+            };
+            // 2. 定义三点坐标 (示例数据)
+            //Vector3 P_start = new Vector3((float)StartPointX, (float)StartPointY, (float)StartPointZ);
+            var startPoint = (X: StartPointX, Y: StartPointY, Z: StartPointZ);
+            var midPoint = (X: MidPointX, Y: MidPointY, Z: MidPointZ);
+            var endPoint = (X: EndPointX, Y: EndPointY, Z: EndPointZ);
+
+            var rpyStart = (X: (float)StartPointRx, Y: (float)StartPointRy, Z: (float)StartPointRz);
+
+            var rpyEnd = (X: (float)EndPointRx, Y: (float)EndPointRy, Z: (float)EndPointRz);
+
+            RobotSimulation robotSimulation=new RobotSimulation();
+            List<TrajectoryPoint> lisPoint=robotSimulation.StartArcPlanningAndInterpolation(startPoint, midPoint, endPoint, rpyStart, rpyEnd, 10, (float)0.1);
+
+            //执行Ik
+            if (lisPoint!=null)
+            {
+                ExecuteArcPath(lisPoint);
+            }
+           
+
         }
 
+        /// <summary>
+        /// 遍历笛卡尔轨迹，进行 IK 求解，并模拟运动。
+        /// </summary>
+        /// <param name="cartesianTrajectory">ArcInterpolator 生成的笛卡尔路径点集合。</param>
+        public void ExecuteArcPath(List<TrajectoryPoint> cartesianTrajectory)
+        {
+            Console.WriteLine("\n--- 开始 IK 求解和模拟运动 ---");
+            _jointTrajectoryQueue = new Queue<JointAnglesEventArgs>();
+            foreach (var point in cartesianTrajectory)
+            {
+                // 1. 提取位置 (X, Y, Z)
+                double nextX = point.Position.X;
+                double nextY = point.Position.Y;
+                double nextZ = point.Position.Z;
+
+                // 2. 将四元数姿态转换为 RPY (Roll, Pitch, Yaw)
+                var (nextRoll, nextPitch, nextYaw) = KinematicsHelper.QuaternionToRPY_Degrees(point.Orientation);
 
 
+                // 调用包含 Rx, Ry, Rz 的新方法
+                double[] angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(
+                    nextX, nextY, nextZ,
+                    nextRoll, nextPitch, nextYaw
+                );
+
+                // 4. 模拟器运动/输出 (这是“运动”阶段)
+
+                // 打印 IK 求解结果（例如，前三个关节角度）
+                string angleOutput = angles.Length >= 6
+                    ? $"({angles[0]:F2}, {angles[1]:F2}, {angles[2]:F2}, ...)"
+                    : "IK 结果不足 6 个角度";
+
+                //handler?.Invoke(this, angles);
+
+                // C. 触发事件
+                //OnNewJointAnglesAvailable(angles, point.Time);
+                // B. 将 IK 结果存入队列
+                _jointTrajectoryQueue.Enqueue(new JointAnglesEventArgs(angles, point.Time));
+
+                Console.WriteLine($"时间:{point.Time:F2}s | 笛卡尔 pos:({nextX:F2}, {nextY:F2}, {nextZ:F2}) | 关节:{angleOutput}");
+
+                // TODO: 在这里调用模拟器的 API 将机械臂移动到这些角度
+                // Example: YourSimulatorAPI.MoveRobotJoints(angles);
+                _currentIndex++;
+            }
+            // 3. 通知 View：轨迹已准备好，可以开始运动了
+            TrajectoryReady?.Invoke(this, EventArgs.Empty);
+            Console.WriteLine("--- 圆弧轨迹 IK 求解及模拟完成 ---");
+        }
+        // 触发事件的保护方法
+        //protected virtual void OnNewJointAnglesAvailable(double[] angles, float time)
+        //{
+        //    // 线程安全地触发事件
+        //    NewJointAnglesAvailable?.Invoke(this, new JointAnglesEventArgs(angles, time));
+        //}
+
+        // 新增方法：供 View 调用，获取下一个点
+        public JointAnglesEventArgs GetNextJointAngles()
+        {
+            if (_jointTrajectoryQueue == null || _jointTrajectoryQueue.Count == 0)
+            {
+                return null;
+            }
+            return _jointTrajectoryQueue.Dequeue();
+        }
         #endregion
 
 
