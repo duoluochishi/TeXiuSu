@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:TeXiuSi" WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" Background="#f0f0f0"
-        Title="Connect" Height="250" Width="400">
+        Title="Connect" Height="350" Width="400">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -19,6 +19,13 @@
                 <TabItem
       Header="CAN">
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -27,11 +34,45 @@
                         <ComboBox Grid.Column="1"
 Width="256" Height="30"
 
+ItemsSource="{Binding observableCollectionSimple}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <TextBlock Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Baudrate：</TextBlock>
+                        <ComboBox Grid.Row="1" Grid.Column="1"
+Width="256" Height="30"
 
+ItemsSource="{Binding TPCANBaudrates}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedTPCANBaudrate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <TextBlock Grid.Row="2"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Type：</TextBlock>
+                        <ComboBox Grid.Row="2" Grid.Column="1"
+Width="256" Height="30"
+
+ItemsSource="{Binding TPCANTypes}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedTPCANType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <TextBlock Grid.Row="3"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> I/O：</TextBlock>
+                        <ComboBox Grid.Row="3" Grid.Column="1"
+Width="256" Height="30"
+
+ItemsSource="{Binding observableCollectionIOModel}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedIOModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+Style="{StaticResource MaterialDesignOutlinedComboBox}" />
+                        <TextBlock Grid.Row="4"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Interrupt：</TextBlock>
+                        <ComboBox Grid.Row="4" Grid.Column="1"
+Width="256" Height="30"
+
+ItemsSource="{Binding observableCollectionInterruptModel}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedInterruptModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                     </Grid>
                 </TabItem>
-                <TabItem
+                <TabItem Visibility="Collapsed"
       Header="Tcp">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -47,6 +88,7 @@ Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                 </TabItem>
             </TabControl>
         </materialDesign:Card>
-        <Button Grid.Row="1" Width="70" Height="30" HorizontalAlignment="Right" Margin="0 0 10 0" Command="{Binding ConnectCommand}" >连接</Button>
+        <Button Grid.Row="1" Width="70" Height="30" HorizontalAlignment="Right" 
+                Margin="0 0 10 0" Command="{Binding ConnectCommand}" >连接</Button>
     </Grid>
 </Window>

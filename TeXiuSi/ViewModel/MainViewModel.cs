@@ -41,7 +41,7 @@ namespace TeXiuSi.ViewModel
         // 事件：现在只触发一次，通知 View 轨迹已准备好
         public event EventHandler<EventArgs> TrajectoryReady;
         // 用于追踪当前运动到哪个点
-        private int _currentIndex = 0;
+        //private int _currentIndex = 0;
 
         public double[] doubleAngles;
 

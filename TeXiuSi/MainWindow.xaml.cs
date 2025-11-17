@@ -193,7 +193,6 @@ namespace TeXiuSi
             _animationTimer.Tick += AnimationTimer_Tick; // 定时器触发的方法
             #endregion
 
-
             robotDynamicsHelper.ConfigureRobot();
             #endregion
         }

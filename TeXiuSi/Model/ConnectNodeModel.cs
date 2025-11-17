@@ -18,7 +18,6 @@ namespace TeXiuSi.Model
         public event PropertyChangedEventHandler PropertyChanged;
 
 
-
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -30,7 +29,13 @@ namespace TeXiuSi.Model
             get { return _type; }
             set { _type = value; OnPropertyChanged("Type"); }
         }
-
+        // 备注：名称
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; OnPropertyChanged("Name"); }
+        }
 
         // 备注：地址
         private string _address;

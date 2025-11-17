@@ -188,3 +188,5 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Numerics.dll
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Spatial.dll
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Numerics.xml
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Spatial.xml
+D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\PCANBasic.NET.dll
+D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\PCANBasic.NET.xml
