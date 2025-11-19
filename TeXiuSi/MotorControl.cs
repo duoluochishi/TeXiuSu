@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TeXiuSi.Helper;
+using TeXiuSi.Model;
 using TeXiuSi.Protocol;
 
 namespace TeXiuSi
@@ -16,6 +19,7 @@ namespace TeXiuSi
         private readonly List<DmActData> _dataPtr;
         private bool _readWriteSave;
         private bool _disposed = false;
+        private List<CANCommand> commandList = new List<CANCommand>();
 
         public MotorControl(uint nomBaud, uint datBaud, string sn, List<DmActData> dataPtr)
         {
@@ -41,6 +45,12 @@ namespace TeXiuSi
             EnableAll();
             Console.WriteLine("**********Motor_Control initialization successful**********\n");
         }
+
+        public MotorControl()
+        {
+
+        }
+
 
         ~MotorControl()
         {
@@ -454,6 +464,93 @@ namespace TeXiuSi
             // 暂时返回false，需要根据实际文档实现
             return false;
         }
+
+
+
+        #region  Help functions
+        /// <summary>
+        /// Convert a CAN DLC value into the actual data length of the CAN/CAN-FD frame.
+        /// </summary>
+        /// <param name="dlc">A value between 0 and 15 (CAN and FD DLC range)</param>
+        /// <param name="isSTD">A value indicating if the msg is a standard CAN (FD Flag not checked)</param>
+        /// <returns>The length represented by the DLC</returns>
+        public static int GetLengthFromDLC(int dlc, bool isSTD)
+        {
+            if (dlc <= 8)
+                return dlc;
+
+            if (isSTD)
+                return 8;
+
+            switch (dlc)
+            {
+                case 9: return 12;
+                case 10: return 16;
+                case 11: return 20;
+                case 12: return 24;
+                case 13: return 32;
+                case 14: return 48;
+                case 15: return 64;
+                default: return dlc;
+            }
+        }
+
+        #endregion
+
+        #region protocol
+        private void InitializeCommands()
+        {
+            commandList = new List<CANCommand>();
+            // 初始化常用命令
+            commandList.Add(new CANCommand("使能",0, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFC }));
+            commandList.Add(new CANCommand("失能", 0, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFD }));
+            commandList.Add(new CANCommand("保存零点", 0, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFE }));
+            commandList.Add(new CANCommand("清除错误", 0, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFB }));
+            // 参数写入
+            commandList.Add(new CANCommand("MIT",1,System.Convert.ToUInt32("7FF"), new byte[] { 0xFF, 0xFF, 0x55, (byte)Register.CTRL_MODE, 0x01, 0x00, 0x00, 0x00 }));
+            commandList.Add(new CANCommand("位置速度", 1, System.Convert.ToUInt32("7FF"), new byte[] { 0xFF, 0xFF, 0x55, (byte)Register.CTRL_MODE, 0x02, 0x00, 0x00, 0x00 }));
+            commandList.Add(new CANCommand("速度", 1, System.Convert.ToUInt32("7FF"), new byte[] { 0xFF, 0xFF, 0x55, (byte)Register.CTRL_MODE, 0x03, 0x00, 0x00, 0x00 }));
+            commandList.Add(new CANCommand("力位混控", 1, System.Convert.ToUInt32("7FF"), new byte[] { 0xFF, 0xFF, 0x55, (byte)Register.CTRL_MODE, 0x04, 0x00, 0x00, 0x00 }));
+        }
+
+        public static string GetEnumDescription(Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
+            return attribute?.Description ?? value.ToString();
+        }
+        /// <summary>
+        /// 写入参数
+        /// </summary>
+        /// <param name="CANID_L"></param>
+        /// <param name="CANID_H"></param>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        public CANCommand WriteParam(byte CANID_L,byte CANID_H, Register register) {
+
+          return new CANCommand(register.GetDescription(), 1, System.Convert.ToUInt32("7FF"), new byte[] { CANID_L, CANID_H, 0x55, (byte)register, 0x02, 0x00, 0x00, 0x00 }
+                );
+
+        }
+        /// <summary>
+        /// 读取参数
+        /// </summary>
+        /// <param name="CANID_L"></param>
+        /// <param name="CANID_H"></param>
+        /// <param name="register"></param>
+        /// <returns></returns>
+        public CANCommand ReadParam(byte CANID_L, byte CANID_H, Register register)
+        {
+
+            return new CANCommand(register.GetDescription(), 1, System.Convert.ToUInt32("7FF"), new byte[] { CANID_L, CANID_H, 0x33, (byte)register, 0x02, 0x00, 0x00, 0x00 }
+                  );
+
+        }
+
+
+
+        #endregion
+
     }
     // 虚拟USB硬件实现（用于测试）
     public class DummyUsbHardware : IUsbHardware

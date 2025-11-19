@@ -20,6 +20,7 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 using Peak.Can.Basic.BackwardCompatibility;
+using System.ComponentModel;
 
 namespace TeXiuSi.Helper
 {    
@@ -545,6 +546,313 @@ namespace TeXiuSi.Helper
         /// </summary>
         PCAN_TYPE_DNG_SJA_EPP   = 0x06,
     }
+
+    /// <summary>
+    /// 寄存器地址
+    /// </summary>
+    public enum Register : byte
+    {
+        /// <summary>
+        /// RW-(10.0,fmax]-float
+        /// </summary>
+        [Description("低压保护值")]
+        UV_Value = 0x00,
+
+        /// <summary>
+        /// RW-[0.0,fmax]-float
+        /// </summary>
+        [Description("扭矩系数")]
+        KT_Value = 0x01,
+
+        /// <summary>
+        /// RW-[80.0,200)-float
+        /// </summary>
+        [Description("过温保护值")]
+        OT_Value = 0x02,
+
+        /// <summary>
+        /// RW-(0.0,1.0)-float
+        /// </summary>
+        [Description("过流保护值")]
+        OC_Value = 0x03,
+
+        /// <summary>
+        /// RW-(0.0,fmax)-float
+        /// </summary>
+        [Description("加速度")]
+        ACC = 0x04,
+
+        /// <summary>
+        /// RW-[-fmax,0.0)-float
+        /// </summary>
+        [Description("减速度")]
+        DEC = 0x05,
+
+        /// <summary>
+        /// RW-(0.0,fmax]-float
+        /// </summary>
+        [Description("最大速度")]
+        MAX_SPD = 0x06,
+
+        /// <summary>
+        /// RW-[0,0x7FF]-uint32
+        /// </summary>
+        [Description("反馈 ID")]
+        MST_ID = 0x07,
+
+        /// <summary>
+        /// RW-[0,0x7FF]-uint32
+        /// </summary>
+        [Description("接收 ID")]
+        ESC_ID = 0x08,
+
+        /// <summary>
+        /// RW-[0,2^32-1]-uint32
+        /// </summary>
+        [Description("超时警报时间")]
+        TIMEOUT = 0x09,
+
+        /// <summary>
+        /// RW-[0,4]-uint32
+        /// </summary>
+        [Description("控制模式")]
+        CTRL_MODE = 0x0A,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机粘滞系数")]
+        Damp = 0x0B,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机转动惯量")]
+        Inertia = 0x0C,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("保留")]
+        hw_ver = 0x0D,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("软件版本号")]
+        sw_ver = 0x0E,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("保留")]
+        SN = 0x0F,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("电机极对数")]
+        NPP = 0x10,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机相电阻")]
+        Rs = 0x11,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机相电感")]
+        Ls = 0x12,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机磁链值")]
+        Flux = 0x13,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("齿轮减速比")]
+        Gr = 0x14,
+
+        /// <summary>
+        /// RW-(0.0,fmax]-float
+        /// </summary>
+        [Description("位置映射范围")]
+        PMAX = 0x15,
+
+        /// <summary>
+        /// RW-(0.0,fmax]-float
+        /// </summary>
+        [Description("速度映射范围")]
+        VMAX = 0x16,
+
+        /// <summary>
+        /// RW-(0.0,fmax]-float
+        /// </summary>
+        [Description("扭矩映射范围")]
+        TMAX = 0x17,
+
+        /// <summary>
+        /// RW-[100.0,1.0e4]-float
+        /// </summary>
+        [Description("电流环控制带宽")]
+        I_BW = 0x18,
+
+        /// <summary>
+        /// RW-[0.0,fmax]-float
+        /// </summary>
+        [Description("速度环 Kp")]
+        KP_ASR = 0x19,
+
+        /// <summary>
+        /// RW-[0.0,fmax]-float
+        /// </summary>
+        [Description("速度环 Ki")]
+        KI_ASR = 0x1A,
+
+        /// <summary>
+        /// RW-[0.0,fmax]-float
+        /// </summary>
+        [Description("位置环 Kp")]
+        KP_APR = 0x1B,
+
+        /// <summary>
+        /// RW-[0.0,fmax]-float
+        /// </summary>
+        [Description("位置环 Ki")]
+        KI_APR = 0x1C,
+
+        /// <summary>
+        /// RW-TBD-float
+        /// </summary>
+        [Description("过压保护值")]
+        OV_Value = 0x1D,
+
+        /// <summary>
+        /// RW-(0.0,1.0]-float
+        /// </summary>
+        [Description("齿轮力矩效率")]
+        GREF = 0x1E,
+
+        /// <summary>
+        /// RW-[1.0,30.0]-float
+        /// </summary>
+        [Description("速度环阻尼系数")]
+        Deta = 0x1F,
+
+        /// <summary>
+        /// RW-(0.0,500.0)-float
+        /// </summary>
+        [Description("速度环滤波带宽")]
+        V_BW = 0x20,
+
+        /// <summary>
+        /// RW-[100.0,1.0e4]-float
+        /// </summary>
+        [Description("电流环增强系数")]
+        IQ_c1 = 0x21,
+
+        /// <summary>
+        /// RW-(0.0,1.0e4]-float
+        /// </summary>
+        [Description("速度环增强系数")]
+        VL_c1 = 0x22,
+
+        /// <summary>
+        /// RW-[0,4]-uint32
+        /// </summary>
+        [Description("CAN 波特率代码")]
+        can_br = 0x23,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("子版本号")]
+        sub_ver = 0x24,
+
+        /// <summary>
+        /// RO-/-uint32
+        /// </summary>
+        [Description("Boot 版本号")]
+        Boot_ver = 0x25,
+
+        // 0x26-0x36 地址未定义，跳过
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("方向")]
+        dir = 0x37,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机侧角度偏移")]
+        m_off = 0x38,
+
+        // 0x39-0x3A 地址未定义，跳过
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("驱动板最大电流")]
+        Imax = 0x3B,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电源电压")]
+        VBus = 0x3C,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("驱动板温度")]
+        Tpcb = 0x3D,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机温度")]
+        Tmtr = 0x3E,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("U 相电流偏置")]
+        Iu_off = 0x3F,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("V 相电流偏置")]
+        Iv_off = 0x40,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("W 相电流偏置")]
+        Iw_off = 0x41,
+
+        // 0x42-0x4F 地址未定义，跳过
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("电机当前位置")]
+        p_m = 0x50,
+
+        /// <summary>
+        /// RO-/-float
+        /// </summary>
+        [Description("输出轴位置")]
+        xout = 0x51
+    }
+
     #endregion
 
     #region Structures

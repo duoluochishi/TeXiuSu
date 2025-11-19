@@ -369,6 +369,7 @@
     <Compile Include="Helper\PCANHelper.cs" />
     <Compile Include="Helper\RobotDynamicsHelper.cs" />
     <Compile Include="MessageStatus.cs" />
+    <Compile Include="Model\CANCommand.cs" />
     <Compile Include="Model\InterruptModel.cs" />
     <Compile Include="Model\IOModel.cs" />
     <Compile Include="PCAN\PANHelper.cs" />

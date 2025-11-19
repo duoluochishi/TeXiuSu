@@ -16,6 +16,7 @@ namespace TeXiuSi
     /// </summary>
     using Peak.Can.Basic;
     using System.Threading;
+    using System.Windows;
     using TeXiuSi.PCAN;
     using TPCANBitrateFD = System.String;
     using TPCANHandle = System.UInt16;
@@ -56,6 +57,8 @@ namespace TeXiuSi
         //public SerialCommunication sc;
 
         public CanBusHelper _canBusHelper;
+
+        public MotorControl _motorControl;
 
 
         private void ReceiveMessage<TMessage>(Action<TMessage> callback) where TMessage : class
@@ -183,7 +186,7 @@ namespace TeXiuSi
 
 
             _pANHelper = new PANHelper();
-
+            _motorControl = new MotorControl();
         }
 
         /// <summary>
@@ -194,7 +197,7 @@ namespace TeXiuSi
             m_PcanHandle = 0;
             m_Baudrate = 0;
             m_Baudrate = 0;
-            _stsResult=new TPCANStatus();
+            _stsResult = new TPCANStatus();
         }
 
         #region  CANControl
@@ -281,6 +284,106 @@ namespace TeXiuSi
                 Log.Error(_pANHelper.GetFormatedError(stsResult));
         }
 
+
+        public void Write()
+        {
+
+            TPCANStatus stsResult;
+
+            // Send the message
+            //
+            stsResult = m_IsFD ? WriteFrameFD() : WriteFrame();
+
+            // The message was successfully sent
+            //
+            if (stsResult == TPCANStatus.PCAN_ERROR_OK)
+                Log.Information("Message was successfully SENT");
+            // An error occurred.  We show the error.
+            //			
+            else
+                MessageBox.Show(_pANHelper.GetFormatedError(stsResult));
+
+        }
+        private TPCANStatus WriteFrameFD()
+        {
+            TPCANMsgFD CANMsg;
+            TextBox txtbCurrentTextBox;
+            int iLength;
+
+            // We create a TPCANMsgFD message structure 
+            //
+            CANMsg = new TPCANMsgFD();
+            CANMsg.DATA = new byte[64];
+
+            // We configurate the Message.  The ID,
+            // Length of the Data, Message Type 
+            // and the data
+            //
+            CANMsg.ID = System.Convert.ToUInt32(txtID.Text, 16);
+            CANMsg.DLC = System.Convert.ToByte(nudLength.Value);
+            CANMsg.MSGTYPE = (chbExtended.Checked) ? TPCANMessageType.PCAN_MESSAGE_EXTENDED : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            CANMsg.MSGTYPE |= (chbFD.Checked) ? TPCANMessageType.PCAN_MESSAGE_FD : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            CANMsg.MSGTYPE |= (chbBRS.Checked) ? TPCANMessageType.PCAN_MESSAGE_BRS : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+
+            // If a remote frame will be sent, the data bytes are not important.
+            //
+            if (chbRemote.Checked)
+                CANMsg.MSGTYPE |= TPCANMessageType.PCAN_MESSAGE_RTR;
+            else
+            {
+                // We get so much data as the Len of the message
+                //
+                iLength = MotorControl.GetLengthFromDLC(CANMsg.DLC, (CANMsg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0);
+                for (int i = 0; i < iLength; i++)
+                {
+                    txtbCurrentTextBox = (TextBox)this.Controls.Find("txtData" + i.ToString(), true)[0];
+                    CANMsg.DATA[i] = System.Convert.ToByte(txtbCurrentTextBox.Text, 16);
+                }
+            }
+
+            // The message is sent to the configured hardware
+            //
+            return PCANBasic.WriteFD(m_PcanHandle, ref CANMsg);
+        }
+        private TPCANStatus WriteFrame()
+        {
+            TPCANMsg CANMsg;
+            TextBox txtbCurrentTextBox;
+
+            // We create a TPCANMsg message structure 
+            //
+            CANMsg = new TPCANMsg();
+            CANMsg.DATA = new byte[8];
+
+            // We configurate the Message.  The ID,
+            // Length of the Data, Message Type
+            // and the data
+            //关节ID 或者下参数加偏移 ---待补充
+            CANMsg.ID = System.Convert.ToUInt32(txtID.Text, 16);
+            CANMsg.LEN = System.Convert.ToByte(8);
+
+            //扩展协议逻辑保留
+            //CANMsg.MSGTYPE = (chbExtended.Checked) ? TPCANMessageType.PCAN_MESSAGE_EXTENDED : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            CANMsg.MSGTYPE = TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            // If a remote frame will be sent, the data bytes are not important.
+            //
+            //if (chbRemote.Checked)
+            //    CANMsg.MSGTYPE |= TPCANMessageType.PCAN_MESSAGE_RTR;
+            //else
+            //{
+            // We get so much data as the Len of the message
+            //
+            for (int i = 0; i < MotorControl.GetLengthFromDLC(CANMsg.LEN, true); i++)
+            {
+                txtbCurrentTextBox = (TextBox)this.Controls.Find("txtData" + i.ToString(), true)[0];
+                CANMsg.DATA[i] = System.Convert.ToByte(txtbCurrentTextBox.Text, 16);
+            }
+            //}
+
+            // The message is sent to the configured hardware
+            //
+            return PCANBasic.Write(m_PcanHandle, ref CANMsg);
+        }
         #endregion
 
 
