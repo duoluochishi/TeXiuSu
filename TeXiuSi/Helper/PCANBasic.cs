@@ -23,8 +23,8 @@ using Peak.Can.Basic.BackwardCompatibility;
 using System.ComponentModel;
 
 namespace TeXiuSi.Helper
-{    
-    using TPCANHandle = System.UInt16;    
+{
+    using TPCANHandle = System.UInt16;
     using TPCANBitrateFD = System.String;
     using TPCANTimestampFD = System.UInt64;
 
@@ -38,35 +38,35 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// No error
         /// </summary>
-        PCAN_ERROR_OK           = 0x00000,
+        PCAN_ERROR_OK = 0x00000,
         /// <summary>
         /// Transmit buffer in CAN controller is full
         /// </summary>
-        PCAN_ERROR_XMTFULL      = 0x00001,
+        PCAN_ERROR_XMTFULL = 0x00001,
         /// <summary>
         /// CAN controller was read too late        
         /// </summary>
-        PCAN_ERROR_OVERRUN      = 0x00002,  
+        PCAN_ERROR_OVERRUN = 0x00002,
         /// <summary>
         /// Bus error: an error counter reached the 'light' limit
         /// </summary>
-        PCAN_ERROR_BUSLIGHT     = 0x00004,  
+        PCAN_ERROR_BUSLIGHT = 0x00004,
         /// <summary>
         /// Bus error: an error counter reached the 'heavy' limit
         /// </summary>
-        PCAN_ERROR_BUSHEAVY     = 0x00008,  
+        PCAN_ERROR_BUSHEAVY = 0x00008,
         /// <summary>
         /// Bus error: an error counter reached the 'warning' limit
         /// </summary>
-        PCAN_ERROR_BUSWARNING   = PCAN_ERROR_BUSHEAVY,
+        PCAN_ERROR_BUSWARNING = PCAN_ERROR_BUSHEAVY,
         /// <summary>
         /// Bus error: the CAN controller is error passive
         /// </summary>
-        PCAN_ERROR_BUSPASSIVE   = 0x40000,
+        PCAN_ERROR_BUSPASSIVE = 0x40000,
         /// <summary>
         /// Bus error: the CAN controller is in bus-off state
         /// </summary>
-        PCAN_ERROR_BUSOFF       = 0x00010,  
+        PCAN_ERROR_BUSOFF = 0x00010,
         /// <summary>
         /// Mask for all bus errors
         /// </summary>
@@ -74,51 +74,51 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// Receive queue is empty
         /// </summary>
-        PCAN_ERROR_QRCVEMPTY    = 0x00020,  
+        PCAN_ERROR_QRCVEMPTY = 0x00020,
         /// <summary>
         /// Receive queue was read too late
         /// </summary>
-        PCAN_ERROR_QOVERRUN     = 0x00040,  
+        PCAN_ERROR_QOVERRUN = 0x00040,
         /// <summary>
         /// Transmit queue is full
         /// </summary>
-        PCAN_ERROR_QXMTFULL     = 0x00080,  
+        PCAN_ERROR_QXMTFULL = 0x00080,
         /// <summary>
         /// Test of the CAN controller hardware registers failed (no hardware found)
         /// </summary>
-        PCAN_ERROR_REGTEST      = 0x00100,
+        PCAN_ERROR_REGTEST = 0x00100,
         /// <summary>
         /// Driver not loaded
         /// </summary>
-        PCAN_ERROR_NODRIVER     = 0x00200,
+        PCAN_ERROR_NODRIVER = 0x00200,
         /// <summary>
         /// Hardware already in use by a Net
         /// </summary>
-        PCAN_ERROR_HWINUSE      = 0x00400,
+        PCAN_ERROR_HWINUSE = 0x00400,
         /// <summary>
         /// A Client is already connected to the Net
         /// </summary>
-        PCAN_ERROR_NETINUSE     = 0x00800,
+        PCAN_ERROR_NETINUSE = 0x00800,
         /// <summary>
         /// Hardware handle is invalid
         /// </summary>
-        PCAN_ERROR_ILLHW        = 0x01400,
+        PCAN_ERROR_ILLHW = 0x01400,
         /// <summary>
         /// Net handle is invalid
         /// </summary>
-        PCAN_ERROR_ILLNET       = 0x01800,
+        PCAN_ERROR_ILLNET = 0x01800,
         /// <summary>
         /// Client handle is invalid
         /// </summary>
-        PCAN_ERROR_ILLCLIENT    = 0x01C00,
+        PCAN_ERROR_ILLCLIENT = 0x01C00,
         /// <summary>
         /// Mask for all handle errors
         /// </summary>
-        PCAN_ERROR_ILLHANDLE    = (PCAN_ERROR_ILLHW | PCAN_ERROR_ILLNET | PCAN_ERROR_ILLCLIENT),
+        PCAN_ERROR_ILLHANDLE = (PCAN_ERROR_ILLHW | PCAN_ERROR_ILLNET | PCAN_ERROR_ILLCLIENT),
         /// <summary>
         /// Resource (FIFO, Client, timeout) cannot be created
         /// </summary>
-        PCAN_ERROR_RESOURCE     = 0x02000,
+        PCAN_ERROR_RESOURCE = 0x02000,
         /// <summary>
         /// Invalid parameter
         /// </summary>
@@ -126,15 +126,15 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// Invalid parameter value
         /// </summary>
-        PCAN_ERROR_ILLPARAMVAL  = 0x08000,
+        PCAN_ERROR_ILLPARAMVAL = 0x08000,
         /// <summary>
         /// Unknown error
         /// </summary>
-        PCAN_ERROR_UNKNOWN      = 0x10000,
+        PCAN_ERROR_UNKNOWN = 0x10000,
         /// <summary>
         /// Invalid data, function, or action.
         /// </summary>
-        PCAN_ERROR_ILLDATA      = 0x20000,
+        PCAN_ERROR_ILLDATA = 0x20000,
         /// <summary>
         /// Driver object state is wrong for the attempted operation
         /// </summary>
@@ -206,7 +206,7 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// Device identifier parameter
         /// </summary>
-        PCAN_DEVICE_ID           = 1,
+        PCAN_DEVICE_ID = 1,
         /// <summary>
         /// DEPRECATED parameter. Use PCAN_DEVICE_ID instead
         /// </summary>
@@ -215,79 +215,79 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// 5-Volt power parameter
         /// </summary>
-        PCAN_5VOLTS_POWER        = 2,
+        PCAN_5VOLTS_POWER = 2,
         /// <summary>
         /// PCAN receive event handler parameter
         /// </summary>
-        PCAN_RECEIVE_EVENT       = 3,
+        PCAN_RECEIVE_EVENT = 3,
         /// <summary>
         /// PCAN message filter parameter
         /// </summary>
-        PCAN_MESSAGE_FILTER      = 4,
+        PCAN_MESSAGE_FILTER = 4,
         /// <summary>
         /// PCAN-Basic API version parameter
         /// </summary>
-        PCAN_API_VERSION         = 5,
+        PCAN_API_VERSION = 5,
         /// <summary>
         /// PCAN device channel version parameter
         /// </summary>
-        PCAN_CHANNEL_VERSION     = 6,
+        PCAN_CHANNEL_VERSION = 6,
         /// <summary>
         /// PCAN Reset-On-Busoff parameter
         /// </summary>
-        PCAN_BUSOFF_AUTORESET    = 7,
+        PCAN_BUSOFF_AUTORESET = 7,
         /// <summary>
         /// PCAN Listen-Only parameter
         /// </summary>
-        PCAN_LISTEN_ONLY         = 8,
+        PCAN_LISTEN_ONLY = 8,
         /// <summary>
         /// Directory path for log files
         /// </summary>
-        PCAN_LOG_LOCATION        = 9,
+        PCAN_LOG_LOCATION = 9,
         /// <summary>
         /// Debug-Log activation status
         /// </summary>
-        PCAN_LOG_STATUS          = 10,
+        PCAN_LOG_STATUS = 10,
         /// <summary>
         /// Configuration of the debugged information (LOG_FUNCTION_***)
         /// </summary>
-        PCAN_LOG_CONFIGURE       = 11,
+        PCAN_LOG_CONFIGURE = 11,
         /// <summary>
         /// Custom insertion of text into the log file
         /// </summary>
-        PCAN_LOG_TEXT            = 12,
+        PCAN_LOG_TEXT = 12,
         /// <summary>
         /// Availability status of a PCAN-Channel
         /// </summary>
-        PCAN_CHANNEL_CONDITION   = 13,
+        PCAN_CHANNEL_CONDITION = 13,
         /// <summary>
         /// PCAN hardware name parameter
         /// </summary>
-        PCAN_HARDWARE_NAME       = 14,
+        PCAN_HARDWARE_NAME = 14,
         /// <summary>
         /// Message reception status of a PCAN-Channel
         /// </summary>
-        PCAN_RECEIVE_STATUS      = 15,
+        PCAN_RECEIVE_STATUS = 15,
         /// <summary>
         /// CAN-Controller number of a PCAN-Channel
         /// </summary>
-        PCAN_CONTROLLER_NUMBER   = 16,
+        PCAN_CONTROLLER_NUMBER = 16,
         /// <summary>
         /// Directory path for PCAN trace files
         /// </summary>
-        PCAN_TRACE_LOCATION      = 17,
+        PCAN_TRACE_LOCATION = 17,
         /// <summary>
         /// CAN tracing activation status
         /// </summary>
-        PCAN_TRACE_STATUS        = 18,
+        PCAN_TRACE_STATUS = 18,
         /// <summary>
         /// Configuration of the maximum file size of a CAN trace
         /// </summary>
-        PCAN_TRACE_SIZE          = 19,
+        PCAN_TRACE_SIZE = 19,
         /// <summary>
         /// Configuration of the trace file storing mode (TRACE_FILE_***)
         /// </summary>
-        PCAN_TRACE_CONFIGURE     = 20,
+        PCAN_TRACE_CONFIGURE = 20,
         /// <summary>
         /// Physical identification of a USB based PCAN-Channel by blinking its associated LED
         /// </summary>
@@ -295,35 +295,35 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// Capabilities of a PCAN device (FEATURE_***)
         /// </summary>
-        PCAN_CHANNEL_FEATURES    = 22,
+        PCAN_CHANNEL_FEATURES = 22,
         /// <summary>
         /// Using of an existing bit rate (PCAN-View connected to a channel)
         /// </summary>
-        PCAN_BITRATE_ADAPTING    = 23,
+        PCAN_BITRATE_ADAPTING = 23,
         /// <summary>
         /// Configured bit rate as Btr0Btr1 value
         /// </summary>
-        PCAN_BITRATE_INFO        = 24,
+        PCAN_BITRATE_INFO = 24,
         /// <summary>
         /// Configured bit rate as TPCANBitrateFD string
         /// </summary>
-        PCAN_BITRATE_INFO_FD     = 25,
+        PCAN_BITRATE_INFO_FD = 25,
         /// <summary>
         /// Configured nominal CAN Bus speed as Bits per seconds
         /// </summary>
-        PCAN_BUSSPEED_NOMINAL    = 26,  
+        PCAN_BUSSPEED_NOMINAL = 26,
         /// <summary>
         /// Configured CAN data speed as Bits per seconds
         /// </summary>
-        PCAN_BUSSPEED_DATA       = 27,
+        PCAN_BUSSPEED_DATA = 27,
         /// <summary>
         /// Remote address of a LAN channel as string in IPv4 format
         /// </summary>
-        PCAN_IP_ADDRESS          = 28,
+        PCAN_IP_ADDRESS = 28,
         /// <summary>
         /// Status of the Virtual PCAN-Gateway Service 
         /// </summary>
-        PCAN_LAN_SERVICE_STATUS  = 29,
+        PCAN_LAN_SERVICE_STATUS = 29,
         /// <summary>
         /// Status messages reception status within a PCAN-Channel
         /// </summary>
@@ -399,15 +399,15 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// The PCAN message is a CAN Standard Frame (11-bit identifier)
         /// </summary>
-        PCAN_MESSAGE_STANDARD  = 0x00,
+        PCAN_MESSAGE_STANDARD = 0x00,
         /// <summary>
         /// The PCAN message is a CAN Remote-Transfer-Request Frame
         /// </summary>
-        PCAN_MESSAGE_RTR       = 0x01,
+        PCAN_MESSAGE_RTR = 0x01,
         /// <summary>
         /// The PCAN message is a CAN Extended Frame (29-bit identifier)
         /// </summary>
-        PCAN_MESSAGE_EXTENDED  = 0x02,
+        PCAN_MESSAGE_EXTENDED = 0x02,
         /// <summary>
         /// The PCAN message represents a FD frame in terms of CiA Specs
         /// </summary>
@@ -431,7 +431,7 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// The PCAN message represents a PCAN status message
         /// </summary>
-        PCAN_MESSAGE_STATUS    = 0x80,
+        PCAN_MESSAGE_STATUS = 0x80,
     }
 
     /// <summary>
@@ -457,59 +457,59 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// 1 MBit/s
         /// </summary>
-        PCAN_BAUD_1M      = 0x0014,
+        PCAN_BAUD_1M = 0x0014,
         /// <summary>
         /// 800 KBit/s
         /// </summary>
-        PCAN_BAUD_800K    = 0x0016,
+        PCAN_BAUD_800K = 0x0016,
         /// <summary>
         /// 500 kBit/s
         /// </summary>
-        PCAN_BAUD_500K    = 0x001C,
+        PCAN_BAUD_500K = 0x001C,
         /// <summary>
         /// 250 kBit/s
         /// </summary>
-        PCAN_BAUD_250K    = 0x011C,
+        PCAN_BAUD_250K = 0x011C,
         /// <summary>
         /// 125 kBit/s
         /// </summary>
-        PCAN_BAUD_125K    = 0x031C,
+        PCAN_BAUD_125K = 0x031C,
         /// <summary>
         /// 100 kBit/s
         /// </summary>
-        PCAN_BAUD_100K    = 0x432F,
+        PCAN_BAUD_100K = 0x432F,
         /// <summary>
         /// 95,238 KBit/s
         /// </summary>
-        PCAN_BAUD_95K     = 0xC34E,
+        PCAN_BAUD_95K = 0xC34E,
         /// <summary>
         /// 83,333 KBit/s
         /// </summary>
-        PCAN_BAUD_83K     = 0x852B,
+        PCAN_BAUD_83K = 0x852B,
         /// <summary>
         /// 50 kBit/s
         /// </summary>
-        PCAN_BAUD_50K     = 0x472F,
+        PCAN_BAUD_50K = 0x472F,
         /// <summary>
         /// 47,619 KBit/s
         /// </summary>
-        PCAN_BAUD_47K     = 0x1414,
+        PCAN_BAUD_47K = 0x1414,
         /// <summary>
         /// 33,333 KBit/s
         /// </summary>
-        PCAN_BAUD_33K     = 0x8B2F,
+        PCAN_BAUD_33K = 0x8B2F,
         /// <summary>
         /// 20 kBit/s
         /// </summary>
-        PCAN_BAUD_20K     = 0x532F,
+        PCAN_BAUD_20K = 0x532F,
         /// <summary>
         /// 10 kBit/s
         /// </summary>
-        PCAN_BAUD_10K     = 0x672F,
+        PCAN_BAUD_10K = 0x672F,
         /// <summary>
         /// 5 kBit/s
         /// </summary>
-        PCAN_BAUD_5K      = 0x7F7F,
+        PCAN_BAUD_5K = 0x7F7F,
     }
 
     /// <summary>
@@ -520,31 +520,31 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// PCAN-ISA 82C200
         /// </summary>
-        PCAN_TYPE_ISA           = 0x01,
+        PCAN_TYPE_ISA = 0x01,
         /// <summary>
         /// PCAN-ISA SJA1000
         /// </summary>
-        PCAN_TYPE_ISA_SJA       = 0x09,
+        PCAN_TYPE_ISA_SJA = 0x09,
         /// <summary>
         /// PHYTEC ISA 
         /// </summary>
-        PCAN_TYPE_ISA_PHYTEC    = 0x04,
+        PCAN_TYPE_ISA_PHYTEC = 0x04,
         /// <summary>
         /// PCAN-Dongle 82C200
         /// </summary>
-        PCAN_TYPE_DNG           = 0x02,
+        PCAN_TYPE_DNG = 0x02,
         /// <summary>
         /// PCAN-Dongle EPP 82C200
         /// </summary>
-        PCAN_TYPE_DNG_EPP       = 0x03,
+        PCAN_TYPE_DNG_EPP = 0x03,
         /// <summary>
         /// PCAN-Dongle SJA1000
         /// </summary>
-        PCAN_TYPE_DNG_SJA       = 0x05,
+        PCAN_TYPE_DNG_SJA = 0x05,
         /// <summary>
         /// PCAN-Dongle EPP SJA1000
         /// </summary>
-        PCAN_TYPE_DNG_SJA_EPP   = 0x06,
+        PCAN_TYPE_DNG_SJA_EPP = 0x06,
     }
 
     /// <summary>
@@ -853,6 +853,78 @@ namespace TeXiuSi.Helper
         xout = 0x51
     }
 
+    /// <summary>
+    /// 节点
+    /// </summary>
+    public enum JointNode
+    {
+        /// <summary>
+        /// 1
+        /// </summary>
+        [Description("关节1")]
+        Nodel1 = 0x01,
+        /// <summary>
+        /// 2
+        /// </summary>
+        [Description("关节2")]
+        /// <summary>
+        /// 3
+        /// </summary>
+        Nodel2 = 0x02,
+        [Description("关节3")]
+        /// <summary>
+        /// 4
+        /// </summary>
+        Nodel3 = 0x03,
+        [Description("关节4")]
+        /// <summary>
+        /// 5
+        /// </summary>
+        Nodel4 = 0x04,
+        [Description("关节5")]
+        /// <summary>
+        /// 6
+        /// </summary>
+        Nodel5 = 0x05,
+        [Description("关节6")]
+        /// <summary>
+        /// 7
+        /// </summary>
+        Nodel6 = 0x06,
+        [Description("关节7")]
+        /// <summary>
+        /// 8
+        /// </summary>
+        Nodel7 = 0x07,
+        [Description("全部关节")]
+        NodelAll = 0x08
+
+    }
+
+    public enum ControlFrame
+    {
+        [Description("位置速度模式")]
+
+        PositionSpd = 0x100,
+        [Description("位置速度模式")]
+
+        Spd = 0x200,
+
+        [Description("力位混控模式")]
+        ForcePositionMixed = 0x300,
+        /// <summary>
+        /// 拼接待定-待补充
+        /// </summary>
+        [Description("MIT")]
+        Mit = 0x00,
+    }
+    public enum ControlPowModel
+    {
+        [Description("使能")]
+        PositionSpd = 0xFC,
+        [Description("失能")]
+        Spd = 0xFD,
+    }
     #endregion
 
     #region Structures
@@ -890,11 +962,11 @@ namespace TeXiuSi.Helper
         /// <summary>
         /// Base-value: milliseconds: 0.. 2^32-1
         /// </summary>
-        public uint millis;             
+        public uint millis;
         /// <summary>
         /// Roll-arounds of millis
         /// </summary>
-        public ushort millis_overflow;  
+        public ushort millis_overflow;
         /// <summary>
         /// Microseconds: 0..999
         /// </summary>
@@ -976,7 +1048,7 @@ namespace TeXiuSi.Helper
         /// Undefined/default value for a PCAN bus
         /// </summary>
         public const TPCANHandle PCAN_NONEBUS = 0x00;
-        
+
         /// <summary>
         /// PCAN-ISA interface, channel 1
         /// </summary>
@@ -1009,7 +1081,7 @@ namespace TeXiuSi.Helper
         /// PCAN-ISA interface, channel 8
         /// </summary>
         public const TPCANHandle PCAN_ISABUS8 = 0x28;
-        
+
         /// <summary>
         /// PPCAN-Dongle/LPT interface, channel 1 
         /// </summary>
@@ -1434,8 +1506,8 @@ namespace TeXiuSi.Helper
             [MarshalAs(UnmanagedType.U2)]
             TPCANBaudrate Btr0Btr1,
             [MarshalAs(UnmanagedType.U1)]
-            TPCANType HwType, 
-            UInt32 IOPort, 
+            TPCANType HwType,
+            UInt32 IOPort,
             UInt16 Interrupt);
 
         /// <summary>
@@ -1636,7 +1708,7 @@ namespace TeXiuSi.Helper
             TPCANHandle Channel,
             [MarshalAs(UnmanagedType.U1)]
             TPCANParameter Parameter,
-            StringBuilder StringBuffer,            
+            StringBuilder StringBuffer,
             UInt32 BufferLength);
 
         /// <summary>

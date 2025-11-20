@@ -33,6 +33,11 @@ namespace TeXiuSi
 
             // ... 后续代码保持不变
             Current.Exit += OnApplicationExit;
+
+
+            // 确保 DeviceOperation 在 MainWindow 实例化之前被实例化和初始化
+            DeviceOperation.Instance.ClearInit();
+
             base.OnStartup(e);
         }
 

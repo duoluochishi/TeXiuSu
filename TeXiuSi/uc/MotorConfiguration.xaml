@@ -10,7 +10,7 @@
              d:DesignHeight="850" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary>
-            <x:Array x:Key="JointNames" Type="sys:String">
+            <!--<x:Array x:Key="JointNames" Type="sys:String">
                 <sys:String>关节1</sys:String>
                 <sys:String>关节2</sys:String>
                 <sys:String>关节3</sys:String>
@@ -18,7 +18,7 @@
                 <sys:String>关节5</sys:String>
                 <sys:String>关节6</sys:String>
                 <sys:String>全部关节</sys:String>
-            </x:Array>
+            </x:Array>-->
             <x:Array x:Key="ConditiontNames" Type="sys:String">
                 <sys:String>使能</sys:String>
                 <sys:String>失能</sys:String>
@@ -57,15 +57,17 @@
 x:Name="Joint"  Grid.Column="1"
 Width="150" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-ItemsSource="{StaticResource JointNames}" 
-SelectedIndex="0"
+ItemsSource="{Binding ConnectNodeModels}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 />
                         <ComboBox
 x:Name="condition"  Grid.Column="2"
 Width="150" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-ItemsSource="{StaticResource ConditiontNames}" 
-SelectedIndex="0"
+   ItemsSource="{Binding ControlPowModels}"
+   DisplayMemberPath="DisplayName"
+   SelectedItem="{Binding SelectedControlPowModel}"
 />
                         <Button Width="180" Height="50" Grid.Column="3"
 Style="{StaticResource MaterialDesignRaisedButton}"

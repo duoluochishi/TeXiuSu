@@ -43,16 +43,14 @@ namespace TeXiuSi
         Model3DGroup RA = new Model3DGroup(); //RoboticArm 3d group
         Model3D geom = null; //Debug sphere to check in which point the joint is rotatin
 
-        List<Joint> joints = null;
+
 
         bool switchingJoint = false;
         bool isAnimating = false;
 
         RobotDynamicsHelper robotDynamicsHelper = null;
 
-        Color oldColor = Colors.White;
-        GeometryModel3D oldSelectedModel = null;
-        string basePath = "";
+
         ModelVisual3D visual;
         double LearningRate = 0.01;
         double SamplingDistance = 0.15;
@@ -77,42 +75,7 @@ namespace TeXiuSi
         System.Windows.Forms.Timer timerPoint;
         System.Windows.Forms.Timer _animationTimer;
 
-#if IRB6700
-        //directroy of all stl files
-        private const string MODEL_PATH1 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01_CAD.stl";
-        private const string MODEL_PATH2 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02_CAD.stl";
-        private const string MODEL_PATH3 = "IRB6700-MH3_245-300_IRC5_rev02_LINK03_CAD.stl";
-        private const string MODEL_PATH4 = "IRB6700-MH3_245-300_IRC5_rev01_LINK04_CAD.stl";
-        private const string MODEL_PATH5 = "IRB6700-MH3_245-300_IRC5_rev01_LINK05_CAD.stl";
-        private const string MODEL_PATH6 = "IRB6700-MH3_245-300_IRC5_rev01_LINK06_CAD.stl";
-        private const string MODEL_PATH7 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01_CABLE.stl";
-        private const string MODEL_PATH8 = "IRB6700-MH3_245-300_IRC5_rev02_LINK01m_CABLE.stl";
-        private const string MODEL_PATH9 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02_CABLE.stl";
-        private const string MODEL_PATH10 = "IRB6700-MH3_245-300_IRC5_rev00_LINK02m_CABLE.stl";
-        private const string MODEL_PATH11 = "IRB6700-MH3_245-300_IRC5_rev00_LINK03a_CABLE.stl";
-        private const string MODEL_PATH12 = "IRB6700-MH3_245-300_IRC5_rev00_LINK03b_CABLE.stl";
-        private const string MODEL_PATH13 = "IRB6700-MH3_245-300_IRC5_rev02_LINK03m_CABLE.stl";
-        private const string MODEL_PATH14 = "IRB6700-MH3_245-300_IRC5_rev01_LINK04_CABLE.stl";
-        private const string MODEL_PATH15 = "IRB6700-MH3_245-300_IRC5_rev00_ROD_CAD.stl";
-        private const string MODEL_PATH16 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO1_CAD.stl";
-        private const string MODEL_PATH17 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO2_CAD.stl";
-        private const string MODEL_PATH18 = "IRB6700-MH3_245-300_IRC5_rev00_LOGO3_CAD.stl";
-        private const string MODEL_PATH19 = "IRB6700-MH3_245-300_IRC5_rev01_BASE_CAD.stl";
-        private const string MODEL_PATH20 = "IRB6700-MH3_245-300_IRC5_rev00_CYLINDER_CAD.stl";
-#else
 
-        private const string MODEL_PATH1 = "IRB4600_20kg-250_LINK1_CAD_rev04.stl";
-        private const string MODEL_PATH2 = "IRB4600_20kg-250_LINK2_CAD_rev04.stl";
-        private const string MODEL_PATH3 = "IRB4600_20kg-250_LINK3_CAD_rev005.stl";
-        private const string MODEL_PATH4 = "IRB4600_20kg-250_LINK4_CAD_rev04.stl";
-        private const string MODEL_PATH5 = "IRB4600_20kg-250_LINK5_CAD_rev04.stl";
-        private const string MODEL_PATH6 = "IRB4600_20kg-250_LINK6_CAD_rev04.stl";
-        private const string MODEL_PATH7 = "IRB4600_20kg-250_LINK3_CAD_rev04.stl";
-        private const string MODEL_PATH8 = "IRB4600_20kg-250_CABLES_LINK1_rev03.stl";
-        private const string MODEL_PATH9 = "IRB4600_20kg-250_CABLES_LINK2_rev03.stl";
-        private const string MODEL_PATH10 = "IRB4600_20kg-250_CABLES_LINK3_rev03.stl";
-        private const string MODEL_PATH11 = "IRB4600_20kg-250_BASE_CAD_rev04.stl";
-#endif
 
         #endregion
         public MainViewModel viewModel;
@@ -135,33 +98,10 @@ namespace TeXiuSi
             viewModel.TrajectoryReady += OnTrajectoryReady;
 
             #region Init
-            basePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models\\";
-            List<string> modelsNames = new List<string>();
-            modelsNames.Add(MODEL_PATH1);
-            modelsNames.Add(MODEL_PATH2);
-            modelsNames.Add(MODEL_PATH3);
-            modelsNames.Add(MODEL_PATH4);
-            modelsNames.Add(MODEL_PATH5);
-            modelsNames.Add(MODEL_PATH6);
-            modelsNames.Add(MODEL_PATH7);
-            modelsNames.Add(MODEL_PATH8);
-            modelsNames.Add(MODEL_PATH9);
-            modelsNames.Add(MODEL_PATH10);
-            modelsNames.Add(MODEL_PATH11);//Until here for the 4600
-#if IRB6700
-            modelsNames.Add(MODEL_PATH12);
-            modelsNames.Add(MODEL_PATH13);
-            modelsNames.Add(MODEL_PATH14);
-            modelsNames.Add(MODEL_PATH15);
-            modelsNames.Add(MODEL_PATH16);
-            modelsNames.Add(MODEL_PATH17);
-            modelsNames.Add(MODEL_PATH18);
-            modelsNames.Add(MODEL_PATH19);
-            modelsNames.Add(MODEL_PATH20);
-#endif
+
             Log.Information("主窗口已初始化。");
 
-            RoboticArm.Content = Initialize_Environment(modelsNames);
+            RoboticArm.Content = DeviceOperation.Instance.model3D;
 
             /** Debug sphere to check in which point the joint is rotating**/
             var builder = new MeshBuilder(true, true);
@@ -179,7 +119,7 @@ namespace TeXiuSi
             viewPort3d.Camera.UpDirection = new Vector3D(-0.145, 0.372, 0.917);
             viewPort3d.Camera.Position = new Point3D(-1571, 4801, 3774);
 
-            double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+            double[] angles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
             ForwardKinematics(angles);
 
             changeSelectedJoint();
@@ -279,12 +219,12 @@ namespace TeXiuSi
         }
         private void ViewModel_AngleChangeEvent(object sender, EventArgs e)
         {
-            joints[0].angle = viewModel.doubleAngles[0];
-            joints[1].angle = viewModel.doubleAngles[1];
-            joints[2].angle = viewModel.doubleAngles[2];
-            joints[3].angle = viewModel.doubleAngles[3];
-            joints[4].angle = viewModel.doubleAngles[4];
-            joints[5].angle = viewModel.doubleAngles[5];
+            DeviceOperation.Instance.joints[0].angle = viewModel.doubleAngles[0];
+            DeviceOperation.Instance.joints[1].angle = viewModel.doubleAngles[1];
+            DeviceOperation.Instance.joints[2].angle = viewModel.doubleAngles[2];
+            DeviceOperation.Instance.joints[3].angle = viewModel.doubleAngles[3];
+            DeviceOperation.Instance.joints[4].angle = viewModel.doubleAngles[4];
+            DeviceOperation.Instance.joints[5].angle = viewModel.doubleAngles[5];
             execute_fk();
         }
 
@@ -295,7 +235,7 @@ namespace TeXiuSi
 
         private void changeSelectedJoint()
         {
-            if (joints == null)
+            if (DeviceOperation.Instance.joints == null)
                 return;
 
             //int sel = ((int)jointSelector.Value) - 1;
@@ -321,240 +261,18 @@ namespace TeXiuSi
             //        jointYAxis.IsEnabled = true;
             //        jointZAxis.IsEnabled = true;
             //    }
-            //    jointX.Value = joints[sel].rotPointX;
-            //    jointY.Value = joints[sel].rotPointY;
-            //    jointZ.Value = joints[sel].rotPointZ;
-            //    jointXAxis.IsChecked = joints[sel].rotAxisX == 1 ? true : false;
-            //    jointYAxis.IsChecked = joints[sel].rotAxisY == 1 ? true : false;
-            //    jointZAxis.IsChecked = joints[sel].rotAxisZ == 1 ? true : false;
-            //    selectModel(joints[sel].model);
+            //    jointX.Value = DeviceOperation.Instance.joints[sel].rotPointX;
+            //    jointY.Value = DeviceOperation.Instance.joints[sel].rotPointY;
+            //    jointZ.Value = DeviceOperation.Instance.joints[sel].rotPointZ;
+            //    jointXAxis.IsChecked = DeviceOperation.Instance.joints[sel].rotAxisX == 1 ? true : false;
+            //    jointYAxis.IsChecked = DeviceOperation.Instance.joints[sel].rotAxisY == 1 ? true : false;
+            //    jointZAxis.IsChecked = DeviceOperation.Instance.joints[sel].rotAxisZ == 1 ? true : false;
+            //    selectModel(DeviceOperation.Instance.joints[sel].model);
             //    updateSpherePosition();
             //}
             switchingJoint = false;
         }
-        /// <summary>
-        /// 读取并组合机械臂模型
-        /// </summary>
-        /// <param name="modelsNames"></param>
-        /// <returns></returns>
-        private Model3DGroup Initialize_Environment(List<string> modelsNames)
-        {
-            try
-            {
-                //Helix Toolkit提供的类，用于加载各种格式的3D模型文件，这里用来加载.stl文件。
-                ModelImporter import = new ModelImporter();
-                joints = new List<Joint>();
-
-                foreach (string modelName in modelsNames)
-                {
-                    var materialGroup = new MaterialGroup();
-                    Color mainColor = Colors.White;
-                    EmissiveMaterial emissMat = new EmissiveMaterial(new SolidColorBrush(mainColor));
-                    DiffuseMaterial diffMat = new DiffuseMaterial(new SolidColorBrush(mainColor));
-                    SpecularMaterial specMat = new SpecularMaterial(new SolidColorBrush(mainColor), 200);
-                    materialGroup.Children.Add(emissMat);
-                    materialGroup.Children.Add(diffMat);
-                    materialGroup.Children.Add(specMat);
-
-                    var link = import.Load(basePath + modelName);
-                    GeometryModel3D model = link.Children[0] as GeometryModel3D;
-                    model.Material = materialGroup;
-                    model.BackMaterial = materialGroup;
-                    //这是一个自定义的辅助类，用于封装每个关节（即机械臂的每个可动部件）。它不仅包含Model3D（3D模型），还存储了该关节的旋转角度、旋转轴、旋转中心点等重要信息
-                    joints.Add(new Joint(link));
-                }
-
-                RA.Children.Add(joints[0].model);
-                RA.Children.Add(joints[1].model);
-                RA.Children.Add(joints[2].model);
-                RA.Children.Add(joints[3].model);
-                RA.Children.Add(joints[4].model);
-                RA.Children.Add(joints[5].model);
-                //RA.Children.Add(joints[6].model);
-                //RA.Children.Add(joints[7].model);
-                //RA.Children.Add(joints[8].model);
-                //RA.Children.Add(joints[9].model);
-                //RA.Children.Add(joints[10].model);
-#if IRB6700
-                //RA.Children.Add(joints[11].model);
-                //RA.Children.Add(joints[12].model);
-                //RA.Children.Add(joints[13].model);
-                RA.Children.Add(joints[14].model);
-                //RA.Children.Add(joints[15].model);
-                //RA.Children.Add(joints[16].model);
-                //RA.Children.Add(joints[17].model);
-                RA.Children.Add(joints[18].model);
-                RA.Children.Add(joints[19].model);
-#endif
-
-#if IRB6700
-                Color cableColor = Colors.DarkSlateGray;
-                changeModelColor(joints[6], cableColor);
-                changeModelColor(joints[7], cableColor);
-                changeModelColor(joints[8], cableColor);
-                changeModelColor(joints[9], cableColor);
-                changeModelColor(joints[10], cableColor);
-                changeModelColor(joints[11], cableColor);
-                changeModelColor(joints[12], cableColor);
-                changeModelColor(joints[13], cableColor);
-
-                changeModelColor(joints[14], Colors.Gray);
-
-                changeModelColor(joints[15], Colors.Red);
-                changeModelColor(joints[16], Colors.Red);
-                changeModelColor(joints[17], Colors.Red);
-
-                changeModelColor(joints[18], Colors.Gray);
-                changeModelColor(joints[19], Colors.Gray);
-                //关节的运动范围
-                joints[0].angleMin = -180;
-                joints[0].angleMax = 180;
-                //旋转轴的方向矢量。您这里是 $(1, 0, 1)$，即 $Z$ 轴。
-                joints[0].rotAxisX = 0;
-                joints[0].rotAxisY = 0;
-                joints[0].rotAxisZ = 1;
-                joints[0].rotPointX = 0;
-                joints[0].rotPointY = 0;
-                joints[0].rotPointZ = 0;
-                //关节的运动范围
-                joints[1].angleMin = -100;
-                joints[1].angleMax = 60;
-                //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                joints[1].rotAxisX = 0;
-                joints[1].rotAxisY = 1;
-                joints[1].rotAxisZ = 0;
-                joints[1].rotPointX = 348;
-                joints[1].rotPointY = -243;
-                joints[1].rotPointZ = 775;
-                //关节的运动范围
-                joints[2].angleMin = -90;
-                joints[2].angleMax = 90;
-                //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                joints[2].rotAxisX = 0;
-                joints[2].rotAxisY = 1;
-                joints[2].rotAxisZ = 0;
-                //旋转轴上的一点（定义旋转轴的位置）。
-                joints[2].rotPointX = 347;
-                joints[2].rotPointY = -376;
-                joints[2].rotPointZ = 1923;
-
-                //关节的运动范围
-                joints[3].angleMin = -180;
-                joints[3].angleMax = 180;
-                //旋转轴的方向矢量。您这里是 $(1, 0, 0)$，即 $X$ 轴。
-                joints[3].rotAxisX = 1;
-                joints[3].rotAxisY = 0;
-                joints[3].rotAxisZ = 0;
-                //旋转轴上的一点（定义旋转轴的位置）。
-                joints[3].rotPointX = 60;
-                joints[3].rotPointY = 0;
-                joints[3].rotPointZ = 2125;
-
-                //关节的运动范围
-                joints[4].angleMin = -115;
-                joints[4].angleMax = 115;
-                //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                joints[4].rotAxisX = 0;
-                joints[4].rotAxisY = 1;
-                joints[4].rotAxisZ = 0;
-                //旋转轴上的一点（定义旋转轴的位置）。
-                joints[4].rotPointX = 1815;
-                joints[4].rotPointY = 0;
-                joints[4].rotPointZ = 2125;
-
-                //关节的运动范围
-                joints[5].angleMin = -180;
-                joints[5].angleMax = 180;
-                //旋转轴的方向矢量。您这里是 $(1, 0, 0)$，即 $X$ 轴。
-                joints[5].rotAxisX = 1;
-                joints[5].rotAxisY = 0;
-                joints[5].rotAxisZ = 0;
-                //旋转轴上的一点（定义旋转轴的位置）。
-                joints[5].rotPointX = 2008;
-                joints[5].rotPointY = 0;
-                joints[5].rotPointZ = 2125;
-
-#else
-                changeModelColor(joints[6], Colors.Red);
-                changeModelColor(joints[7], Colors.Black);
-                changeModelColor(joints[8], Colors.Black);
-                changeModelColor(joints[9], Colors.Black);
-                changeModelColor(joints[10], Colors.Gray);
-
-                RA.Children.Add(joints[0].model);
-                RA.Children.Add(joints[1].model);
-                RA.Children.Add(joints[2].model);
-                RA.Children.Add(joints[3].model);
-                RA.Children.Add(joints[4].model);
-                RA.Children.Add(joints[5].model);
-                RA.Children.Add(joints[6].model);
-                RA.Children.Add(joints[7].model);
-                RA.Children.Add(joints[8].model);
-                RA.Children.Add(joints[9].model);
-                RA.Children.Add(joints[10].model);
-                
-                joints[0].angleMin = -180;
-                joints[0].angleMax = 180;
-                joints[0].rotAxisX = 0;
-                joints[0].rotAxisY = 0;
-                joints[0].rotAxisZ = 1;
-                joints[0].rotPointX = 0;
-                joints[0].rotPointY = 0;
-                joints[0].rotPointZ = 0;
-
-                joints[1].angleMin = -100;
-                joints[1].angleMax = 60;
-                joints[1].rotAxisX = 0;
-                joints[1].rotAxisY = 1;
-                joints[1].rotAxisZ = 0;
-                joints[1].rotPointX = 175; 
-                joints[1].rotPointY = -200;
-                joints[1].rotPointZ = 500;
-
-                joints[2].angleMin = -90;
-                joints[2].angleMax = 90;
-                joints[2].rotAxisX = 0;
-                joints[2].rotAxisY = 1;
-                joints[2].rotAxisZ = 0;
-                joints[2].rotPointX = 190;
-                joints[2].rotPointY = -700;
-                joints[2].rotPointZ = 1595;
-
-                joints[3].angleMin = -180;
-                joints[3].angleMax = 180;
-                joints[3].rotAxisX = 1;
-                joints[3].rotAxisY = 0;
-                joints[3].rotAxisZ = 0;
-                joints[3].rotPointX = 400;
-                joints[3].rotPointY = 0;
-                joints[3].rotPointZ = 1765;
-
-                joints[4].angleMin = -115;
-                joints[4].angleMax = 115;
-                joints[4].rotAxisX = 0;
-                joints[4].rotAxisY = 1;
-                joints[4].rotAxisZ = 0;
-                joints[4].rotPointX = 1405;
-                joints[4].rotPointY = 50;
-                joints[4].rotPointZ = 1765;
-
-                joints[5].angleMin = -180;
-                joints[5].angleMax = 180;
-                joints[5].rotAxisX = 1;
-                joints[5].rotAxisY = 0;
-                joints[5].rotAxisZ = 0;
-                joints[5].rotPointX = 1405;
-                joints[5].rotPointY = 0;
-                joints[5].rotPointZ = 1765;
-#endif
-
-            }
-            catch (Exception e)
-            {
-                Log.Error("Exception Error:" + e.StackTrace);
-            }
-            return RA;
-        }
+       
 
         private void ViewPort3D_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -562,7 +280,7 @@ namespace TeXiuSi
             HitTestResult result = VisualTreeHelper.HitTest(viewPort3d, e.GetPosition(viewPort3d));
             RayMeshGeometry3DHitTestResult mesh_result = result as RayMeshGeometry3DHitTestResult;
 
-            if (oldSelectedModel != null)
+            if (DeviceOperation.Instance._motorControl.oldSelectedModel != null)
                 unselectModel();
 
             if (mesh_result != null)
@@ -596,52 +314,24 @@ namespace TeXiuSi
         }
         private void unselectModel()
         {
-            changeModelColor(oldSelectedModel, oldColor);
+            DeviceOperation.Instance._motorControl.changeModelColor(DeviceOperation.Instance._motorControl.oldSelectedModel, DeviceOperation.Instance._motorControl.oldColor);
         }
 
-        private Color changeModelColor(Joint pJoint, Color newColor)
-        {
-            Model3DGroup models = ((Model3DGroup)pJoint.model);
-            return changeModelColor(models.Children[0] as GeometryModel3D, newColor);
-        }
-        private Color changeModelColor(GeometryModel3D pModel, Color newColor)
-        {
-            if (pModel == null)
-                return oldColor;
 
-            Color previousColor = Colors.Black;
-
-            MaterialGroup mg = (MaterialGroup)pModel.Material;
-            if (mg.Children.Count > 0)
-            {
-                try
-                {
-                    previousColor = ((EmissiveMaterial)mg.Children[0]).Color;
-                    ((EmissiveMaterial)mg.Children[0]).Color = newColor;
-                    ((DiffuseMaterial)mg.Children[1]).Color = newColor;
-                }
-                catch (Exception exc)
-                {
-                    previousColor = oldColor;
-                }
-            }
-
-            return previousColor;
-
-        }
         private void selectModel(Model3D pModel)
         {
             try
             {
                 Model3DGroup models = ((Model3DGroup)pModel);
-                oldSelectedModel = models.Children[0] as GeometryModel3D;
+                DeviceOperation.Instance._motorControl.oldSelectedModel = models.Children[0] as GeometryModel3D;
             }
             catch (Exception exc)
             {
-                oldSelectedModel = (GeometryModel3D)pModel;
+                DeviceOperation.Instance._motorControl.oldSelectedModel = (GeometryModel3D)pModel;
             }
-            oldColor = changeModelColor(oldSelectedModel, ColorHelper.HexToColor("#ff3333"));
+            DeviceOperation.Instance._motorControl.oldColor = DeviceOperation.Instance._motorControl.changeModelColor(DeviceOperation.Instance._motorControl.oldSelectedModel, ColorHelper.HexToColor("#ff3333"));
         }
+
 
 
         /**
@@ -651,7 +341,7 @@ namespace TeXiuSi
         {
             /** Debug sphere, it takes the x,y,z of the textBoxes and update its position
              * This is useful when using x,y,z in the "new Point3D(x,y,z)* when defining a new RotateTransform3D() to check where the joints is actually  rotating */
-            double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+            double[] angles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
             ForwardKinematics(angles);
             //updateSpherePosition();
         }
@@ -666,7 +356,7 @@ namespace TeXiuSi
             //The base only has rotation and is always at the origin, so the only transform in the transformGroup is the rotation R
             // --- 关节 1 (基座) 的变换 ---
             F1 = new Transform3DGroup();
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[0].rotAxisX, joints[0].rotAxisY, joints[0].rotAxisZ), angles[0]), new Point3D(joints[0].rotPointX, joints[0].rotPointY, joints[0].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[0].rotAxisX, DeviceOperation.Instance.joints[0].rotAxisY, DeviceOperation.Instance.joints[0].rotAxisZ), angles[0]), new Point3D(DeviceOperation.Instance.joints[0].rotPointX, DeviceOperation.Instance.joints[0].rotPointY, DeviceOperation.Instance.joints[0].rotPointZ));
             F1.Children.Add(R);
 
             //This moves the first joint attached to the base, it may translate and rotate. Since the joint are already in the right position (the .stl model also store the joints position
@@ -678,7 +368,7 @@ namespace TeXiuSi
             // --- 关节 2 的变换 ---
             F2 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[1].rotAxisX, joints[1].rotAxisY, joints[1].rotAxisZ), angles[1]), new Point3D(joints[1].rotPointX, joints[1].rotPointY, joints[1].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[1].rotAxisX, DeviceOperation.Instance.joints[1].rotAxisY, DeviceOperation.Instance.joints[1].rotAxisZ), angles[1]), new Point3D(DeviceOperation.Instance.joints[1].rotPointX, DeviceOperation.Instance.joints[1].rotPointY, DeviceOperation.Instance.joints[1].rotPointZ));
             F2.Children.Add(T);
             F2.Children.Add(R);
             F2.Children.Add(F1);
@@ -688,7 +378,7 @@ namespace TeXiuSi
             // --- 关节 3 的变换 ---
             F3 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[2].rotAxisX, joints[2].rotAxisY, joints[2].rotAxisZ), angles[2]), new Point3D(joints[2].rotPointX, joints[2].rotPointY, joints[2].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[2].rotAxisX, DeviceOperation.Instance.joints[2].rotAxisY, DeviceOperation.Instance.joints[2].rotAxisZ), angles[2]), new Point3D(DeviceOperation.Instance.joints[2].rotPointX, DeviceOperation.Instance.joints[2].rotPointY, DeviceOperation.Instance.joints[2].rotPointZ));
             F3.Children.Add(T);
             F3.Children.Add(R);
             F3.Children.Add(F2);
@@ -696,7 +386,7 @@ namespace TeXiuSi
             // --- 关节 4 的变换 ---
             F4 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0); //1500, 650, 1650
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[3].rotAxisX, joints[3].rotAxisY, joints[3].rotAxisZ), angles[3]), new Point3D(joints[3].rotPointX, joints[3].rotPointY, joints[3].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[3].rotAxisX, DeviceOperation.Instance.joints[3].rotAxisY, DeviceOperation.Instance.joints[3].rotAxisZ), angles[3]), new Point3D(DeviceOperation.Instance.joints[3].rotPointX, DeviceOperation.Instance.joints[3].rotPointY, DeviceOperation.Instance.joints[3].rotPointZ));
             F4.Children.Add(T);
             F4.Children.Add(R);
             F4.Children.Add(F3);
@@ -704,8 +394,8 @@ namespace TeXiuSi
             // --- 关节 5 的变换 ---
             F5 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[4].rotAxisX, joints[4].rotAxisY, joints[4].rotAxisZ), angles[4]),
-                new Point3D(joints[4].rotPointX, joints[4].rotPointY, joints[4].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[4].rotAxisX, DeviceOperation.Instance.joints[4].rotAxisY, DeviceOperation.Instance.joints[4].rotAxisZ), angles[4]),
+                new Point3D(DeviceOperation.Instance.joints[4].rotPointX, DeviceOperation.Instance.joints[4].rotPointY, DeviceOperation.Instance.joints[4].rotPointZ));
             F5.Children.Add(T);
             F5.Children.Add(R);
             F5.Children.Add(F4);
@@ -716,35 +406,35 @@ namespace TeXiuSi
             // --- 关节 6 的变换 ---
             F6 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[5].rotAxisX, joints[5].rotAxisY, joints[5].rotAxisZ), angles[5]), new Point3D(joints[5].rotPointX, joints[5].rotPointY, joints[5].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[5].rotAxisX, DeviceOperation.Instance.joints[5].rotAxisY, DeviceOperation.Instance.joints[5].rotAxisZ), angles[5]), new Point3D(DeviceOperation.Instance.joints[5].rotPointX, DeviceOperation.Instance.joints[5].rotPointY, DeviceOperation.Instance.joints[5].rotPointZ));
             F6.Children.Add(T);
             F6.Children.Add(R);
             F6.Children.Add(F5);
 
             //变换的链式关系: 这是运动学的核心。例如，关节2的最终姿态不仅取决于自身的旋转，还取决于其父关节（关节1）的旋转。因此，F2的变换组中包含了F1。这样一层层传递下去，就构成了机械臂的完整运动链
-            joints[0].model.Transform = F1; //First joint
-            joints[1].model.Transform = F2; //Second joint (the "biceps")
-            joints[2].model.Transform = F3; //third joint (the "knee" or "elbow")
-            joints[3].model.Transform = F4; //the "forearm"
-            joints[4].model.Transform = F5; //the tool plate
-            joints[5].model.Transform = F6; //the tool
+            DeviceOperation.Instance.joints[0].model.Transform = F1; //First joint
+            DeviceOperation.Instance.joints[1].model.Transform = F2; //Second joint (the "biceps")
+            DeviceOperation.Instance.joints[2].model.Transform = F3; //third joint (the "knee" or "elbow")
+            DeviceOperation.Instance.joints[3].model.Transform = F4; //the "forearm"
+            DeviceOperation.Instance.joints[4].model.Transform = F5; //the tool plate
+            DeviceOperation.Instance.joints[5].model.Transform = F6; //the tool
 
-            //Tx.Content = joints[5].model.Bounds.Location.X;
-            //Ty.Content = joints[5].model.Bounds.Location.Y;
-            //Tz.Content = joints[5].model.Bounds.Location.Z;
+            //Tx.Content = DeviceOperation.Instance.joints[5].model.Bounds.Location.X;
+            //Ty.Content = DeviceOperation.Instance.joints[5].model.Bounds.Location.Y;
+            //Tz.Content = DeviceOperation.Instance.joints[5].model.Bounds.Location.Z;
             //Tx_Copy.Content = geom.Bounds.Location.X;
             //Ty_Copy.Content = geom.Bounds.Location.Y;
             //Tz_Copy.Content = geom.Bounds.Location.Z;
 
 
-            joints[7].model.Transform = F1; //Cables
+            DeviceOperation.Instance.joints[7].model.Transform = F1; //Cables
 
-            joints[8].model.Transform = F2; //Cables
+            DeviceOperation.Instance.joints[8].model.Transform = F2; //Cables
 
-            joints[6].model.Transform = F3; //The ABB writing
-            joints[9].model.Transform = F3; //Cables
+            DeviceOperation.Instance.joints[6].model.Transform = F3; //The ABB writing
+            DeviceOperation.Instance.joints[9].model.Transform = F3; //Cables
 
-            return new Vector3D(joints[5].model.Bounds.Location.X, joints[5].model.Bounds.Location.Y, joints[5].model.Bounds.Location.Z);
+            return new Vector3D(DeviceOperation.Instance.joints[5].model.Bounds.Location.X, DeviceOperation.Instance.joints[5].model.Bounds.Location.Y, DeviceOperation.Instance.joints[5].model.Bounds.Location.Z);
         }
 
 
@@ -755,7 +445,7 @@ namespace TeXiuSi
             //The base only has rotation and is always at the origin, so the only transform in the transformGroup is the rotation R
             // --- 关节 1 (基座) 的变换 ---
             F1 = new Transform3DGroup();
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[0].rotAxisX, joints[0].rotAxisY, joints[0].rotAxisZ), angles[0]), new Point3D(joints[0].rotPointX, joints[0].rotPointY, joints[0].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[0].rotAxisX, DeviceOperation.Instance.joints[0].rotAxisY, DeviceOperation.Instance.joints[0].rotAxisZ), angles[0]), new Point3D(DeviceOperation.Instance.joints[0].rotPointX, DeviceOperation.Instance.joints[0].rotPointY, DeviceOperation.Instance.joints[0].rotPointZ));
             F1.Children.Add(R);
 
             //This moves the first joint attached to the base, it may translate and rotate. Since the joint are already in the right position (the .stl model also store the joints position
@@ -767,7 +457,7 @@ namespace TeXiuSi
             // --- 关节 2 的变换 ---
             F2 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[1].rotAxisX, joints[1].rotAxisY, joints[1].rotAxisZ), angles[1]), new Point3D(joints[1].rotPointX, joints[1].rotPointY, joints[1].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[1].rotAxisX, DeviceOperation.Instance.joints[1].rotAxisY, DeviceOperation.Instance.joints[1].rotAxisZ), angles[1]), new Point3D(DeviceOperation.Instance.joints[1].rotPointX, DeviceOperation.Instance.joints[1].rotPointY, DeviceOperation.Instance.joints[1].rotPointZ));
             F2.Children.Add(T);
             F2.Children.Add(R);
             F2.Children.Add(F1);
@@ -777,7 +467,7 @@ namespace TeXiuSi
             // --- 关节 3 的变换 ---
             F3 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[2].rotAxisX, joints[2].rotAxisY, joints[2].rotAxisZ), angles[2]), new Point3D(joints[2].rotPointX, joints[2].rotPointY, joints[2].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[2].rotAxisX, DeviceOperation.Instance.joints[2].rotAxisY, DeviceOperation.Instance.joints[2].rotAxisZ), angles[2]), new Point3D(DeviceOperation.Instance.joints[2].rotPointX, DeviceOperation.Instance.joints[2].rotPointY, DeviceOperation.Instance.joints[2].rotPointZ));
             F3.Children.Add(T);
             F3.Children.Add(R);
             F3.Children.Add(F2);
@@ -785,7 +475,7 @@ namespace TeXiuSi
             // --- 关节 4 的变换 ---
             F4 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0); //1500, 650, 1650
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[3].rotAxisX, joints[3].rotAxisY, joints[3].rotAxisZ), angles[3]), new Point3D(joints[3].rotPointX, joints[3].rotPointY, joints[3].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[3].rotAxisX, DeviceOperation.Instance.joints[3].rotAxisY, DeviceOperation.Instance.joints[3].rotAxisZ), angles[3]), new Point3D(DeviceOperation.Instance.joints[3].rotPointX, DeviceOperation.Instance.joints[3].rotPointY, DeviceOperation.Instance.joints[3].rotPointZ));
             F4.Children.Add(T);
             F4.Children.Add(R);
             F4.Children.Add(F3);
@@ -793,8 +483,8 @@ namespace TeXiuSi
             // --- 关节 5 的变换 ---
             F5 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[4].rotAxisX, joints[4].rotAxisY, joints[4].rotAxisZ), angles[4]),
-                new Point3D(joints[4].rotPointX, joints[4].rotPointY, joints[4].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[4].rotAxisX, DeviceOperation.Instance.joints[4].rotAxisY, DeviceOperation.Instance.joints[4].rotAxisZ), angles[4]),
+                new Point3D(DeviceOperation.Instance.joints[4].rotPointX, DeviceOperation.Instance.joints[4].rotPointY, DeviceOperation.Instance.joints[4].rotPointZ));
             F5.Children.Add(T);
             F5.Children.Add(R);
             F5.Children.Add(F4);
@@ -805,14 +495,14 @@ namespace TeXiuSi
             // --- 关节 6 的变换 ---
             F6 = new Transform3DGroup();
             T = new TranslateTransform3D(0, 0, 0);
-            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(joints[5].rotAxisX, joints[5].rotAxisY, joints[5].rotAxisZ), angles[5]), new Point3D(joints[5].rotPointX, joints[5].rotPointY, joints[5].rotPointZ));
+            R = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(DeviceOperation.Instance.joints[5].rotAxisX, DeviceOperation.Instance.joints[5].rotAxisY, DeviceOperation.Instance.joints[5].rotAxisZ), angles[5]), new Point3D(DeviceOperation.Instance.joints[5].rotPointX, DeviceOperation.Instance.joints[5].rotPointY, DeviceOperation.Instance.joints[5].rotPointZ));
             F6.Children.Add(T);
             F6.Children.Add(R);
             F6.Children.Add(F5);
             // --- 提取位置 (X, Y, Z) ---
-            double X = joints[5].model.Bounds.Location.X;
-            double Y = joints[5].model.Bounds.Location.Y;
-            double Z = joints[5].model.Bounds.Location.Z;
+            double X = DeviceOperation.Instance.joints[5].model.Bounds.Location.X;
+            double Y = DeviceOperation.Instance.joints[5].model.Bounds.Location.Y;
+            double Z = DeviceOperation.Instance.joints[5].model.Bounds.Location.Z;
 
 
             // --- 3. 提取姿态 (Rx, Ry, Rz) - 困难点，需要矩阵转换 ---
@@ -863,7 +553,7 @@ namespace TeXiuSi
         //{
         //    try
         //    {
-        //        double[] angles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+        //        double[] angles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
 
 
         //        #region 之前的关节角度计算
@@ -881,21 +571,21 @@ namespace TeXiuSi
         //            Log.Information("计算失败");
         //            return;
         //        }
-        //        joint1.Value = joints[0].angle = angles[0];
-        //        joint2.Value = joints[1].angle = angles[1];
-        //        joint3.Value = joints[2].angle = angles[2];
-        //        joint4.Value = joints[3].angle = angles[3];
-        //        joint5.Value = joints[4].angle = angles[4];
-        //        joint6.Value = joints[5].angle = angles[5];
+        //        joint1.Value = DeviceOperation.Instance.joints[0].angle = angles[0];
+        //        joint2.Value = DeviceOperation.Instance.joints[1].angle = angles[1];
+        //        joint3.Value = DeviceOperation.Instance.joints[2].angle = angles[2];
+        //        joint4.Value = DeviceOperation.Instance.joints[3].angle = angles[3];
+        //        joint5.Value = DeviceOperation.Instance.joints[4].angle = angles[4];
+        //        joint6.Value = DeviceOperation.Instance.joints[5].angle = angles[5];
 
         //        #endregion
         //        // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
-        //        viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
-        //        viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
-        //        viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
-        //        viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
-        //        viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
-        //        viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+        //        viewModel.Joint1Angle = (DeviceOperation.Instance.joints[0].angle = angles[0]).ToString("F3");
+        //        viewModel.Joint2Angle = (DeviceOperation.Instance.joints[1].angle = angles[1]).ToString("F3");
+        //        viewModel.Joint3Angle = (DeviceOperation.Instance.joints[2].angle = angles[2]).ToString("F3");
+        //        viewModel.Joint4Angle = (DeviceOperation.Instance.joints[3].angle = angles[3]).ToString("F3");
+        //        viewModel.Joint5Angle = (DeviceOperation.Instance.joints[4].angle = angles[4]).ToString("F3");
+        //        viewModel.Joint6Angle = (DeviceOperation.Instance.joints[5].angle = angles[5]).ToString("F3");
 
         //        if ((--movements) <= 0)
         //        {
@@ -932,7 +622,7 @@ namespace TeXiuSi
                 angles[i] -= LearningRate * gradient;
 
                 // Clamp
-                angles[i] = Clamp(angles[i], joints[i].angleMin, joints[i].angleMax);
+                angles[i] = Clamp(angles[i], DeviceOperation.Instance.joints[i].angleMin, DeviceOperation.Instance.joints[i].angleMax);
 
                 // Early termination
                 if (DistanceFromTarget(target, angles) < DistanceThreshold || checkAngles(oldAngles, angles))
@@ -974,7 +664,7 @@ namespace TeXiuSi
 
                 // --- 3. 调用 IK 求解器计算下一帧的关节角度 ---
 
-                double[] currentAngles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+                double[] currentAngles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
 
                 // 调用包含 Rx, Ry, Rz 的新方法
                 double[] angles = robotDynamicsHelper.UserComputeInverseKinematicsMethod(
@@ -1014,23 +704,23 @@ namespace TeXiuSi
         public void MoveAction(double[] angles)
         {
             ForwardKinematics(angles);
-            // ... 将 angles 赋值给 joints[i].angle 和 UI 控件 (与您原有代码相同) ...
-            joint1.Value = joints[0].angle = angles[0];
-            joint1.Value = joints[0].angle = angles[0];
-            joint2.Value = joints[1].angle = angles[1];
-            joint3.Value = joints[2].angle = angles[2];
-            joint4.Value = joints[3].angle = angles[3];
-            joint5.Value = joints[4].angle = angles[4];
-            joint6.Value = joints[5].angle = angles[5];
+            // ... 将 angles 赋值给 DeviceOperation.Instance.joints[i].angle 和 UI 控件 (与您原有代码相同) ...
+            joint1.Value = DeviceOperation.Instance.joints[0].angle = angles[0];
+            joint1.Value = DeviceOperation.Instance.joints[0].angle = angles[0];
+            joint2.Value = DeviceOperation.Instance.joints[1].angle = angles[1];
+            joint3.Value = DeviceOperation.Instance.joints[2].angle = angles[2];
+            joint4.Value = DeviceOperation.Instance.joints[3].angle = angles[3];
+            joint5.Value = DeviceOperation.Instance.joints[4].angle = angles[4];
+            joint6.Value = DeviceOperation.Instance.joints[5].angle = angles[5];
 
 
             // 将计算出的角度更新回ViewModel，以便UI（如关节角度文本框）可以同步更新
-            viewModel.Joint1Angle = (joints[0].angle = angles[0]).ToString("F3");
-            viewModel.Joint2Angle = (joints[1].angle = angles[1]).ToString("F3");
-            viewModel.Joint3Angle = (joints[2].angle = angles[2]).ToString("F3");
-            viewModel.Joint4Angle = (joints[3].angle = angles[3]).ToString("F3");
-            viewModel.Joint5Angle = (joints[4].angle = angles[4]).ToString("F3");
-            viewModel.Joint6Angle = (joints[5].angle = angles[5]).ToString("F3");
+            viewModel.Joint1Angle = (DeviceOperation.Instance.joints[0].angle = angles[0]).ToString("F3");
+            viewModel.Joint2Angle = (DeviceOperation.Instance.joints[1].angle = angles[1]).ToString("F3");
+            viewModel.Joint3Angle = (DeviceOperation.Instance.joints[2].angle = angles[2]).ToString("F3");
+            viewModel.Joint4Angle = (DeviceOperation.Instance.joints[3].angle = angles[3]).ToString("F3");
+            viewModel.Joint5Angle = (DeviceOperation.Instance.joints[4].angle = angles[4]).ToString("F3");
+            viewModel.Joint6Angle = (DeviceOperation.Instance.joints[5].angle = angles[5]).ToString("F3");
         }
 
         /// <summary>
@@ -1111,12 +801,12 @@ namespace TeXiuSi
             if (isAnimating)
                 return;
 
-            joints[0].angle = joint1.Value;
-            joints[1].angle = joint2.Value;
-            joints[2].angle = joint3.Value;
-            joints[3].angle = joint4.Value;
-            joints[4].angle = joint5.Value;
-            joints[5].angle = joint6.Value;
+            DeviceOperation.Instance.joints[0].angle = joint1.Value;
+            DeviceOperation.Instance.joints[1].angle = joint2.Value;
+            DeviceOperation.Instance.joints[2].angle = joint3.Value;
+            DeviceOperation.Instance.joints[3].angle = joint4.Value;
+            DeviceOperation.Instance.joints[4].angle = joint5.Value;
+            DeviceOperation.Instance.joints[5].angle = joint6.Value;
             execute_fk();
         }
         private void ReachingPoint_TextChanged(object sender, TextChangedEventArgs e)
@@ -1137,9 +827,9 @@ namespace TeXiuSi
                 return;
 
             //int sel = ((int)jointSelector.Value) - 1;
-            //joints[sel].rotAxisX = jointXAxis.IsChecked.Value ? 1 : 0;
-            //joints[sel].rotAxisY = jointYAxis.IsChecked.Value ? 1 : 0;
-            //joints[sel].rotAxisZ = jointZAxis.IsChecked.Value ? 1 : 0;
+            //DeviceOperation.Instance.joints[sel].rotAxisX = jointXAxis.IsChecked.Value ? 1 : 0;
+            //DeviceOperation.Instance.joints[sel].rotAxisY = jointYAxis.IsChecked.Value ? 1 : 0;
+            //DeviceOperation.Instance.joints[sel].rotAxisZ = jointZAxis.IsChecked.Value ? 1 : 0;
         }
         private void rotationPointChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -1147,9 +837,9 @@ namespace TeXiuSi
                 return;
 
             //int sel = ((int)jointSelector.Value) - 1;
-            //joints[sel].rotPointX = (int)jointX.Value;
-            //joints[sel].rotPointY = (int)jointY.Value;
-            //joints[sel].rotPointZ = (int)jointZ.Value;
+            //DeviceOperation.Instance.joints[sel].rotPointX = (int)jointX.Value;
+            //DeviceOperation.Instance.joints[sel].rotPointY = (int)jointY.Value;
+            //DeviceOperation.Instance.joints[sel].rotPointZ = (int)jointZ.Value;
             //updateSpherePosition();
         }
 
@@ -1181,7 +871,7 @@ namespace TeXiuSi
             // 1. 记录起点：从当前模型获取
             // 假设您能从当前关节角度通过正运动学 (FK) 获取当前 X,Y,Z,Rx,Ry,Rz
             // 如果不能直接获取 Rx, Ry, Rz，您需要先通过 FK 拿到 RotationMatrix 并转换为欧拉角。
-            double[] currentAngles = { joints[0].angle, joints[1].angle, joints[2].angle, joints[3].angle, joints[4].angle, joints[5].angle };
+            double[] currentAngles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
             // 假设 get_current_pose() 能返回当前位姿的六个值
             double[] currentPose = GetCurrentEndEffectorPose(currentAngles);
 
