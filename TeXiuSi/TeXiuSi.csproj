@@ -376,6 +376,7 @@
     <Compile Include="Model\InterruptModel.cs" />
     <Compile Include="Model\IOModel.cs" />
     <Compile Include="Model\MessageStatus.cs" />
+    <Compile Include="Model\MotorFeedbackFrame.cs" />
     <Compile Include="Model\RobotArmJointInformation.cs" />
     <Compile Include="PCAN\PANHelper.cs" />
     <Compile Include="ViewModel\JointAnglesEventArgs.cs" />

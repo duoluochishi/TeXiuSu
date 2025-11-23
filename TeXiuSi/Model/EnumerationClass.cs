@@ -167,4 +167,25 @@ namespace TeXiuSi.Model
         [Description("终点")]
         EndPoint
     }
+
+    // ====================================================================
+    // 3. 错误类型枚举
+    // ====================================================================
+
+    /// <summary> 错误/状态类型。对应 ERR 字段。 </summary>
+    public enum ErrorType : byte
+    {
+        Disable = 0x00,      // 0: 失能
+        Enable = 0x01,       // 1: 使能
+        Reserved_2 = 0x02,
+        Reserved_7 = 0x07,
+        OverVoltage = 0x08,  // 8: 超压
+        UnderVoltage = 0x09, // 9: 欠压
+        OverCurrent = 0x0A,  // A: 过电流
+        MosOverheat = 0x0B,  // B: MOS 过温
+        CoilOverheat = 0x0C, // C: 电机线圈过温
+        CommLoss = 0x0D,     // D: 通讯丢失
+        Overload = 0x0E      // E: 过载
+    }
+
 }

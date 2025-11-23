@@ -18,7 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
-using TeXiuSi.Model; 
+using TeXiuSi.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace TeXiuSi.ViewModel
@@ -72,8 +72,33 @@ namespace TeXiuSi.ViewModel
         public double targetPitch;      // Ry
         public double targetYaw;        // Rz
 
-        #endregion
 
+
+
+
+        #endregion 整体控制
+
+
+
+        // 速度值  rad/s
+        private float _totalSpeed;
+        /// <summary>
+        /// 整体速度设置 给全局设置
+        /// </summary>
+        public float TotalSpeed
+        {
+            get { return _totalSpeed; }
+            set
+            {
+                if (Equals(_totalSpeed, value)) return;
+                _totalSpeed = value;
+                DeviceOperation.Instance.Speed = value;
+                OnPropertyChanged();
+            }
+        }
+        #region
+
+        #endregion
 
         #region 
 
@@ -998,7 +1023,7 @@ namespace TeXiuSi.ViewModel
         // 用于存储所有操作模式选项
         public ObservableCollection<EnumBindingItem<OperationType>> OperationModes { get; set; }
 
-        public ObservableCollection<EnumBindingItem<SportType>> SportTypes { get; set; }
+        public ObservableCollection<EnumBindingItem<ControlFrame>> SportTypes { get; set; }
 
         private EnumBindingItem<OperationType> _selectedOperationMode;
 
@@ -1018,10 +1043,10 @@ namespace TeXiuSi.ViewModel
                 }
             }
         }
-        private EnumBindingItem<SportType> _selectedSportType;
+        private EnumBindingItem<ControlFrame> _selectedSportType;
 
         // 绑定到ComboBox的SelectedItem属性
-        public EnumBindingItem<SportType> SelectedSportType
+        public EnumBindingItem<ControlFrame> SelectedSportType
         {
             get { return _selectedSportType; }
             set
@@ -1034,10 +1059,10 @@ namespace TeXiuSi.ViewModel
                     // 你可以获取到选择的中文名和枚举值
                     Console.WriteLine($"选择了: {_selectedSportType.DisplayName}，枚举值为: {_selectedSportType.Value}");
 
-                    IsPointMotionVisible = _selectedSportType.Value == SportType.PointMotion;
-                    IsArcMotionVisible = _selectedSportType.Value == SportType.ArcMotion;
-                    IsJointMotionVisible = _selectedSportType.Value == SportType.JointMotion;
-                    IsStraightLineMotionVisible = _selectedSportType.Value == SportType.StraightLineMotion;
+                    IsPointMotionVisible = _selectedSportType.Value == ControlFrame.PositionSpd;
+                    IsArcMotionVisible = _selectedSportType.Value == ControlFrame.Spd;
+                    IsJointMotionVisible = _selectedSportType.Value == ControlFrame.ForcePositionMixed;
+                    IsStraightLineMotionVisible = _selectedSportType.Value == ControlFrame.Mit;
                 }
             }
         }
@@ -1192,19 +1217,19 @@ namespace TeXiuSi.ViewModel
         public MainViewModel()
         {
             robotDynamicsHelper = new RobotDynamicsHelper();
-            controller=new RobotController(this);
+            controller = new RobotController(this);
             //controller.ArcMotionChangeEvent += ControlArcMotion;
             SharedJawValue = 0;
 
             OperationModes = new ObservableCollection<EnumBindingItem<OperationType>>();
 
-            SportTypes = new ObservableCollection<EnumBindingItem<SportType>>();
+            SportTypes = new ObservableCollection<EnumBindingItem<ControlFrame>>();
 
             #region init
-            foreach (SportType opType in Enum.GetValues(typeof(SportType)))
+            foreach (ControlFrame opType in Enum.GetValues(typeof(ControlFrame)))
             {
                 // 创建新的绑定项，并添加到集合中
-                SportTypes.Add(new EnumBindingItem<SportType>
+                SportTypes.Add(new EnumBindingItem<ControlFrame>
                 {
                     DisplayName = opType.GetDescription(), // 使用我们创建的扩展方法获取中文描述
                     Value = opType
@@ -1469,11 +1494,12 @@ namespace TeXiuSi.ViewModel
         {
             try
             {
+                //发送给每个关节失能
 
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"直线运动回零失败: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"失能失败: {ex.Message}");
             }
         }
         private void OnScram()
@@ -1677,7 +1703,7 @@ namespace TeXiuSi.ViewModel
                     return;
                 }
 
-                
+
                 // 执行画弧操作
                 ExecuteArcMotion(arcInstructionData);
 
@@ -1745,7 +1771,7 @@ namespace TeXiuSi.ViewModel
             // 这里需要根据您的具体运动控制需求实现
 
 
-            _currentIndex = 0;
+            //_currentIndex = 0;
 
             arcInstructionData = new ArcInstructionData
             {
@@ -1764,15 +1790,15 @@ namespace TeXiuSi.ViewModel
 
             var rpyEnd = (X: (float)EndPointRx, Y: (float)EndPointRy, Z: (float)EndPointRz);
 
-            RobotSimulation robotSimulation=new RobotSimulation();
-            List<TrajectoryPoint> lisPoint=robotSimulation.StartArcPlanningAndInterpolation(startPoint, midPoint, endPoint, rpyStart, rpyEnd, 10, (float)0.1);
+            RobotSimulation robotSimulation = new RobotSimulation();
+            List<TrajectoryPoint> lisPoint = robotSimulation.StartArcPlanningAndInterpolation(startPoint, midPoint, endPoint, rpyStart, rpyEnd, 10, (float)0.1);
 
             //执行Ik
-            if (lisPoint!=null)
+            if (lisPoint != null)
             {
                 ExecuteArcPath(lisPoint);
             }
-           
+
 
         }
 
@@ -1819,7 +1845,7 @@ namespace TeXiuSi.ViewModel
 
                 // TODO: 在这里调用模拟器的 API 将机械臂移动到这些角度
                 // Example: YourSimulatorAPI.MoveRobotJoints(angles);
-                _currentIndex++;
+
             }
             // 3. 通知 View：轨迹已准备好，可以开始运动了
             TrajectoryReady?.Invoke(this, EventArgs.Empty);

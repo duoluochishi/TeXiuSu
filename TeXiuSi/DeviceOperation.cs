@@ -11,17 +11,20 @@ using TeXiuSi.Protocol;
 
 namespace TeXiuSi
 {
+    using Microsoft.Win32;
 
     /// <summary>
     /// Inclusion of PEAK PCAN-Basic namespace
     /// </summary>
     using Peak.Can.Basic;
     using Peak.Can.Basic.BackwardCompatibility;
+    using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows;
     using System.Windows.Forms;
     using System.Windows.Markup;
     using System.Windows.Media.Media3D;
+    using System.Windows.Threading;
     using TeXiuSi.Model;
     using TeXiuSi.PCAN;
     using TPCANBitrateFD = System.String;
@@ -43,26 +46,13 @@ namespace TeXiuSi
 
         private static Lazy<DeviceOperation> m_Instance = new Lazy<DeviceOperation>(() => new DeviceOperation());
 
-
-        //    public ActionBlock<TherapyInfo> SerialCTBlock;
-        //    SerialCTBlock = new ActionBlock<TherapyInfo>(async data =>
-        //        {
-        //            //var ithread = IsUiThread();
-        //            //Log($"Socket Block - Thread ID: {Thread.CurrentThread.ManagedThreadId}, Is UI Thread: {IsUiThread()}");
-        //            await Handle6DofEvent(data);
-        //}, new ExecutionDataflowBlockOptions
-        //        {
-        //            MaxDegreeOfParallelism = 4,
-        //            BoundedCapacity = 1,  // 只保留最新的数据
-        //            SingleProducerConstrained = true  // 提高性能
-        //        });
         /// <summary>
         /// Stores the status of received messages for its display
         /// </summary>
         private System.Collections.ArrayList m_LastMsgsList;
         public bool IsRunning { get; private set; }
 
-        public readonly BroadcastBlock<RobotArmJointInformation> bufferBlock = new BroadcastBlock<RobotArmJointInformation>(data => data);
+        public readonly BroadcastBlock<MotorFeedbackFrame> bufferBlock = new BroadcastBlock<MotorFeedbackFrame>(data => data);
         /// <summary>
         /// 获取单例
         /// </summary>
@@ -102,6 +92,25 @@ namespace TeXiuSi
 
         public Model3D model3D;
 
+        public bool isInJointsPage;
+
+
+        #region  Thread for message reading (using events)
+        public bool rdbEvent;
+
+        private System.Threading.Thread m_ReadThread;
+        #endregion
+
+
+        #region 全局设置参数
+
+        public float Speed;
+
+        /// <summary>
+        /// 使能/失能
+        /// </summary>
+        public bool bolEnable;
+        #endregion
 
 
         private void ReceiveMessage<TMessage>(Action<TMessage> callback) where TMessage : class
@@ -140,11 +149,16 @@ namespace TeXiuSi
         private DeviceOperation()
         {
             InitData();
-
-            IsRunning=false;
+            bolEnable = false;
+            rdbEvent = false;
+            isInJointsPage = false;
+            IsRunning = false;
             // Creates the event used for signalize incomming messages 
             //
             m_ReceiveEvent = new System.Threading.AutoResetEvent(false);
+
+            //链接后调用
+            //InitMessageRev();
         }
 
         private void InitData()
@@ -239,6 +253,62 @@ namespace TeXiuSi
             model3D = _motorControl.Initialize_Environment(_motorControl.modelsNames);
         }
 
+
+        #region eventResive
+
+        private async Task InitMessageRev()
+        {
+            await CANReadThreadFunc();
+            //System.Threading.ThreadStart threadDelegate = new System.Threading.ThreadStart(this.CANReadThreadFunc);
+            //m_ReadThread = new System.Threading.Thread(threadDelegate);
+            ////m_ReadThread.IsBackground = true;
+            //m_ReadThread.Start();
+        }
+        /// <summary>
+        /// Thread-Function used for reading PCAN-Basic messages
+        /// </summary>
+        private async Task CANReadThreadFunc()
+        {
+
+
+            UInt32 iBuffer;
+            TPCANStatus stsResult;
+
+            iBuffer = System.Convert.ToUInt32(m_ReceiveEvent.SafeWaitHandle.DangerousGetHandle().ToInt32());
+            // Sets the handle of the Receive-Event.
+            //
+            stsResult = PCANBasic.SetValue(m_PcanHandle, TPCANParameter.PCAN_RECEIVE_EVENT, ref iBuffer, sizeof(UInt32));
+
+            if (stsResult != TPCANStatus.PCAN_ERROR_OK)
+            {
+                Log.Error(_pANHelper.GetFormatedError(stsResult), "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            await ReadCanMessagesAsync();
+            // While this mode is selected
+            //while (rdbEvent)
+            //{
+            //    // Waiting for Receive-Event
+            //    // 
+            //    if (m_ReceiveEvent.WaitOne(50))
+            //        // Process Receive-Event using .NET Invoke function
+            //        // in order to interact with Winforms UI (calling the 
+            //        // function ReadMessages)
+            //        // 
+            //        this.Invoke(m_ReadDelegate);
+            //    // 1. 获取主 UI 线程的 Dispatcher
+            //    //Dispatcher uiDispatcher = Application.Current.Dispatcher;
+
+            //    // 2. 使用 Dispatcher.Invoke() 或 InvokeAsync() 执行委托
+            //    // Invoke() 是同步阻塞调用（等待 UI 更新完成）
+            //    // InvokeAsync() 是异步非阻塞调用（推荐）
+
+            //    //uiDispatcher.Invoke(m_ReadDelegate);
+
+            //}
+        }
+        #endregion
+
         /// <summary>
         /// 清空
         /// </summary>
@@ -263,44 +333,81 @@ namespace TeXiuSi
             //        txtBitrate.Text);
             //else
             _stsResult = PCANBasic.Initialize(
-                DeviceOperation.Instance.m_PcanHandle,
-                DeviceOperation.Instance.m_Baudrate,
-                DeviceOperation.Instance.m_HwType,
+                m_PcanHandle,
+                m_Baudrate,
+                m_HwType,
                 IOPort,
                  Interrupt);
 
-            if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
-                if (_stsResult != TPCANStatus.PCAN_ERROR_CAUTION)
-                    Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
-                else
-                {
+            //if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+            //    if (_stsResult != TPCANStatus.PCAN_ERROR_CAUTION)
+            //        Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+            //    else
+            //    {
 
-                    Log.Information("The bitrate being used is different than the given one");
+            //        Log.Information("The bitrate being used is different than the given one");
 
-                    _stsResult = TPCANStatus.PCAN_ERROR_OK;
-                }
-            else
-                // Prepares the PCAN-Basic's PCAN-Trace file
-                //
+            //        _stsResult = TPCANStatus.PCAN_ERROR_OK;
+            //    }
+            //else
+            //    // Prepares the PCAN-Basic's PCAN-Trace file
+            //    //
+            //    ConfigureTraceFile();
+
+
+
+            if (_stsResult == TPCANStatus.PCAN_ERROR_OK)
+            {
+                // 连接/初始化成功
+                // TPCANHandle 是有效的，可以开始读写
+                Console.WriteLine($"通道 {m_PcanHandle} 初始化成功。");
                 ConfigureTraceFile();
+
+                _stsResult = TPCANStatus.PCAN_ERROR_OK;
+            }
+            else if (_stsResult == TPCANStatus.PCAN_ERROR_CAUTION)
+            {
+                // 初始化成功，但波特率与预设值不同（适用于 Bitrate Adapting 模式）
+                Console.WriteLine($"通道 {m_PcanHandle} 初始化成功，但有警告。");
+                ConfigureTraceFile();
+                _stsResult = TPCANStatus.PCAN_ERROR_OK;
+            }
+            else if (_stsResult == TPCANStatus.PCAN_ERROR_ILLHANDLE)
+            {
+                // 通道句柄无效，说明您选择的 PCAN_xx 句柄可能不正确
+                Console.WriteLine($"错误：句柄无效。");
+                Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+            }
+            else if (_stsResult == TPCANStatus.PCAN_ERROR_ILLHW)
+            {
+                // 硬件不可用，可能是未插入或驱动问题
+                Console.WriteLine($"错误：硬件不可用。");
+                Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+            }
+            else
+            {
+                // 其他错误
+                Console.WriteLine($"通道初始化失败，错误代码：{_stsResult}");
+                Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+            }
 
             // Sets the connection status of the main-form
             //
             //SetConnectionStatus(stsResult == TPCANStatus.PCAN_ERROR_OK);
-
+            //链接后获取状态
+            InitMessageRev();
         }
         private void Release()
         {
             // Releases a current connected PCAN-Basic channel
             //
             PCANBasic.Uninitialize(m_PcanHandle);
-            //tmrRead.Enabled = false;
-            //if (m_ReadThread != null)
-            //{
-            //    m_ReadThread.Abort();
-            //    m_ReadThread.Join();
-            //    m_ReadThread = null;
-            //}
+            if (m_ReadThread != null)
+            {
+                m_ReadThread.Abort();
+                m_ReadThread.Join();
+                m_ReadThread = null;
+            }
 
             // Sets the connection status of the main-form
             //
@@ -334,15 +441,233 @@ namespace TeXiuSi
                 Log.Error(_pANHelper.GetFormatedError(stsResult));
         }
 
+        #region 整体控制
 
-        public void Write(string text)
+
+        /// <summary>
+        /// 使能/失能所有关机
+        /// </summary>
+        public void ControlConnectOfJoints(ControlPowModel controlPowModel)
+        {
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+
+                switch (controlPowModel)
+                {
+                    case ControlPowModel.PositionSpd:
+                        bolEnable = true;
+                        break;
+                    case ControlPowModel.Spd:
+                        bolEnable = false;
+                        break;
+                    default:
+                        break;
+                }
+
+                foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+                {
+                    var typeCommad = _motorControl.ControlCmd((byte)controlPowModel);
+
+                    Write(((int)opType).ToString("X2"), typeCommad);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"失能失败{ex.Message}");
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// 清除错误/保存零点
+        /// </summary>
+        public void ClearTheErrorOfJoints(ControlPowModelOther controlPowModelOther)
+        {
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+
+
+                foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+                {
+                    var typeCommad = _motorControl.ControlCmd((byte)controlPowModelOther);
+
+                    Write(((int)opType).ToString("X2"), typeCommad);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清除错误/保存零点失败{ex.Message}");
+            }
+        }
+
+
+
+        /// <summary>
+        ///  发送关节运动命令
+        /// </summary>
+        /// <param name="controlFrame"></param>
+        /// <param name="ID"></param>
+        /// <param name="positionDes">弧度</param>
+        /// <param name="velocityDes"></param>
+        /// <param name="currentLimit"></param>
+        public void ControlJointsMove(ControlFrame controlFrame,double[] positionDess, float velocityDes, float currentLimit)
+        {
+
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"运动失败连接丢失");
+                    return;
+                }
+                int i = 0;
+
+                foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+                {
+                    CANCommand cANCommand = _motorControl.SendPositionAndSpeeed(controlFrame, (byte)opType, (float)positionDess[i], Speed, 1);
+
+                    Write(((int)opType).ToString("X2"), cANCommand.Data);
+                    i++;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清除错误/保存零点失败{ex.Message}");
+            }
+        }
+
+
+        #endregion
+
+
+        #region 单个关节控制
+        public void ControlConnectOfJoints(ControlPowModel controlPowModel, JointNode opType)
+        {
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+
+                switch (controlPowModel)
+                {
+                    case ControlPowModel.PositionSpd:
+                        bolEnable = true;
+                        break;
+                    case ControlPowModel.Spd:
+                        bolEnable = false;
+                        break;
+                    default:
+                        break;
+                }
+
+
+                var typeCommad = _motorControl.ControlCmd((byte)controlPowModel);
+
+                Write(((int)JointNode.Nodel1).ToString("X2"), typeCommad);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"失能失败{ex.Message}");
+            }
+        }
+        /// <summary>
+        /// 清除错误/保存零点
+        /// </summary>
+        public void ClearTheErrorOfJoints(ControlPowModelOther controlPowModelOther, JointNode opType)
+        {
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+
+
+                var typeCommad = _motorControl.ControlCmd((byte)controlPowModelOther);
+
+                Write(((int)JointNode.Nodel1).ToString("X2"), typeCommad);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清除错误/保存零点失败{ex.Message}");
+            }
+        }
+        /// <summary>
+        /// 写入参数值
+        /// </summary>
+        /// <param name="jointNode"></param>
+        /// <param name="register"></param>
+        /// <param name="Value"></param>
+        public void SetParam(JointNode jointNode, Register register, float Value)
+        {
+            try
+            {
+                byte CanIDL = 0;
+                byte CanIDH = 0;
+
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+                _motorControl.SplitCanIdForLittleEndian((byte)jointNode, out CanIDL, out CanIDH);
+
+
+                CANCommand cANCommand = _motorControl.WriteParam(CanIDL, CanIDH, register, Value);
+
+
+                Write(((int)JointNode.Nodel1).ToString("X2"), cANCommand.Data);
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清除错误/保存零点失败{ex.Message}");
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 写入消息
+        /// </summary>
+        /// <param name="textID"></param>
+        /// <param name="byteMessage"></param>
+        public void Write(string textID, byte[] byteMessage)
         {
 
             TPCANStatus stsResult;
 
             // Send the message
             //
-            stsResult = m_IsFD ? WriteFrameFD() : WriteFrame(text);
+            stsResult = m_IsFD ? WriteFrameFD() : WriteFrame(textID, byteMessage);
 
             // The message was successfully sent
             //
@@ -369,34 +694,41 @@ namespace TeXiuSi
             // Length of the Data, Message Type 
             // and the data
             //
-            CANMsg.ID = System.Convert.ToUInt32(txtID.Text, 16);
-            CANMsg.DLC = System.Convert.ToByte(nudLength.Value);
-            CANMsg.MSGTYPE = (chbExtended.Checked) ? TPCANMessageType.PCAN_MESSAGE_EXTENDED : TPCANMessageType.PCAN_MESSAGE_STANDARD;
-            CANMsg.MSGTYPE |= (chbFD.Checked) ? TPCANMessageType.PCAN_MESSAGE_FD : TPCANMessageType.PCAN_MESSAGE_STANDARD;
-            CANMsg.MSGTYPE |= (chbBRS.Checked) ? TPCANMessageType.PCAN_MESSAGE_BRS : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            //CANMsg.ID = System.Convert.ToUInt32(txtID.Text, 16);
+            //CANMsg.DLC = System.Convert.ToByte(8);
+            //CANMsg.MSGTYPE = (chbExtended.Checked) ? TPCANMessageType.PCAN_MESSAGE_EXTENDED : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            //CANMsg.DLC = System.Convert.ToByte(8);
+            //CANMsg.MSGTYPE = (chbExtended.Checked) ? TPCANMessageType.PCAN_MESSAGE_EXTENDED : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            //CANMsg.MSGTYPE |= (chbFD.Checked) ? TPCANMessageType.PCAN_MESSAGE_FD : TPCANMessageType.PCAN_MESSAGE_STANDARD;
+            //CANMsg.MSGTYPE |= (chbBRS.Checked) ? TPCANMessageType.PCAN_MESSAGE_BRS : TPCANMessageType.PCAN_MESSAGE_STANDARD;
 
-            // If a remote frame will be sent, the data bytes are not important.
-            //
-            if (chbRemote.Checked)
-                CANMsg.MSGTYPE |= TPCANMessageType.PCAN_MESSAGE_RTR;
-            else
-            {
-                // We get so much data as the Len of the message
-                //
-                iLength = MotorControl.GetLengthFromDLC(CANMsg.DLC, (CANMsg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0);
-                for (int i = 0; i < iLength; i++)
-                {
-                    txtbCurrentTextBox = (TextBox)this.Controls.Find("txtData" + i.ToString(), true)[0];
-                    CANMsg.DATA[i] = System.Convert.ToByte(txtbCurrentTextBox.Text, 16);
-                }
-            }
+            //// If a remote frame will be sent, the data bytes are not important.
+            ////
+            //if (chbRemote.Checked)
+            //    CANMsg.MSGTYPE |= TPCANMessageType.PCAN_MESSAGE_RTR;
+            //else
+            //{
+            //    // We get so much data as the Len of the message
+            //    //
+            //    iLength = MotorControl.GetLengthFromDLC(CANMsg.DLC, (CANMsg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0);
+            //    for (int i = 0; i < iLength; i++)
+            //    {
+            //        txtbCurrentTextBox = (TextBox)this.Controls.Find("txtData" + i.ToString(), true)[0];
+            //        CANMsg.DATA[i] = System.Convert.ToByte(txtbCurrentTextBox.Text, 16);
+            //    }
+            //}
 
             // The message is sent to the configured hardware
             //
             return PCANBasic.WriteFD(m_PcanHandle, ref CANMsg);
         }
-        private TPCANStatus WriteFrame(string txtID)
+        private TPCANStatus WriteFrame(string txtID, byte[] bytesWrite)
         {
+            if (bytesWrite == null || bytesWrite.Count() == 0)
+            {
+                Log.Error("dont have any message");
+                return TPCANStatus.PCAN_ERROR_XMTFULL;
+            }
             TPCANMsg CANMsg;
             TextBox txtbCurrentTextBox;
 
@@ -425,8 +757,8 @@ namespace TeXiuSi
             //
             for (int i = 0; i < MotorControl.GetLengthFromDLC(CANMsg.LEN, true); i++)
             {
-                txtbCurrentTextBox = (TextBox)this.Controls.Find("txtData" + i.ToString(), true)[0];
-                CANMsg.DATA[i] = System.Convert.ToByte(txtbCurrentTextBox.Text, 16);
+                //txtbCurrentTextBox = bytesWrite[0];
+                CANMsg.DATA[i] = bytesWrite[0];
             }
             //}
 
@@ -485,9 +817,14 @@ namespace TeXiuSi
         {
             // 在这个方法中，我们假设 rdbEvent.Checked 是从 UI 线程安全获取的，
             // 或者在启动任务时，rdbEvent 状态是固定的。
-
+            TPCANStatus stsResult;
             while (!token.IsCancellationRequested) // 使用 Cancellation Token 来控制循环退出
             {
+                //判断是否在关节状态界面 不是不用发
+                if (true)
+                {
+
+                }
                 // 阻塞调用，等待 CAN 接收事件（最大等待 50ms）
                 bool eventTriggered = m_ReceiveEvent.WaitOne(50);
 
@@ -508,7 +845,14 @@ namespace TeXiuSi
                     //this.Invoke(m_ReadDelegate); // 使用 WinForms/WPF 的 Invoke/Dispatcher.Invoke 
                     // 确保 m_ReadDelegate (即 ReadMessages) 在 UI 线程执行
 
-                    bufferBlock.SendAsync(data);
+                    //ReadMessage();
+                    stsResult = m_IsFD ? ReadMessageFD() : ReadMessage();
+                    if (stsResult != TPCANStatus.PCAN_ERROR_OK)
+                        // If an error occurred, an information message is included
+                        //
+                        //IncludeTextMessage(GetFormatedError(stsResult));
+                        //bufferBlock.SendAsync(data);
+                        Log.Information("receive data success");
                 }
 
                 // 检查 rdbEvent.Checked 是否被取消，如果 UI 控件发生变化，需要在 UI 线程处理
@@ -538,7 +882,8 @@ namespace TeXiuSi
             if (stsResult != TPCANStatus.PCAN_ERROR_QRCVEMPTY)
                 // We process the received message
                 //
-                ProcessMessage(CANMsg, CANTimeStamp);
+                return stsResult;
+            //ProcessMessage(CANMsg, CANTimeStamp);
 
             return stsResult;
         }
@@ -563,52 +908,94 @@ namespace TeXiuSi
 
             return stsResult;
         }
+
+        #region Time读取法
         /// <summary>
         /// Function for reading PCAN-Basic messages
         /// </summary>
-        private void ReadMessages()
-        {
-            TPCANStatus stsResult;
+        //private void ReadMessagesTime()
+        //{
+        //    TPCANStatus stsResult;
 
-            // We read at least one time the queue looking for messages.
-            // If a message is found, we look again trying to find more.
-            // If the queue is empty or an error occurr, we get out from
-            // the dowhile statement.
-            //			
-            do
-            {
-                stsResult = m_IsFD ? ReadMessageFD() : ReadMessage();
-                if (stsResult == TPCANStatus.PCAN_ERROR_ILLOPERATION)
-                    break;
-            } while (IsRunning && (!System.Convert.ToBoolean(stsResult & TPCANStatus.PCAN_ERROR_QRCVEMPTY)));
-        }
+        //    // We read at least one time the queue looking for messages.
+        //    // If a message is found, we look again trying to find more.
+        //    // If the queue is empty or an error occurr, we get out from
+        //    // the dowhile statement.
+        //    //			
+        //    do
+        //    {
+        //        stsResult = m_IsFD ? ReadMessageFD() : ReadMessage();
+        //        if (stsResult == TPCANStatus.PCAN_ERROR_ILLOPERATION)
+        //            break;
+        //    } while (IsRunning && (!System.Convert.ToBoolean(stsResult & TPCANStatus.PCAN_ERROR_QRCVEMPTY)));
+        //}
         /// <summary>
         /// Processes a received message, in order to show it in the Message-ListView
         /// </summary>
         /// <param name="theMsg">The received PCAN-Basic message</param>
         /// <returns>True if the message must be created, false if it must be modified</returns>
-        private void ProcessMessage(TPCANMsgFD theMsg, TPCANTimestampFD itsTimeStamp)
-        {
-            // We search if a message (Same ID and Type) is 
-            // already received or if this is a new message
-            //
-            lock (m_LastMsgsList.SyncRoot)
-            {
-                foreach (MessageStatus msg in m_LastMsgsList)
-                {
-                    if ((msg.CANMsg.ID == theMsg.ID) && (msg.CANMsg.MSGTYPE == theMsg.MSGTYPE))
-                    {
-                        // Modify the message and exit
-                        //
-                        msg.Update(theMsg, itsTimeStamp);
-                        return;
-                    }
-                }
-                // Message not found. It will created
-                //
-                InsertMsgEntry(theMsg, itsTimeStamp);
-            }
-        }
+        //private void ProcessMessage(TPCANMsgFD theMsg, TPCANTimestampFD itsTimeStamp)
+        //{
+        //    // We search if a message (Same ID and Type) is 
+        //    // already received or if this is a new message
+        //    //
+        //    lock (m_LastMsgsList.SyncRoot)
+        //    {
+        //        foreach (MessageStatus msg in m_LastMsgsList)
+        //        {
+        //            if ((msg.CANMsg.ID == theMsg.ID) && (msg.CANMsg.MSGTYPE == theMsg.MSGTYPE))
+        //            {
+        //                // Modify the message and exit
+        //                //
+        //                msg.Update(theMsg, itsTimeStamp);
+        //                return;
+        //            }
+        //        }
+        //        // Message not found. It will created
+        //        //
+        //        InsertMsgEntry(theMsg, itsTimeStamp);
+        //    }
+        //}
+        ///// <summary>
+        ///// Inserts a new entry for a new message in the Message-ListView
+        ///// </summary>
+        ///// <param name="newMsg">The messasge to be inserted</param>
+        ///// <param name="timeStamp">The Timesamp of the new message</param>
+        //private void InsertMsgEntry(TPCANMsgFD newMsg, TPCANTimestampFD timeStamp)
+        //{
+        //    MessageStatus msgStsCurrentMsg;
+        //    ListViewItem lviCurrentItem;
+
+        //    lock (m_LastMsgsList.SyncRoot)
+        //    {
+        //        // We add this status in the last message list
+        //        //
+        //        msgStsCurrentMsg = new MessageStatus(newMsg, timeStamp, lstMessages.Items.Count);
+        //        msgStsCurrentMsg.ShowingPeriod = chbShowPeriod.Checked;
+        //        m_LastMsgsList.Add(msgStsCurrentMsg);
+
+        //        // Add the new ListView Item with the Type of the message
+        //        //	
+        //        lviCurrentItem = lstMessages.Items.Add(msgStsCurrentMsg.TypeString);
+        //        // We set the ID of the message
+        //        //
+        //        lviCurrentItem.SubItems.Add(msgStsCurrentMsg.IdString);
+        //        // We set the length of the Message
+        //        //
+        //        lviCurrentItem.SubItems.Add(MotorControl.GetLengthFromDLC(newMsg.DLC, (newMsg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0).ToString());
+        //        // we set the message count message (this is the First, so count is 1)            
+        //        //
+        //        lviCurrentItem.SubItems.Add(msgStsCurrentMsg.Count.ToString());
+        //        // Add time stamp information if needed
+        //        //
+        //        lviCurrentItem.SubItems.Add(msgStsCurrentMsg.TimeString);
+        //        // We set the data of the message. 	
+        //        //
+        //        lviCurrentItem.SubItems.Add(msgStsCurrentMsg.DataString);
+        //    }
+        //}
+        #endregion
+
         /// <summary>
         /// Processes a received message, in order to show it in the Message-ListView
         /// </summary>
@@ -616,58 +1003,35 @@ namespace TeXiuSi
         /// <returns>True if the message must be created, false if it must be modified</returns>
         private void ProcessMessage(TPCANMsg theMsg, TPCANTimestamp itsTimeStamp)
         {
-            TPCANMsgFD newMsg;
-            TPCANTimestampFD newTimestamp;
-
-            newMsg = new TPCANMsgFD();
-            newMsg.DATA = new byte[64];
-            newMsg.ID = theMsg.ID;
-            newMsg.DLC = theMsg.LEN;
-            for (int i = 0; i < ((theMsg.LEN > 8) ? 8 : theMsg.LEN); i++)
-                newMsg.DATA[i] = theMsg.DATA[i];
-            newMsg.MSGTYPE = theMsg.MSGTYPE;
-
-            newTimestamp = System.Convert.ToUInt64(itsTimeStamp.micros + 1000 * itsTimeStamp.millis + 0x100000000 * 1000 * itsTimeStamp.millis_overflow);
-            ProcessMessage(newMsg, newTimestamp);
-        }
-        /// <summary>
-        /// Inserts a new entry for a new message in the Message-ListView
-        /// </summary>
-        /// <param name="newMsg">The messasge to be inserted</param>
-        /// <param name="timeStamp">The Timesamp of the new message</param>
-        private void InsertMsgEntry(TPCANMsgFD newMsg, TPCANTimestampFD timeStamp)
-        {
-            MessageStatus msgStsCurrentMsg;
-            ListViewItem lviCurrentItem;
-
-            lock (m_LastMsgsList.SyncRoot)
+            try
             {
-                // We add this status in the last message list
-                //
-                msgStsCurrentMsg = new MessageStatus(newMsg, timeStamp, lstMessages.Items.Count);
-                msgStsCurrentMsg.ShowingPeriod = chbShowPeriod.Checked;
-                m_LastMsgsList.Add(msgStsCurrentMsg);
+                TPCANMsgFD newMsg;
+                TPCANTimestampFD newTimestamp;
 
-                // Add the new ListView Item with the Type of the message
-                //	
-                lviCurrentItem = lstMessages.Items.Add(msgStsCurrentMsg.TypeString);
-                // We set the ID of the message
-                //
-                lviCurrentItem.SubItems.Add(msgStsCurrentMsg.IdString);
-                // We set the length of the Message
-                //
-                lviCurrentItem.SubItems.Add(MotorControl.GetLengthFromDLC(newMsg.DLC, (newMsg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0).ToString());
-                // we set the message count message (this is the First, so count is 1)            
-                //
-                lviCurrentItem.SubItems.Add(msgStsCurrentMsg.Count.ToString());
-                // Add time stamp information if needed
-                //
-                lviCurrentItem.SubItems.Add(msgStsCurrentMsg.TimeString);
-                // We set the data of the message. 	
-                //
-                lviCurrentItem.SubItems.Add(msgStsCurrentMsg.DataString);
+                newMsg = new TPCANMsgFD();
+                newMsg.DATA = new byte[64];
+                newMsg.ID = theMsg.ID;
+                newMsg.DLC = theMsg.LEN;
+                for (int i = 0; i < ((theMsg.LEN > 8) ? 8 : theMsg.LEN); i++)
+                    newMsg.DATA[i] = theMsg.DATA[i];
+                newMsg.MSGTYPE = theMsg.MSGTYPE;
+
+                newTimestamp = System.Convert.ToUInt64(itsTimeStamp.micros + 1000 * itsTimeStamp.millis + 0x100000000 * 1000 * itsTimeStamp.millis_overflow);
+                Log.Information($"recevie Data {newMsg.DATA}");
+
+                //转换信息
+                MotorFeedbackFrame frame = MotorFeedbackFrame.Parse(newMsg.DATA);
+
+                bufferBlock.SendAsync(frame);
             }
+            catch (Exception ex)
+            {
+
+                Log.Error($"receive data error{ex.Message}");
+            }
+
         }
+
         #endregion
 
         ~DeviceOperation()

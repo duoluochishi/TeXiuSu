@@ -904,12 +904,9 @@ namespace TeXiuSi.Helper
     public enum ControlFrame
     {
         [Description("位置速度模式")]
-
         PositionSpd = 0x100,
         [Description("位置速度模式")]
-
         Spd = 0x200,
-
         [Description("力位混控模式")]
         ForcePositionMixed = 0x300,
         /// <summary>
@@ -924,6 +921,13 @@ namespace TeXiuSi.Helper
         PositionSpd = 0xFC,
         [Description("失能")]
         Spd = 0xFD,
+    }
+    public enum ControlPowModelOther
+    {
+        [Description("清除错误")]
+        ClearError = 0xFB,
+        [Description("保存零点")]
+        SaveZero = 0xFE,
     }
     #endregion
 

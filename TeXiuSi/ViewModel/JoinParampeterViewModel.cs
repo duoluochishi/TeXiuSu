@@ -1,39 +1,59 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.ObjectModel;
+using System.IO.Ports;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+using TeXiuSi.Helper;
 using TeXiuSi.Model;
+using static TeXiuSi.ViewModel.MainViewModel;
 
 namespace TeXiuSi.ViewModel
 {
     public partial class JoinParampeterViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private ObservableCollection<JointParameterNodel> _jointParameterName;
+        public ActionBlock<MotorFeedbackFrame> SerialCTBlock;
+
+        private ObservableCollection<MotorFeedbackFrame> _jointsInfo;
+        public ObservableCollection<MotorFeedbackFrame> JointsInfo
+        {
+            get { return _jointsInfo; }
+            set { _jointsInfo = value; OnPropertyChanged(); }
+        }
 
         public JoinParampeterViewModel()
         {
-            _jointParameterName = new ObservableCollection<JointParameterNodel>();
+            SerialCTBlock = new ActionBlock<MotorFeedbackFrame>(async data =>
+                    {
+                        //var ithread = IsUiThread();
+                        //Log($"Socket Block - Thread ID: {Thread.CurrentThread.ManagedThreadId}, Is UI Thread: {IsUiThread()}");
+                        await Handle6DofEvent(data);
+                    }, new ExecutionDataflowBlockOptions
+                    {
+                        MaxDegreeOfParallelism = 4,
+                        BoundedCapacity = 1,  // 只保留最新的数据
+                        SingleProducerConstrained = true  // 提高性能
+                    });
 
-            for (int i = 1; i <= 6; i++)
+            JointsInfo = new ObservableCollection<MotorFeedbackFrame>();
+
+
+            foreach (JointNode mode in Enum.GetValues(typeof(JointNode)))
             {
-                _jointParameterName.Add(new JointParameterNodel
+                var motorFeedbackFrame = new MotorFeedbackFrame()
                 {
-                    Id = i,
-                    CanineStateCode = "0",
-                    ErrorStatus = "0",
-                    EnabledState = "0",
-                    CommunicationStatus = "0",
-                    CollisionProtection = "0",
-                    RotorBlockingProtection = "0",
-                    AngleState = "0",
-                    PositionDegree = "0",
-                    MotorSpeed = "0",
-                    AngularAcceleration = "0",
-                    PowerSupplyVoltage = "0",
-                    WiringCurrent = "0",
-                    MotorTemperature = "0",
-                    DriverTemperature = "0"
-                });
+                    Id = (byte)mode,
+                    Name = mode.GetDescription(),
+                };
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        private async Task Handle6DofEvent(MotorFeedbackFrame data)
+        {
+
+            //对比更新数据
         }
     }
 }

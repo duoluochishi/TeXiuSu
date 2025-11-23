@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TeXiuSi.Model;
 using TeXiuSi.ViewModel;
 
 namespace TeXiuSi.uc
@@ -32,6 +33,7 @@ namespace TeXiuSi.uc
 
         internal void ShowDialog()
         {
+           
             throw new NotImplementedException();
         }
     }

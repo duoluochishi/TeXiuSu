@@ -875,6 +875,9 @@ namespace TeXiuSi
             // 假设 get_current_pose() 能返回当前位姿的六个值
             double[] currentPose = GetCurrentEndEffectorPose(currentAngles);
 
+            //发送位移参数给关节
+            DeviceOperation.Instance.ControlJointsMove( viewModel.SelectedSportType.Value,currentPose,viewModel.TotalSpeed,1);
+
             viewModel.startPosition = new Vector3D(currentPose[0], currentPose[1], currentPose[2]);
             viewModel.startRoll = currentPose[3];
             viewModel.startPitch = currentPose[4];

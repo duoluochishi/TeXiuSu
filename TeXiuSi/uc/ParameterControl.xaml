@@ -36,14 +36,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <x:Array x:Key="JointNames" Type="sys:String">
-                <sys:String>1</sys:String>
-                <sys:String>2</sys:String>
-                <sys:String>3</sys:String>
-                <sys:String>4</sys:String>
-                <sys:String>5</sys:String>
-                <sys:String>6</sys:String>
-            </x:Array>
+
             <x:Array x:Key="LoadValues" Type="sys:String">
                 <sys:String>空载</sys:String>
                 <sys:String>半载</sys:String>
@@ -80,10 +73,11 @@
 x:Name="Outlined"  Grid.Column="2"
 Width="150" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
-ItemsSource="{StaticResource JointNames}" 
-SelectedIndex="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+ItemsSource="{Binding ConnectNodeModels}"
+DisplayMemberPath="Name"
+SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 />
-                        <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大角度:</TextBlock>
+                        <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" >位置范围:</TextBlock>
                         <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
  Width="330" Maximum="180"  Value="{Binding MaximumAngle, Mode=TwoWay}" Minimum="0"/>
                         <xctk:DecimalUpDown 
@@ -95,9 +89,9 @@ SelectedIndex="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChan
                                 Increment="0.1" Minimum="0" Maximum="180"
                                 FormatString="F2"  Height="40"
                                 />
-                        <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最小角度:</TextBlock>
+                        <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 速度范围:</TextBlock>
                         <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
- Maximum="0" Width="330"  Value="{Binding MinimumAngle, Mode=TwoWay}" Minimum="-180" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
+ Maximum="10" Width="330"  Value="{Binding MinimumAngle, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <xctk:DecimalUpDown 
                                 Grid.Row="2" 
@@ -105,7 +99,7 @@ SelectedIndex="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChan
                                 Width="150" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center" Value="{Binding MinimumAngle, Mode=TwoWay}"
-                                Increment="0.1" Minimum="-180" Maximum="0"
+                                Increment="0.1" Minimum="0" Maximum="10"
                                 FormatString="F1"  Height="40"
                                 >
 
@@ -117,7 +111,7 @@ SelectedIndex="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChan
         IsHitTestVisible="False" />
 
                         <TextBlock 
-Text="°" Grid.Row="2" Grid.Column="3"
+Text="rad/s" Grid.Row="2" Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left" FontSize="18"
 IsHitTestVisible="False" />

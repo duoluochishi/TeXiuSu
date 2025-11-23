@@ -2,9 +2,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TeXiuSi.Helper;
+using TeXiuSi.Model;
 
 namespace TeXiuSi.ViewModel
 {
@@ -21,7 +24,19 @@ namespace TeXiuSi.ViewModel
         }
 
         #region Joint setting
+        private ObservableCollection<Joint> _connectNodeModels;
+        public ObservableCollection<Joint> ConnectNodeModels
+        {
+            get { return _connectNodeModels; }
+            set { _connectNodeModels = value; OnPropertyChanged(nameof(_connectNodeModels)); }
+        }
 
+        private Joint _selectedNode;
+        public Joint SelectedNode
+        {
+            get { return _selectedNode; }
+            set { _selectedNode = value; OnPropertyChanged(nameof(SelectedNode)); }
+        }
         private double _maximumAngle = 0.0; // 初始值
         public double MaximumAngle
         {
@@ -198,7 +213,26 @@ namespace TeXiuSi.ViewModel
 
             SaveCommand = new RelayCommand(SaveJoint);
 
+            foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+            {
+                if (opType==JointNode.NodelAll)
+                {
+                    return;
 
+                }
+                // 创建新的绑定项，并添加到集合中
+                ConnectNodeModels.Add(new Joint
+                {
+                    Name = opType.GetDescription(), // 使用我们创建的扩展方法获取中文描述
+                    Type = 0,
+                    JointInfo = opType
+                });
+            }
+            if (ConnectNodeModels.Count > 0)
+            {
+
+                SelectedNode = ConnectNodeModels[0];
+            }
             #endregion
 
             #region Terminal setting
@@ -265,6 +299,11 @@ namespace TeXiuSi.ViewModel
 
                 IsEditing = false;
 
+                MaximumAngle = 0;
+                MinimumAngle = 0;
+                MinimumSpeed = 0;
+                MinimumAcceleration = 0;
+
             }
             catch (Exception ex)
             {
@@ -280,6 +319,17 @@ namespace TeXiuSi.ViewModel
                 //tab封锁 
 
                 IsEditing = false;
+
+                //保存参数
+
+                //设置位置范围参数
+                DeviceOperation.Instance.SetParam(SelectedNode.JointInfo, Register.PMAX, (float)MaximumAngle);
+                //设置位置速度参数
+                DeviceOperation.Instance.SetParam(SelectedNode.JointInfo, Register.VMAX, (float)MinimumAngle);
+                //设置位置最大速度
+                DeviceOperation.Instance.SetParam(SelectedNode.JointInfo, Register.MAX_SPD, (float)MinimumSpeed);
+                //设置位置最大加速度
+                DeviceOperation.Instance.SetParam(SelectedNode.JointInfo, Register.ACC, (float)MinimumAcceleration);
 
             }
             catch (Exception ex)

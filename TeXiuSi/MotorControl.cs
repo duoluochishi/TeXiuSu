@@ -102,7 +102,7 @@ namespace TeXiuSi
             _usbHw.SetFrameCallback(CanFrameCallback);
             Thread.Sleep(200);
 
-            EnableAll();
+            //EnableAll();
             Console.WriteLine("**********Motor_Control initialization successful**********\n");
         }
 
@@ -183,7 +183,7 @@ namespace TeXiuSi
 
                 for (int j = 0; j < 5; j++)
                 {
-                    ControlCmd((ushort)(motor.CanId + (int)motor.GetMotorMode()), 0xFC);
+                    ControlCmd(0xFC);
                     Thread.Sleep(2);
                 }
             }
@@ -197,7 +197,7 @@ namespace TeXiuSi
 
                 for (int j = 0; j < 5; j++)
                 {
-                    ControlCmd((ushort)(motor.CanId + (int)motor.GetMotorMode()), 0xFD);
+                    //ControlCmd((ushort)(motor.CanId + (int)motor.GetMotorMode()), 0xFD);
                     Thread.Sleep(2);
                 }
             }
@@ -216,21 +216,21 @@ namespace TeXiuSi
             return 0f;
         }
 
-        public void SaveMotorParam(Motor motor)
-        {
-            ushort id = motor.CanId;
-            Control_Mode_Code mode = motor.GetMotorMode();
-            ControlCmd((ushort)(id + (int)mode), 0xFD);
-            Thread.Sleep(10);
+        //public void SaveMotorParam(Motor motor)
+        //{
+        //    ushort id = motor.CanId;
+        //    Control_Mode_Code mode = motor.GetMotorMode();
+        //    ControlCmd((ushort)(id + (int)mode), 0xFD);
+        //    Thread.Sleep(10);
 
-            _readWriteSave = true;
-            byte idLow = (byte)(id & 0xFF);
-            byte idHigh = (byte)((id >> 8) & 0xFF);
+        //    _readWriteSave = true;
+        //    byte idLow = (byte)(id & 0xFF);
+        //    byte idHigh = (byte)((id >> 8) & 0xFF);
 
-            byte[] data = { idLow, idHigh, 0xAA, 0x01, 0x00, 0x00, 0x00, 0x00 };
-            _usbHw.FdcanFrameSend(data, 0x7FF);
-            Thread.Sleep(100);
-        }
+        //    byte[] data = { idLow, idHigh, 0xAA, 0x01, 0x00, 0x00, 0x00, 0x00 };
+        //    _usbHw.FdcanFrameSend(data, 0x7FF);
+        //    Thread.Sleep(100);
+        //}
 
         public void RefreshMotorStatus(Motor motor)
         {
@@ -246,10 +246,12 @@ namespace TeXiuSi
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cmd"></param>
-        public void ControlCmd(ushort id, byte cmd)
+        public byte[] ControlCmd(byte cmd)
         {
             byte[] data = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, cmd };
-            _usbHw.FdcanFrameSend(data, id);
+
+            return data;
+            //_usbHw.FdcanFrameSend(data, id);
         }
 
         /// <summary>
@@ -275,10 +277,10 @@ namespace TeXiuSi
             _usbHw.FdcanFrameSend(sendData, 0x7FF);
         }
 
-        public void SetZeroPosition(Motor motor)
-        {
-            ControlCmd((ushort)(motor.CanId + (int)motor.GetMotorMode()), 0xFE);
-        }
+        //public void SetZeroPosition(Motor motor)
+        //{
+        //    ControlCmd((ushort)(motor.CanId + (int)motor.GetMotorMode()), 0xFE);
+        //}
 
         public void ControlMit(Motor motor, float kp, float kd, float q, float dq, float tau)
         {
@@ -873,19 +875,65 @@ namespace TeXiuSi
             var attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
             return attribute?.Description ?? value.ToString();
         }
+
+        /// <summary>
+        /// 将完整的 CAN ID 拆分为低字节 (L) 和高字节 (H)，并确保为小端序。
+        /// </summary>
+        /// <param name="canId">完整的 CAN ID (uint 类型)</param>
+        /// <param name="canIdL">输出：CAN ID 的低字节 (D[0])</param>
+        /// <param name="canIdH">输出：CAN ID 的高字节 (D[1])</param>
+        public  void SplitCanIdForLittleEndian(uint canId, out byte canIdL, out byte canIdH)
+        {
+            // 1. 获取 CAN ID 的低 8 位 (Low Byte)
+            // 使用 & 0xFF 掩码取出最低 8 位。
+            // 这就是 CANID_L (D[0])
+            canIdL = (byte)(canId & 0xFF);
+
+            // 2. 获取 CAN ID 的高位 (High Byte)
+            // 将 CAN ID 右移 8 位，丢弃低 8 位，剩下的部分就是高位。
+            // 这就是 CANID_H (D[1])
+            canIdH = (byte)(canId >> 8);
+        }
         /// <summary>
         /// 写入参数
         /// </summary>
-        /// <param name="CANID_L"></param>
-        /// <param name="CANID_H"></param>
-        /// <param name="register"></param>
+        /// <param name="CANID_L">CAN ID 低字节 (D[0])</param>
+        /// <param name="CANID_H">CAN ID 高字节 (D[1])</param>
+        /// <param name="register">要写入的寄存器地址 (RID, D[3])</param>
+        /// <param name="value">要写入的浮点数数据 (D[4]到D[7])</param>
         /// <returns></returns>
-        public CANCommand WriteParam(byte CANID_L, byte CANID_H, Register register)
+        public CANCommand WriteParam(byte CANID_L, byte CANID_H, Register register, float value)
         {
+            // 1. 将 float (4 字节) 转换为 byte[]
+            // BitConverter 默认与系统架构的字节序一致（通常是小端序，符合您的要求）
+            byte[] floatBytes = BitConverter.GetBytes(value);
 
-            return new CANCommand(register.GetDescription(), 1, System.Convert.ToUInt32("7FF"), new byte[] { CANID_L, CANID_H, 0x55, (byte)register, 0x02, 0x00, 0x00, 0x00 }
-                  );
+            // 2. 构造完整的 8 字节数据数组
+            // 结构：CANID_L, CANID_H, 0x55, RID, 数据[4], 数据[5], 数据[6], 数据[7]
+            byte[] dataField = new byte[8];
 
+            dataField[0] = CANID_L;         // D[0]
+            dataField[1] = CANID_H;         // D[1]
+            dataField[2] = 0x55;            // D[2] (固定值 0x55)
+            dataField[3] = (byte)register;  // D[3] (寄存器 ID)
+
+            // 将 floatBytes (4 字节) 拷贝到 dataField 的后 4 个字节 (D[4] 到 D[7])
+            // 由于是小端序，floatBytes[0] 是最低有效字节 (LSB)，但直接放入 D[4] 即可
+            Array.Copy(floatBytes, 0, dataField, 4, 4);
+
+            // 3. 返回 CANCommand
+            // 注意：System.Convert.ToUInt32("7FF") 会将 "7FF" 视为十进制数 779。
+            // 如果您想将其作为 16 进制解析，需要指定基数 16。
+            // 但在 CAN ID 处，7FF 通常是 16 进制，所以直接写 0x7FF 更安全。
+            uint canId = 0x7FF;
+
+            return new CANCommand(
+                register.GetDescription(),
+                // 假设您的 CANCommand 构造函数第二个参数是数据长度 (8)
+                (byte)dataField.Length,
+                canId,
+                dataField
+            );
         }
         /// <summary> 
         /// 读取参数
@@ -935,7 +983,15 @@ namespace TeXiuSi
                 return bytes;
             }
         }
-        public void SendPositionAndSpeeed(ControlFrame controlFrame, UInt32 ID, float positionDes, float velocityDes,float currentLimit)
+        /// <summary>
+        /// 控制关节发送位置速度信息，位置为弧度
+        /// </summary>
+        /// <param name="controlFrame"></param>
+        /// <param name="ID"></param>
+        /// <param name="positionDes"></param>
+        /// <param name="velocityDes"></param>
+        /// <param name="currentLimit"></param>
+        public CANCommand SendPositionAndSpeeed(ControlFrame controlFrame, byte ID, float positionDes, float velocityDes, float currentLimit)
         {
             // 1. 将 float 类型的位置值转换为 4 字节数组
             byte[] pBytes = BitConverter.GetBytes(positionDes);
@@ -949,7 +1005,7 @@ namespace TeXiuSi
                 Array.Reverse(vBytes);
             }
             byte[] data = new byte[8];
-           
+
             CANCommand cANCommand = new CANCommand(ControlFrame.PositionSpd.GetDescription(), 0, data, ControlFrame.PositionSpd.GetDescription(), controlFrame);
 
             //根据模式不同0-8位的不同
@@ -967,7 +1023,7 @@ namespace TeXiuSi
                 case ControlFrame.Spd:
                     //帧 ID 为设定的 CAN ID 值加上 0x200 的偏移 V_des：速度给定，浮点型，低位在前，高位在后此处发送命令的 CAN ID 是 0x200 + ID。
                     cANCommand.ID = ID + 0x200;
-                    
+
                     Buffer.BlockCopy(vBytes, 0, data, 0, 4); // 复制 P_des 到 data[0]..data[3]
                     cANCommand.Data = data;
 
@@ -1018,7 +1074,7 @@ namespace TeXiuSi
                 default:
                     break;
             }
-
+            return cANCommand;
         }
 
         #endregion
@@ -1032,6 +1088,7 @@ namespace TeXiuSi
         public void FdcanFrameSend(byte[] data, uint id)
         {
             Console.WriteLine($"CAN Send - ID: 0x{id:X}, Data: {BitConverter.ToString(data)}");
+
         }
 
         public void SetFrameCallback(Action<CanValueType> callback)
