@@ -117,13 +117,32 @@ namespace TeXiuSi
 
             if ((m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_RTR) == TPCANMessageType.PCAN_MESSAGE_RTR)
                 return "Remote Request";
-            //else
-            //    for (int i = 0; i < Form1.GetLengthFromDLC(m_Msg.DLC, (m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0); i++)
-            //        strTemp += string.Format("{0:X2} ", m_Msg.DATA[i]);
+            else
+                for (int i = 0; i < GetLengthFromDLC(m_Msg.DLC, (m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0); i++)
+                    strTemp += string.Format("{0:X2} ", m_Msg.DATA[i]);
 
             return strTemp;
         }
+        public static int GetLengthFromDLC(int dlc, bool isSTD)
+        {
+            if (dlc <= 8)
+                return dlc;
 
+            if (isSTD)
+                return 8;
+
+            switch (dlc)
+            {
+                case 9: return 12;
+                case 10: return 16;
+                case 11: return 20;
+                case 12: return 24;
+                case 13: return 32;
+                case 14: return 48;
+                case 15: return 64;
+                default: return dlc;
+            }
+        }
         private string GetIdString()
         {
             // We format the ID of the message and show it

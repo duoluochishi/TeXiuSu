@@ -86,7 +86,8 @@ namespace TeXiuSi.ViewModel
 
 
             ConnectNodeModels = new ObservableCollection<Joint>();
-
+            ZeroNodeModels = new ObservableCollection<Joint>();
+            ControlPowModels = new ObservableCollection<EnumBindingItem<ControlPowModel>>();
 
             foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
             {
@@ -120,7 +121,7 @@ namespace TeXiuSi.ViewModel
                 SelectedZeroNode = ZeroNodeModels[0];
             }
 
-            ControlPowModels = new ObservableCollection<EnumBindingItem<ControlPowModel>>();
+
 
             foreach (ControlPowModel opType in Enum.GetValues(typeof(ControlPowModel)))
             {
@@ -157,6 +158,7 @@ namespace TeXiuSi.ViewModel
                     switch (selectedModel)
                     {
                         case ControlPowModel.PositionSpd:
+                            DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.PositionSpd);
                             break;
                         case ControlPowModel.Spd:
                             string message = "机械臂失能会直接落下，请确保机械臂已处于安全位置？";
@@ -173,6 +175,7 @@ namespace TeXiuSi.ViewModel
                             // 3. 根据用户的选择进行判断
                             if (result == MessageBoxResult.Yes)
                             {
+                                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.Spd);
                                 // 用户点击了“是” (Yes)
                                 Console.WriteLine("用户选择了保存并退出。");
                                 // 执行保存和退出逻辑...
@@ -231,6 +234,17 @@ namespace TeXiuSi.ViewModel
             catch (Exception ex)
             {
                 Log.Error($"清除错误失败{ex.Message}");
+            }
+        }
+        private void OnRefreshInfoEditor(Register register)
+        {
+            try
+            {
+                DeviceOperation.Instance.RefreshInfoEditorOfJoints(ControlPowModelOther.Refresh,register);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"刷新获取信息失败{ex.Message}");
             }
         }
     }

@@ -1238,8 +1238,7 @@ namespace TeXiuSi.ViewModel
 
             if (SportTypes.Count > 0)
             {
-
-                SelectedSportType = SportTypes[0];
+                SelectedSportType = SportTypes.Where(o=>o.DisplayName== "点位运动模式").First();
             }
 
 

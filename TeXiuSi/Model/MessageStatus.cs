@@ -122,9 +122,9 @@ namespace TeXiuSi.Model
 
             if ((m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_RTR) == TPCANMessageType.PCAN_MESSAGE_RTR)
                 return "Remote Request";
-            else
-                for (int i = 0; i < Form1.GetLengthFromDLC(m_Msg.DLC, (m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0); i++)
-                    strTemp += string.Format("{0:X2} ", m_Msg.DATA[i]);
+            //else
+            //    for (int i = 0; i < Form1.GetLengthFromDLC(m_Msg.DLC, (m_Msg.MSGTYPE & TPCANMessageType.PCAN_MESSAGE_FD) == 0); i++)
+            //        strTemp += string.Format("{0:X2} ", m_Msg.DATA[i]);
 
             return strTemp;
         }

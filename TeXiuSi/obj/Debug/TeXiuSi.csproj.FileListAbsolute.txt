@@ -190,3 +190,5 @@ D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Numerics.xml
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\MathNet.Spatial.xml
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\PCANBasic.NET.dll
 D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\PCANBasic.NET.xml
+D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\System.Threading.Tasks.Dataflow.dll
+D:\Project\texiusi\TeXiuSu\TeXiuSi\bin\Debug\System.Threading.Tasks.Dataflow.xml

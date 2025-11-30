@@ -62,9 +62,9 @@ namespace TeXiuSi
             return m_Instance.Value;
         }
         /// <summary>
-        /// 单例
+        /// 单例实例
         /// </summary>
-        public static DeviceOperation Instance => DeviceOperation.GetInstance();
+        public static DeviceOperation Instance => m_Instance.Value;
 
         /// <summary>
         /// 连接数据返回参数
@@ -250,13 +250,13 @@ namespace TeXiuSi
             _pANHelper = new PANHelper();
             _motorControl = new MotorControl();
 
-            model3D = _motorControl.Initialize_Environment(_motorControl.modelsNames);
+            model3D = _motorControl.Initialize_Environment(_motorControl.modelsNames, out joints);
         }
 
 
         #region eventResive
 
-        private async Task InitMessageRev()
+        public async Task InitMessageRev()
         {
             await CANReadThreadFunc();
             //System.Threading.ThreadStart threadDelegate = new System.Threading.ThreadStart(this.CANReadThreadFunc);
@@ -315,14 +315,13 @@ namespace TeXiuSi
         public void ClearInit()
         {
             m_PcanHandle = 0;
-            m_Baudrate = 0;
-            m_Baudrate = 0;
+            m_Baudrate = TPCANBaudrate.PCAN_BAUD_1M;
             _stsResult = new TPCANStatus();
         }
 
         #region  CANControl
         public void Connect(UInt32 IOPort,
-            UInt16 Interrupt)
+            UInt16 Interrupt, TPCANBaudrate m_Baudrate, TPCANType m_HwType)
         {
 
             // Connects a selected PCAN-Basic channel
@@ -361,6 +360,7 @@ namespace TeXiuSi
                 // 连接/初始化成功
                 // TPCANHandle 是有效的，可以开始读写
                 Console.WriteLine($"通道 {m_PcanHandle} 初始化成功。");
+                Log.Information($"通道 {m_PcanHandle} 初始化成功。");
                 ConfigureTraceFile();
 
                 _stsResult = TPCANStatus.PCAN_ERROR_OK;
@@ -516,7 +516,34 @@ namespace TeXiuSi
             }
         }
 
+        /// <summary>
+        /// 刷新数据
+        /// </summary>
+        public void RefreshInfoEditorOfJoints(ControlPowModelOther controlPowModelOther, Register register)
+        {
+            try
+            {
+                if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                {
+                    Log.Error($"失能失败连接丢失");
+                    return;
+                }
+                //这里先写死
 
+                foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+                {
+                    var typeCommad = _motorControl.ControlRefreshCmd((byte)opType, (byte)controlPowModelOther, (byte)register);
+
+                    Write(((int)opType).ToString("X2"), typeCommad);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"清除错误/保存零点失败{ex.Message}");
+            }
+        }
 
         /// <summary>
         ///  发送关节运动命令
@@ -526,7 +553,7 @@ namespace TeXiuSi
         /// <param name="positionDes">弧度</param>
         /// <param name="velocityDes"></param>
         /// <param name="currentLimit"></param>
-        public void ControlJointsMove(ControlFrame controlFrame,double[] positionDess, float velocityDes, float currentLimit)
+        public void ControlJointsMove(ControlFrame controlFrame, double[] positionDess, float velocityDes, float currentLimit)
         {
 
             try
@@ -545,9 +572,6 @@ namespace TeXiuSi
                     Write(((int)opType).ToString("X2"), cANCommand.Data);
                     i++;
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -682,8 +706,8 @@ namespace TeXiuSi
         private TPCANStatus WriteFrameFD()
         {
             TPCANMsgFD CANMsg;
-            TextBox txtbCurrentTextBox;
-            int iLength;
+            //TextBox txtbCurrentTextBox;
+            //int iLength;
 
             // We create a TPCANMsgFD message structure 
             //
@@ -730,7 +754,7 @@ namespace TeXiuSi
                 return TPCANStatus.PCAN_ERROR_XMTFULL;
             }
             TPCANMsg CANMsg;
-            TextBox txtbCurrentTextBox;
+            //TextBox txtbCurrentTextBox;
 
             // We create a TPCANMsg message structure 
             //
@@ -758,7 +782,7 @@ namespace TeXiuSi
             for (int i = 0; i < MotorControl.GetLengthFromDLC(CANMsg.LEN, true); i++)
             {
                 //txtbCurrentTextBox = bytesWrite[0];
-                CANMsg.DATA[i] = bytesWrite[0];
+                CANMsg.DATA[i] = bytesWrite[i];
             }
             //}
 
@@ -826,34 +850,34 @@ namespace TeXiuSi
 
                 }
                 // 阻塞调用，等待 CAN 接收事件（最大等待 50ms）
-                bool eventTriggered = m_ReceiveEvent.WaitOne(50);
+                //bool eventTriggered = m_ReceiveEvent.WaitOne(50);
 
-                if (eventTriggered)
-                {
-                    // 接收事件触发，需要将消息处理切换回 UI 线程
-                    // TaskScheduler.FromCurrentSynchronizationContext() 必须在 UI 线程上获取
+                //if (eventTriggered)
+                //{
+                // 接收事件触发，需要将消息处理切换回 UI 线程
+                // TaskScheduler.FromCurrentSynchronizationContext() 必须在 UI 线程上获取
 
-                    // 为了在 Task.Run 内部安全地获取 UI 线程上下文并执行 Invoke，
-                    // 必须使用 Task.Factory.StartNew，并指定之前获取到的 UI Context。
+                // 为了在 Task.Run 内部安全地获取 UI 线程上下文并执行 Invoke，
+                // 必须使用 Task.Factory.StartNew，并指定之前获取到的 UI Context。
 
-                    // 假设您在 StartReadingAsync 启动之前已经获取了 UI 线程的上下文
-                    // 建议：在类级别存储 TaskScheduler.FromCurrentSynchronizationContext()
+                // 假设您在 StartReadingAsync 启动之前已经获取了 UI 线程的上下文
+                // 建议：在类级别存储 TaskScheduler.FromCurrentSynchronizationContext()
 
-                    // 假设我们现在直接使用 WinForms 的 Invoke（这在 Task.Run 内部是可行的）
+                // 假设我们现在直接使用 WinForms 的 Invoke（这在 Task.Run 内部是可行的）
 
-                    // *** 替代 this.Invoke(m_ReadDelegate) 的方法：***
-                    //this.Invoke(m_ReadDelegate); // 使用 WinForms/WPF 的 Invoke/Dispatcher.Invoke 
-                    // 确保 m_ReadDelegate (即 ReadMessages) 在 UI 线程执行
+                // *** 替代 this.Invoke(m_ReadDelegate) 的方法：***
+                //this.Invoke(m_ReadDelegate); // 使用 WinForms/WPF 的 Invoke/Dispatcher.Invoke 
+                // 确保 m_ReadDelegate (即 ReadMessages) 在 UI 线程执行
 
-                    //ReadMessage();
-                    stsResult = m_IsFD ? ReadMessageFD() : ReadMessage();
-                    if (stsResult != TPCANStatus.PCAN_ERROR_OK)
-                        // If an error occurred, an information message is included
-                        //
-                        //IncludeTextMessage(GetFormatedError(stsResult));
-                        //bufferBlock.SendAsync(data);
-                        Log.Information("receive data success");
-                }
+                //ReadMessage();
+                stsResult = m_IsFD ? ReadMessageFD() : ReadMessage();
+                if (stsResult != TPCANStatus.PCAN_ERROR_OK)
+                    // If an error occurred, an information message is included
+                    //
+                    //IncludeTextMessage(GetFormatedError(stsResult));
+                    //bufferBlock.SendAsync(data);
+                    Log.Information("receive data success");
+                //}
 
                 // 检查 rdbEvent.Checked 是否被取消，如果 UI 控件发生变化，需要在 UI 线程处理
                 // 简单的 WinForms/WPF 应用通常依赖于外部调用 StopReading 来退出循环
@@ -1018,8 +1042,15 @@ namespace TeXiuSi
 
                 newTimestamp = System.Convert.ToUInt64(itsTimeStamp.micros + 1000 * itsTimeStamp.millis + 0x100000000 * 1000 * itsTimeStamp.millis_overflow);
                 Log.Information($"recevie Data {newMsg.DATA}");
+                //InsertMsgEntry(theMsg, itsTimeStamp);
 
-                //转换信息
+
+                MessageStatus msgStsCurrentMsg = new MessageStatus(newMsg, newTimestamp, 1);
+
+
+
+                //转换信息-出来第一位有些不同
+
                 MotorFeedbackFrame frame = MotorFeedbackFrame.Parse(newMsg.DATA);
 
                 bufferBlock.SendAsync(frame);
@@ -1031,6 +1062,7 @@ namespace TeXiuSi
             }
 
         }
+
 
         #endregion
 

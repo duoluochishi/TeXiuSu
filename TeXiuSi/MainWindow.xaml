@@ -64,6 +64,7 @@
 
 
             <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White" Command="{Binding DisabledCommand}">失能</Button>
+            <Button Grid.Column="1" Width='80' HorizontalAlignment="Left" Foreground="White" Click="Button_Click_3">获取信息</Button>
             <Button Grid.Column="4" Width='80' HorizontalAlignment="Left" Margin="10 0 0 0" Foreground="White" Command="{Binding ScramCommand}">急停</Button>
             <Button x:Name="btnMin" Grid.Column="6"
 
@@ -97,9 +98,9 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                 <materialDesign:Card >
                     <TabControl x:Name="TableControl"
     Style="{StaticResource MaterialDesignFilledTabControl}"
-    TabStripPlacement="Left">
+    TabStripPlacement="Left" >
                         <TabItem
-      Header="用户操作区" >
+      Header="   用户操作区      " >
                             <ScrollViewer>
                                 <materialDesign:Card>
                                     <TabControl
@@ -121,18 +122,18 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
                                                     <ColumnDefinition Width="94*"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
 
-                                                <TextBlock Margin="71,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="23" Grid.ColumnSpan="2"> 运动方式:</TextBlock>
+                                                <TextBlock Margin="20,20,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="23" Grid.ColumnSpan="2"> 运动方式:</TextBlock>
                                                 <ComboBox
     x:Name="Outlined"  Grid.Column="1"
-    Width="150" HorizontalAlignment="Left"
+    Width="200" HorizontalAlignment="Left" VerticalAlignment="Center"
     ItemsSource="{Binding SportTypes}"
     DisplayMemberPath="DisplayName"
     SelectedItem="{Binding SelectedSportType}"
-    Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.ColumnSpan="2" Margin="54,0,0,0"
+    Style="{StaticResource MaterialDesignOutlinedComboBox}" Grid.ColumnSpan="2" Margin="20,10,0,0"
     />
-                                                <TextBlock Grid.Column="3" Margin="71,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="23"> 操作模式:</TextBlock>
+                                                <TextBlock Grid.Column="3" Margin="71,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="23" Visibility="Collapsed"> 操作模式:</TextBlock>
                                                 <ComboBox
-    x:Name="OutlinedComboBox" Grid.Column="3"
+    x:Name="OutlinedComboBox" Grid.Column="3" Visibility="Collapsed"
     Width="150" HorizontalAlignment="Left"
     ItemsSource="{Binding OperationModes}"
     SelectedItem="{Binding SelectedOperationMode}"                                          
@@ -523,9 +524,9 @@ ToolTip="MaterialDesignIconButton" Click="btnClose_Click">
 
 
 
-                                                    <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Left" Margin="122,0,0,0" >
+                                                    <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Center" Margin="0 10 0 0"  >
                                                         <Button Name="ResetToZeroButton" 
- Width="150" Height="50"
+ Width="300" Height="50" Margin="0 0 30 0"
 Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZeroCommand}">
 
                                                             <StackPanel Orientation="Horizontal">
@@ -537,7 +538,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
                                                             </StackPanel>
                                                         </Button>
                                                         <Button Name="LoadButton" 
- Width="150" Height="50" Margin="30 0"
+ Width="300" Height="50" Margin="30 0" Visibility="Collapsed"
     Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding LoadCommand}">
 
                                                             <StackPanel Orientation="Horizontal">
@@ -549,7 +550,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
                                                             </StackPanel>
                                                         </Button>
                                                         <Button Name="SendButton" 
- Width="150" Height="50" Click="SimulateMotionButton_Click"
+  Width="300" Height="50" Click="SimulateMotionButton_Click"
     Style="{StaticResource MaterialDesignRaisedButton}">
                                                             <StackPanel Orientation="Horizontal">
                                                                 <materialDesign:PackIcon
@@ -595,7 +596,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ResetToZer
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" 
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -606,7 +607,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"   > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -617,40 +618,40 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"  > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23"  > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding StartPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
@@ -680,7 +681,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -691,7 +692,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -702,40 +703,40 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding MidPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
@@ -765,7 +766,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > X:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointX, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -776,7 +777,7 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Y:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointY, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
@@ -787,40 +788,40 @@ FormatString="F2"  Height="40"
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Z:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="70 0 0 0"
+Width="120" Margin="70 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointZ, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-1000" Maximum="1000"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rx:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRx, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel  Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Ry:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRy, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
 FormatString="F2"  Height="40"
 />
                                                                 </StackPanel>
-                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 20 0 0">
+                                                                <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0 10 0 0">
                                                                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > Rz:</TextBlock>
                                                                     <xctk:DecimalUpDown 
 
-Width="130" Margin="56 0 0 0"
+Width="120" Margin="56 0 0 0"
 HorizontalAlignment="Center" 
 VerticalAlignment="Center" Text="{Binding EndPointRz, StringFormat='F2', UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 Increment="0.01" Minimum="-180" Maximum="180"
@@ -849,7 +850,8 @@ DisplayMemberPath="DisplayName"
 SelectedItem="{Binding SelectedPoison}"
 />
                                                                 <Button Name="LoadInstructionPointButton"
-Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"   Command="{Binding LoadInstructionPointCommand}">
+Grid.Column="2" Width="180" Height="50" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20 0 0 0"  
+                                                                       Visibility="Collapsed" Command="{Binding LoadInstructionPointCommand}">
 
                                                                     <StackPanel Orientation="Horizontal">
                                                                         <materialDesign:PackIcon
@@ -1033,166 +1035,175 @@ Command="{Binding JointSendCommand}">
                                                 <!--StraightLineMotionVisible-->
 
                                                 <StackPanel Grid.Row="1" Grid.ColumnSpan="6" Grid.RowSpan="3"  Visibility="{Binding IsStraightLineMotionVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                                    <Grid Margin="40 70 20 20">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                            <RowDefinition></RowDefinition>
-                                                        </Grid.RowDefinitions>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="70"></ColumnDefinition>
-                                                            <ColumnDefinition Width="70"></ColumnDefinition>
-                                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                            <ColumnDefinition Width="70"></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
+                                                    <GroupBox Padding="8" materialDesign:ElevationAssist.Elevation="Dp6" Style="{StaticResource MaterialDesignCardGroupBox}" Margin="10">
+                                                        <GroupBox.Header >
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <materialDesign:PackIcon Foreground="White" Kind="Wrench" />
+                                                                <TextBlock Foreground="White"  Margin="8,0,0,0" Text="MIT" />
 
-                                                        <!-- X坐标 -->
-                                                        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">X(mm)：</TextBlock>
-                                                            <Button Name="XDecreaseButton"
+                                                            </StackPanel>
+                                                        </GroupBox.Header>
+                                                        <Grid Margin="40 30 20 20">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                                <RowDefinition></RowDefinition>
+                                                            </Grid.RowDefinitions>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- X坐标 -->
+                                                            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">X(mm)：</TextBlock>
+                                                                <Button Name="XDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding XDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="XTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="XTextBox" Width="400"
                      Text="{Binding StraightLineX, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="XIncreaseButton"
+                                                                <Button Name="XIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding XIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- Y坐标 -->
-                                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Y(mm)：</TextBlock>
-                                                            <Button Name="YDecreaseButton"
+                                                            <!-- Y坐标 -->
+                                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Y(mm)：</TextBlock>
+                                                                <Button Name="YDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding YDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="YTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="YTextBox" Width="400"
                      Text="{Binding StraightLineY, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="YIncreaseButton"
+                                                                <Button Name="YIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding YIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- Z坐标 -->
-                                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Z(mm)：</TextBlock>
-                                                            <Button Name="ZDecreaseButton"
+                                                            <!-- Z坐标 -->
+                                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 10 0">Z(mm)：</TextBlock>
+                                                                <Button Name="ZDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding ZDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="ZTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="ZTextBox" Width="400"
                      Text="{Binding StraightLineZ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="ZIncreaseButton"
+                                                                <Button Name="ZIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding ZIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- RX角度 -->
-                                                        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RX(°)：</TextBlock>
-                                                            <Button Name="RxDecreaseButton"
+                                                            <!-- RX角度 -->
+                                                            <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RX(°)：</TextBlock>
+                                                                <Button Name="RxDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RxDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="RxTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="RxTextBox" Width="400"
                      Text="{Binding StraightLineRx, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="RxIncreaseButton"
+                                                                <Button Name="RxIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RxIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- RY角度 -->
-                                                        <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RY(°)：</TextBlock>
-                                                            <Button Name="RyDecreaseButton"
+                                                            <!-- RY角度 -->
+                                                            <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RY(°)：</TextBlock>
+                                                                <Button Name="RyDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RyDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="RyTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="RyTextBox" Width="400"
                      Text="{Binding StraightLineRy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="RyIncreaseButton"
+                                                                <Button Name="RyIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RyIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- RZ角度 -->
-                                                        <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
-                                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RZ(°)：</TextBlock>
-                                                            <Button Name="RzDecreaseButton"
+                                                            <!-- RZ角度 -->
+                                                            <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="6" HorizontalAlignment="Left" Margin="0 20">
+                                                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 30 0">RZ(°)：</TextBlock>
+                                                                <Button Name="RzDecreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RzDecreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
-                                                            </Button>
-                                                            <TextBox Name="RzTextBox" Width="400"
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Minus" />
+                                                                </Button>
+                                                                <TextBox Name="RzTextBox" Width="400"
                      Text="{Binding StraightLineRz, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="0.000"/>
-                                                            <Button Name="RzIncreaseButton"
+                                                                <Button Name="RzIncreaseButton"
                     Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
                     Margin="0 0 10 0"
                     Command="{Binding RzIncreaseCommand}">
-                                                                <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
-                                                            </Button>
-                                                        </StackPanel>
+                                                                    <materialDesign:PackIcon Width="32" Height="32" Kind="Plus" />
+                                                                </Button>
+                                                            </StackPanel>
 
-                                                        <!-- 底部按钮 -->
-                                                        <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center">
-                                                            <Button Name="StraightLineResetToZeroButton"
+                                                            <!-- 底部按钮 -->
+                                                            <StackPanel Grid.Row="6" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                                <Button Name="StraightLineResetToZeroButton"
                     Width="300" Height="50" 
                     HorizontalAlignment="Center" VerticalAlignment="Center" 
                     Margin="0 0 30 0"
                     Command="{Binding StraightLineResetToZeroCommand}">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <materialDesign:PackIcon Kind="ChartLineVariant" Margin="0 0 8 0" />
-                                                                    <TextBlock Text="回零" />
-                                                                </StackPanel>
-                                                            </Button>
-                                                            <Button Name="StraightLineEditButton"
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <materialDesign:PackIcon Kind="ChartLineVariant" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="回零" />
+                                                                    </StackPanel>
+                                                                </Button>
+                                                                <Button Name="StraightLineEditButton"
                     Width="300" Height="50" 
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Command="{Binding StraightLineEditCommand}">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
-                                                                    <TextBlock Text="编辑" />
-                                                                </StackPanel>
-                                                            </Button>
-                                                        </StackPanel>
-                                                    </Grid>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <materialDesign:PackIcon Kind="LinkEdit" Margin="0 0 8 0" />
+                                                                        <TextBlock Text="编辑" />
+                                                                    </StackPanel>
+                                                                </Button>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </GroupBox>
                                                 </StackPanel>
 
                                             </Grid>
@@ -1341,8 +1352,8 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
 
                                                 <TextBlock Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="23" Margin="73,0,0,0" Grid.ColumnSpan="2" >示例器助力等级:</TextBlock>
 
-                                                <materialDesign:NumericUpDown Grid.Row="4" Width="130"
-                                        Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Minimum="1" Maximum="10"
+                                                <materialDesign:NumericUpDown Grid.Row="4" Width="130" Maximum="10"
+                                        Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Minimum="1" 
                                         Style="{StaticResource MaterialDesignOutlinedNumericUpDown}"  Value="{Binding AssistanceLevel,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"   Margin="301,0,0,0" >
                                                     <materialDesign:NumericUpDown.IncreaseContent>
                                                         <materialDesign:PackIcon Kind="PlusCircle" />
@@ -1396,18 +1407,18 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" />-->
                             </ScrollViewer>
                         </TabItem>
                         <TabItem
-      Header="参数设置">
+      Header="参数设置   ">
                             <uc:ParameterControl/>
                         </TabItem>
                         <TabItem
-      Header="电机设置">
+      Header="电机设置   ">
                             <uc:MotorConfiguration/>
                         </TabItem>
 
                     </TabControl>
                 </materialDesign:Card>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 160" Click="Button_Click_1">
-                    <StackPanel Orientation="Horizontal">
+                <Button Width="120" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 170" Click="Button_Click_1" >
+                    <StackPanel Orientation="Horizontal" >
                         <materialDesign:PackIcon
 Kind="Bookshelf" 
 Margin="0 0 8 0" />
@@ -1415,8 +1426,8 @@ Margin="0 0 8 0" />
 Text="轨迹库" />
                     </StackPanel>
                 </Button>
-                <Button Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0 0 0 80" Click="Button_Click_2">关节状态</Button>
-                <Button x:Name="btnUpdate" Width="100" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnUpdate_Click">版本升级</Button>
+                <Button Width="120" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 90" Click="Button_Click_2">关节状态</Button>
+                <Button x:Name="btnUpdate" Width="120" Height="50" Background="Wheat" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 0 0 10" Click="btnUpdate_Click">版本升级</Button>
             </Grid>
 
             <Grid Grid.Column="1" >
@@ -1510,13 +1521,13 @@ Style="{StaticResource MaterialDesignRaisedButton}" Click="btnSet_Click">
 
                 <ColumnDefinition Width="50"></ColumnDefinition>
                 <ColumnDefinition Width="50"></ColumnDefinition>
-                <ColumnDefinition Width="50"></ColumnDefinition>
-                <ColumnDefinition Width="50"></ColumnDefinition>
-                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
+                <ColumnDefinition Width="45"></ColumnDefinition>
                 <ColumnDefinition Width="120"></ColumnDefinition>
                 <ColumnDefinition Width="120"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock  FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center">V1.1.0.250307beta</TextBlock>
+            <TextBlock  FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center">V1.0</TextBlock>
             <TextBlock Grid.Column="3" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center">控制：</TextBlock>
             <TextBlock Grid.Column="4" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center">CAN</TextBlock>
 

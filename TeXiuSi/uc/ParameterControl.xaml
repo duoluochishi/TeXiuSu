@@ -58,7 +58,7 @@
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
@@ -71,7 +71,7 @@
                         <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 关节序号:</TextBlock>
                         <ComboBox
 x:Name="Outlined"  Grid.Column="2"
-Width="150" HorizontalAlignment="Center"
+Width="120" HorizontalAlignment="Center"
 Style="{StaticResource MaterialDesignOutlinedComboBox}" 
 ItemsSource="{Binding ConnectNodeModels}"
 DisplayMemberPath="Name"
@@ -79,11 +79,11 @@ SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyCh
 />
                         <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" >位置范围:</TextBlock>
                         <Slider Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
- Width="330" Maximum="180"  Value="{Binding MaximumAngle, Mode=TwoWay}" Minimum="0"/>
+ Width="300" Maximum="180"  Value="{Binding MaximumAngle, Mode=TwoWay}" Minimum="0"/>
                         <xctk:DecimalUpDown 
                                 Grid.Row="1"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
                                 Grid.Column="2" 
-                                Width="150" Value="{Binding MaximumAngle, Mode=TwoWay}" 
+                                Width="120" Value="{Binding MaximumAngle, Mode=TwoWay}" 
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.1" Minimum="0" Maximum="180"
@@ -91,12 +91,12 @@ SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyCh
                                 />
                         <TextBlock  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 速度范围:</TextBlock>
                         <Slider Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
- Maximum="10" Width="330"  Value="{Binding MinimumAngle, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
+ Maximum="10" Width="300"  Value="{Binding MinimumAngle, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <xctk:DecimalUpDown 
                                 Grid.Row="2" 
                                 Grid.Column="2" 
-                                Width="150" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
+                                Width="120" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center" Value="{Binding MinimumAngle, Mode=TwoWay}"
                                 Increment="0.1" Minimum="0" Maximum="10"
@@ -107,22 +107,22 @@ SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyCh
                         <TextBlock 
         Text="°" Grid.Row="1" Grid.Column="3"
         VerticalAlignment="Center" 
-        HorizontalAlignment="Left" FontSize="18"
+        HorizontalAlignment="Left" FontSize="12"
         IsHitTestVisible="False" />
 
                         <TextBlock 
 Text="rad/s" Grid.Row="2" Grid.Column="3"
 VerticalAlignment="Center" 
-HorizontalAlignment="Left" FontSize="18"
+HorizontalAlignment="Left" FontSize="12"
 IsHitTestVisible="False" />
                         <TextBlock  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大速度:</TextBlock>
                         <Slider Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="3.2" Width="330"  Value="{Binding MinimumSpeed, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
+Maximum="3.2" Width="300"  Value="{Binding MinimumSpeed, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
 
                         <xctk:DecimalUpDown 
                                 Grid.Row="3" 
                                 Grid.Column="2"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
-                                Width="150" Value="{Binding MinimumSpeed, Mode=TwoWay}"
+                                Width="120" Value="{Binding MinimumSpeed, Mode=TwoWay}"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.01" Minimum="0" Maximum="3.2"
@@ -136,11 +136,11 @@ HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
                         <TextBlock  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 最大加速度:</TextBlock>
                         <Slider Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-Maximum="10" Width="330"  Value="{Binding MinimumAcceleration, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
+Maximum="10" Width="300"  Value="{Binding MinimumAcceleration, Mode=TwoWay}" Minimum="0" IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"/>
                         <xctk:DecimalUpDown 
                                 Grid.Row="4"  IsEnabled="{Binding IsEditing,UpdateSourceTrigger=PropertyChanged}"
                                 Grid.Column="2" 
-                                Width="150" Value="{Binding MinimumAcceleration, Mode=TwoWay}"
+                                Width="120" Value="{Binding MinimumAcceleration, Mode=TwoWay}"
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"
                                 Increment="0.01" Minimum="0" Maximum="10"
@@ -365,9 +365,9 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
   Style="{StaticResource MaterialDesignCardGroupBox}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.6*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
-                            <ColumnDefinition Width="0.4*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
@@ -524,7 +524,7 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
                     </Grid.RowDefinitions>
                     <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" Margin="0 0 20 0"> 运动信息:</TextBlock>
                     <Button x:Name="btnsportInfo" Width="280" Height="50" Grid.Column="1"
-Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewMotionInformationCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}" Click="btnsportInfo_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="TextBoxOutline" 
@@ -536,7 +536,7 @@ Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewMotion
                     <TextBlock  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="23" > 状态信息:</TextBlock>
 
                     <Button x:Name="btnConditionInfo" Grid.Row="1" Width="280" Height="50" Grid.Column="1"
-Style="{StaticResource MaterialDesignRaisedButton}" Command="{Binding ViewStatusInformationCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}" Click="btnConditionInfo_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="TextBoxOutline" 

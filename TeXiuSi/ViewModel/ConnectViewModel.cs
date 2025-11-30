@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.PCAN;
 using static TeXiuSi.ViewModel.MainViewModel;
@@ -19,17 +20,32 @@ namespace TeXiuSi.ViewModel
 
 
         private ObservableCollection<ConnectNodeModel> _observableCollectionSimple;
-        public ObservableCollection<ConnectNodeModel> observableCollectionSimple
+        public ObservableCollection<ConnectNodeModel> ObservableCollectionSimple
         {
             get { return _observableCollectionSimple; }
-            set { _observableCollectionSimple = value; OnPropertyChanged(nameof(observableCollectionSimple)); }
+            set { _observableCollectionSimple = value; OnPropertyChanged(); }
+
         }
         // 2. 用于绑定 ComboBox 选中项的属性
         private ConnectNodeModel _selectedNode;
         public ConnectNodeModel SelectedNode
         {
             get { return _selectedNode; }
-            set { _selectedNode = value; OnPropertyChanged(nameof(SelectedNode)); }
+            set
+            {
+                _selectedNode = value; OnPropertyChanged(nameof(SelectedNode));
+
+                // Get the handle fromt he text being shown
+                //
+               var strTemp = _selectedNode.Name;
+                strTemp = strTemp.Substring(strTemp.IndexOf('(') + 1, 3);
+
+                strTemp = strTemp.Replace('h', ' ').Trim(' ');
+
+                // Determines if the handle belong to a No Plug&Play hardware 
+                //
+                DeviceOperation.Instance.m_PcanHandle =System.Convert.ToUInt16(strTemp, 16);
+            }
         }
 
 
@@ -107,11 +123,7 @@ namespace TeXiuSi.ViewModel
         {
             //初始化
             _observableCollectionSimple = new ObservableCollection<ConnectNodeModel>();
-            DeviceOperation.Instance._pANHelper = new PANHelper();
-            _observableCollectionSimple =
-            new ObservableCollection<ConnectNodeModel>(
-                DeviceOperation.Instance._pANHelper.SetCanList().OrderBy(node => node.Name) // 假设         ConnectNodeModel 有一个 Name 属性
-            );
+
 
             observableCollectionIOModel = new ObservableCollection<IOModel> {
 
@@ -164,17 +176,53 @@ namespace TeXiuSi.ViewModel
                  new InterruptModel() { Type = 0, Name = "0278", Value = value12 },
                  new InterruptModel() { Type = 0, Name = "0280", Value = value15 },
             };
-            SelectedTPCANBaudrate = TPCANBaudrates[0];
-            SelectedTPCANType = TPCANTypes[0];
+
+            TPCANBaudrates = new ObservableCollection<EnumBindingItem<TPCANBaudrate>>();
+            foreach (TPCANBaudrate mode in Enum.GetValues(typeof(TPCANBaudrate)))
+            {
+                TPCANBaudrates.Add(new EnumBindingItem<TPCANBaudrate>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (TPCANBaudrates.Count > 0)
+                SelectedTPCANBaudrate = TPCANBaudrates[0];
+
+            TPCANTypes = new ObservableCollection<EnumBindingItem<TPCANType>>();
+            foreach (TPCANType mode in Enum.GetValues(typeof(TPCANType)))
+            {
+                TPCANTypes.Add(new EnumBindingItem<TPCANType>
+                {
+                    DisplayName = mode.GetDescription(),
+                    Value = mode
+                });
+            }
+            if (TPCANTypes.Count > 0)
+                SelectedTPCANType = TPCANTypes[0];
+
             SelectedIOModel = observableCollectionIOModel[0];
             SelectedInterruptModel = observableCollectionInterruptModel[0];
             ConnectCommand = new RelayCommand(Connect);
+
+            DeviceOperation.Instance._pANHelper = new PANHelper();
+            ObservableCollectionSimple =
+            new ObservableCollection<ConnectNodeModel>(
+                DeviceOperation.Instance._pANHelper.SetCanList().OrderBy(node => node.Name) // 假设         ConnectNodeModel 有一个 Name 属性
+            );
+            if (ObservableCollectionSimple != null && ObservableCollectionSimple.Count > 0)
+            {
+                SelectedNode = ObservableCollectionSimple[0];
+            }
         }
 
         [RelayCommand]
         private void Connect()
         {
-            DeviceOperation.Instance.Connect(SelectedIOModel.Value, SelectedInterruptModel.Value);
+
+            DeviceOperation.Instance.Connect(SelectedIOModel.Value, SelectedInterruptModel.Value, SelectedTPCANBaudrate.Value, SelectedTPCANType.Value);
         }
+
+
     }
 }

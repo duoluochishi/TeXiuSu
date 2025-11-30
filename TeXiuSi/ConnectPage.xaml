@@ -13,65 +13,59 @@
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <materialDesign:Card >
-            <TabControl 
-    materialDesign:ColorZoneAssist.Mode="PrimaryMid"
-    Style="{StaticResource MaterialDesignFilledTabControl}">
-                <TabItem
-      Header="CAN">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> CAN：</TextBlock>
-                        <ComboBox Grid.Column="1"
-Width="256" Height="30"
 
-ItemsSource="{Binding observableCollectionSimple}"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> CAN：</TextBlock>
+                <ComboBox Grid.Column="1"
+Width="256" Height="30"
+ItemsSource="{Binding ObservableCollectionSimple}"
 DisplayMemberPath="Name"
-SelectedItem="{Binding SelectedNode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                        <TextBlock Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Baudrate：</TextBlock>
-                        <ComboBox Grid.Row="1" Grid.Column="1"
+SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+ />
+                <TextBlock Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Baudrate：</TextBlock>
+                <ComboBox Grid.Row="1" Grid.Column="1"
 Width="256" Height="30"
-
 ItemsSource="{Binding TPCANBaudrates}"
-DisplayMemberPath="Name"
+DisplayMemberPath="DisplayName"
 SelectedItem="{Binding SelectedTPCANBaudrate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                        <TextBlock Grid.Row="2"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Type：</TextBlock>
-                        <ComboBox Grid.Row="2" Grid.Column="1"
+ />
+                <TextBlock Grid.Row="2"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Type：</TextBlock>
+                <ComboBox Grid.Row="2" Grid.Column="1"
 Width="256" Height="30"
 
 ItemsSource="{Binding TPCANTypes}"
-DisplayMemberPath="Name"
+DisplayMemberPath="DisplayName"
 SelectedItem="{Binding SelectedTPCANType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                        <TextBlock Grid.Row="3"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> I/O：</TextBlock>
-                        <ComboBox Grid.Row="3" Grid.Column="1"
+/>
+                <TextBlock Grid.Row="3"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> I/O：</TextBlock>
+                <ComboBox Grid.Row="3" Grid.Column="1"
 Width="256" Height="30"
 
 ItemsSource="{Binding observableCollectionIOModel}"
 DisplayMemberPath="Name"
 SelectedItem="{Binding SelectedIOModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                        <TextBlock Grid.Row="4"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Interrupt：</TextBlock>
-                        <ComboBox Grid.Row="4" Grid.Column="1"
+/>
+                <TextBlock Grid.Row="4"  VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Margin="0 0 10 0"> Interrupt：</TextBlock>
+                <ComboBox Grid.Row="4" Grid.Column="1"
 Width="256" Height="30"
 
 ItemsSource="{Binding observableCollectionInterruptModel}"
 DisplayMemberPath="Name"
 SelectedItem="{Binding SelectedInterruptModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-                    </Grid>
-                </TabItem>
+ />
+            </Grid>
+            <!--</TabItem>
                 <TabItem Visibility="Collapsed"
       Header="Tcp">
                     <Grid>
@@ -85,8 +79,8 @@ Width="256" Height="30"
 
 Style="{StaticResource MaterialDesignOutlinedComboBox}" />
                     </Grid>
-                </TabItem>
-            </TabControl>
+                </TabItem>-->
+            <!--</TabControl>-->
         </materialDesign:Card>
         <Button Grid.Row="1" Width="70" Height="30" HorizontalAlignment="Right" 
                 Margin="0 0 10 0" Command="{Binding ConnectCommand}" >连接</Button>

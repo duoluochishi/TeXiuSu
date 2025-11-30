@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
@@ -253,7 +254,19 @@ namespace TeXiuSi
             return data;
             //_usbHw.FdcanFrameSend(data, id);
         }
+        /// <summary>
+        /// 刷新获取参数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cmd"></param>
+        public byte[] ControlRefreshCmd(byte Id, byte cmd, byte jicunInfo)
+        {
+            int info = 0x7FF;
+            byte[] data = { (byte)info, 0x00, cmd, jicunInfo, 0x00, 0x00, 0x00, 0x00 };
 
+            return data;
+            //_usbHw.FdcanFrameSend(data, id);
+        }
         /// <summary>
         /// 写入参数模式
         /// </summary>
@@ -565,13 +578,15 @@ namespace TeXiuSi
         /// </summary>
         /// <param name="modelsNames"></param>
         /// <returns></returns>
-        public Model3DGroup Initialize_Environment(List<string> modelsNames)
+        public Model3DGroup Initialize_Environment(List<string> modelsNames, out List<Joint> jointsInfo)
         {
+            var joints = new List<Joint>();
             try
             {
                 //Helix Toolkit提供的类，用于加载各种格式的3D模型文件，这里用来加载.stl文件。
                 ModelImporter import = new ModelImporter();
-                DeviceOperation.Instance.joints = new List<Joint>();
+                //DeviceOperation.Instance.joints = new List<Joint>();
+
 
                 foreach (string modelName in modelsNames)
                 {
@@ -589,7 +604,7 @@ namespace TeXiuSi
                     model.Material = materialGroup;
                     model.BackMaterial = materialGroup;
                     //这是一个自定义的辅助类，用于封装每个关节（即机械臂的每个可动部件）。它不仅包含Model3D（3D模型），还存储了该关节的旋转角度、旋转轴、旋转中心点等重要信息
-                    DeviceOperation.Instance.joints.Add(new Joint(link)
+                    joints.Add(new Joint(link)
                     {
 
                         Type = 0,
@@ -598,12 +613,12 @@ namespace TeXiuSi
                     });
                 }
 
-                RA.Children.Add(DeviceOperation.Instance.joints[0].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[1].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[2].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[3].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[4].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[5].model);
+                RA.Children.Add(joints[0].model);
+                RA.Children.Add(joints[1].model);
+                RA.Children.Add(joints[2].model);
+                RA.Children.Add(joints[3].model);
+                RA.Children.Add(joints[4].model);
+                RA.Children.Add(joints[5].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[6].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[7].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[8].model);
@@ -613,180 +628,183 @@ namespace TeXiuSi
                 //RA.Children.Add(DeviceOperation.Instance.joints[11].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[12].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[13].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[14].model);
+                RA.Children.Add(joints[14].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[15].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[16].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[17].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[18].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[19].model);
+                RA.Children.Add(joints[18].model);
+                RA.Children.Add(joints[19].model);
 #endif
 
 #if IRB6700
                 Color cableColor = Colors.DarkSlateGray;
-                changeModelColor(DeviceOperation.Instance.joints[6], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[7], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[8], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[9], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[10], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[11], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[12], cableColor);
-                changeModelColor(DeviceOperation.Instance.joints[13], cableColor);
+                changeModelColor(joints[6], cableColor);
+                changeModelColor(joints[7], cableColor);
+                changeModelColor(joints[8], cableColor);
+                changeModelColor(joints[9], cableColor);
+                changeModelColor(joints[10], cableColor);
+                changeModelColor(joints[11], cableColor);
+                changeModelColor(joints[12], cableColor);
+                changeModelColor(joints[13], cableColor);
 
-                changeModelColor(DeviceOperation.Instance.joints[14], Colors.Gray);
+                changeModelColor(joints[14], Colors.Gray);
 
-                changeModelColor(DeviceOperation.Instance.joints[15], Colors.Red);
-                changeModelColor(DeviceOperation.Instance.joints[16], Colors.Red);
-                changeModelColor(DeviceOperation.Instance.joints[17], Colors.Red);
+                changeModelColor(joints[15], Colors.Red);
+                changeModelColor(joints[16], Colors.Red);
+                changeModelColor(joints[17], Colors.Red);
 
-                changeModelColor(DeviceOperation.Instance.joints[18], Colors.Gray);
-                changeModelColor(DeviceOperation.Instance.joints[19], Colors.Gray);
+                changeModelColor(joints[18], Colors.Gray);
+                changeModelColor(joints[19], Colors.Gray);
                 //关节的运动范围
-                DeviceOperation.Instance.joints[0].angleMin = -180;
-                DeviceOperation.Instance.joints[0].angleMax = 180;
+                joints[0].angleMin = -180;
+                joints[0].angleMax = 180;
                 //旋转轴的方向矢量。您这里是 $(1, 0, 1)$，即 $Z$ 轴。
-                DeviceOperation.Instance.joints[0].rotAxisX = 0;
-                DeviceOperation.Instance.joints[0].rotAxisY = 0;
-                DeviceOperation.Instance.joints[0].rotAxisZ = 1;
-                DeviceOperation.Instance.joints[0].rotPointX = 0;
-                DeviceOperation.Instance.joints[0].rotPointY = 0;
-                DeviceOperation.Instance.joints[0].rotPointZ = 0;
+                joints[0].rotAxisX = 0;
+                joints[0].rotAxisY = 0;
+                joints[0].rotAxisZ = 1;
+                joints[0].rotPointX = 0;
+                joints[0].rotPointY = 0;
+                joints[0].rotPointZ = 0;
                 //关节的运动范围
-                DeviceOperation.Instance.joints[1].angleMin = -100;
-                DeviceOperation.Instance.joints[1].angleMax = 60;
+                joints[1].angleMin = -100;
+                joints[1].angleMax = 60;
                 //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                DeviceOperation.Instance.joints[1].rotAxisX = 0;
-                DeviceOperation.Instance.joints[1].rotAxisY = 1;
-                DeviceOperation.Instance.joints[1].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[1].rotPointX = 348;
-                DeviceOperation.Instance.joints[1].rotPointY = -243;
-                DeviceOperation.Instance.joints[1].rotPointZ = 775;
+                joints[1].rotAxisX = 0;
+                joints[1].rotAxisY = 1;
+                joints[1].rotAxisZ = 0;
+                joints[1].rotPointX = 348;
+                joints[1].rotPointY = -243;
+                joints[1].rotPointZ = 775;
                 //关节的运动范围
-                DeviceOperation.Instance.joints[2].angleMin = -90;
-                DeviceOperation.Instance.joints[2].angleMax = 90;
+                joints[2].angleMin = -90;
+                joints[2].angleMax = 90;
                 //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                DeviceOperation.Instance.joints[2].rotAxisX = 0;
-                DeviceOperation.Instance.joints[2].rotAxisY = 1;
-                DeviceOperation.Instance.joints[2].rotAxisZ = 0;
+                joints[2].rotAxisX = 0;
+                joints[2].rotAxisY = 1;
+                joints[2].rotAxisZ = 0;
                 //旋转轴上的一点（定义旋转轴的位置）。
-                DeviceOperation.Instance.joints[2].rotPointX = 347;
-                DeviceOperation.Instance.joints[2].rotPointY = -376;
-                DeviceOperation.Instance.joints[2].rotPointZ = 1923;
+                joints[2].rotPointX = 347;
+                joints[2].rotPointY = -376;
+                joints[2].rotPointZ = 1923;
 
                 //关节的运动范围
-                DeviceOperation.Instance.joints[3].angleMin = -180;
-                DeviceOperation.Instance.joints[3].angleMax = 180;
+                joints[3].angleMin = -180;
+                joints[3].angleMax = 180;
                 //旋转轴的方向矢量。您这里是 $(1, 0, 0)$，即 $X$ 轴。
-                DeviceOperation.Instance.joints[3].rotAxisX = 1;
-                DeviceOperation.Instance.joints[3].rotAxisY = 0;
-                DeviceOperation.Instance.joints[3].rotAxisZ = 0;
+                joints[3].rotAxisX = 1;
+                joints[3].rotAxisY = 0;
+                joints[3].rotAxisZ = 0;
                 //旋转轴上的一点（定义旋转轴的位置）。
-                DeviceOperation.Instance.joints[3].rotPointX = 60;
-                DeviceOperation.Instance.joints[3].rotPointY = 0;
-                DeviceOperation.Instance.joints[3].rotPointZ = 2125;
+                joints[3].rotPointX = 60;
+                joints[3].rotPointY = 0;
+                joints[3].rotPointZ = 2125;
 
                 //关节的运动范围
-                DeviceOperation.Instance.joints[4].angleMin = -115;
-                DeviceOperation.Instance.joints[4].angleMax = 115;
+                joints[4].angleMin = -115;
+                joints[4].angleMax = 115;
                 //旋转轴的方向矢量。您这里是 $(0, 1, 0)$，即 $Y$ 轴。
-                DeviceOperation.Instance.joints[4].rotAxisX = 0;
-                DeviceOperation.Instance.joints[4].rotAxisY = 1;
-                DeviceOperation.Instance.joints[4].rotAxisZ = 0;
+                joints[4].rotAxisX = 0;
+                joints[4].rotAxisY = 1;
+                joints[4].rotAxisZ = 0;
                 //旋转轴上的一点（定义旋转轴的位置）。
-                DeviceOperation.Instance.joints[4].rotPointX = 1815;
-                DeviceOperation.Instance.joints[4].rotPointY = 0;
-                DeviceOperation.Instance.joints[4].rotPointZ = 2125;
+                joints[4].rotPointX = 1815;
+                joints[4].rotPointY = 0;
+                joints[4].rotPointZ = 2125;
 
                 //关节的运动范围
-                DeviceOperation.Instance.joints[5].angleMin = -180;
-                DeviceOperation.Instance.joints[5].angleMax = 180;
+                joints[5].angleMin = -180;
+                joints[5].angleMax = 180;
                 //旋转轴的方向矢量。您这里是 $(1, 0, 0)$，即 $X$ 轴。
-                DeviceOperation.Instance.joints[5].rotAxisX = 1;
-                DeviceOperation.Instance.joints[5].rotAxisY = 0;
-                DeviceOperation.Instance.joints[5].rotAxisZ = 0;
+                joints[5].rotAxisX = 1;
+                joints[5].rotAxisY = 0;
+                joints[5].rotAxisZ = 0;
                 //旋转轴上的一点（定义旋转轴的位置）。
-                DeviceOperation.Instance.joints[5].rotPointX = 2008;
-                DeviceOperation.Instance.joints[5].rotPointY = 0;
-                DeviceOperation.Instance.joints[5].rotPointZ = 2125;
+                joints[5].rotPointX = 2008;
+                joints[5].rotPointY = 0;
+                joints[5].rotPointZ = 2125;
 
 #else
-                changeModelColor(DeviceOperation.Instance.joints[6], Colors.Red);
-                changeModelColor(DeviceOperation.Instance.joints[7], Colors.Black);
-                changeModelColor(DeviceOperation.Instance.joints[8], Colors.Black);
-                changeModelColor(DeviceOperation.Instance.joints[9], Colors.Black);
-                changeModelColor(DeviceOperation.Instance.joints[10], Colors.Gray);
+                changeModelColor(joints[6], Colors.Red);
+                changeModelColor(joints[7], Colors.Black);
+                changeModelColor(joints[8], Colors.Black);
+                changeModelColor(joints[9], Colors.Black);
+                changeModelColor(joints[10], Colors.Gray);
 
-                RA.Children.Add(DeviceOperation.Instance.joints[0].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[1].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[2].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[3].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[4].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[5].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[6].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[7].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[8].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[9].model);
-                RA.Children.Add(DeviceOperation.Instance.joints[10].model);
+                RA.Children.Add(joints[0].model);
+                RA.Children.Add(joints[1].model);
+                RA.Children.Add(joints[2].model);
+                RA.Children.Add(joints[3].model);
+                RA.Children.Add(joints[4].model);
+                RA.Children.Add(joints[5].model);
+                RA.Children.Add(joints[6].model);
+                RA.Children.Add(joints[7].model);
+                RA.Children.Add(joints[8].model);
+                RA.Children.Add(joints[9].model);
+                RA.Children.Add(joints[10].model);
                 
-                DeviceOperation.Instance.joints[0].angleMin = -180;
-                DeviceOperation.Instance.joints[0].angleMax = 180;
-                DeviceOperation.Instance.joints[0].rotAxisX = 0;
-                DeviceOperation.Instance.joints[0].rotAxisY = 0;
-                DeviceOperation.Instance.joints[0].rotAxisZ = 1;
-                DeviceOperation.Instance.joints[0].rotPointX = 0;
-                DeviceOperation.Instance.joints[0].rotPointY = 0;
-                DeviceOperation.Instance.joints[0].rotPointZ = 0;
+                joints[0].angleMin = -180;
+                joints[0].angleMax = 180;
+                joints[0].rotAxisX = 0;
+                joints[0].rotAxisY = 0;
+                joints[0].rotAxisZ = 1;
+                joints[0].rotPointX = 0;
+                joints[0].rotPointY = 0;
+                joints[0].rotPointZ = 0;
 
-                DeviceOperation.Instance.joints[1].angleMin = -100;
-                DeviceOperation.Instance.joints[1].angleMax = 60;
-                DeviceOperation.Instance.joints[1].rotAxisX = 0;
-                DeviceOperation.Instance.joints[1].rotAxisY = 1;
-                DeviceOperation.Instance.joints[1].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[1].rotPointX = 175; 
-                DeviceOperation.Instance.joints[1].rotPointY = -200;
-                DeviceOperation.Instance.joints[1].rotPointZ = 500;
+                joints[1].angleMin = -100;
+                joints[1].angleMax = 60;
+                joints[1].rotAxisX = 0;
+                joints[1].rotAxisY = 1;
+                joints[1].rotAxisZ = 0;
+                joints[1].rotPointX = 175; 
+                joints[1].rotPointY = -200;
+                joints[1].rotPointZ = 500;
 
-                DeviceOperation.Instance.joints[2].angleMin = -90;
-                DeviceOperation.Instance.joints[2].angleMax = 90;
-                DeviceOperation.Instance.joints[2].rotAxisX = 0;
-                DeviceOperation.Instance.joints[2].rotAxisY = 1;
-                DeviceOperation.Instance.joints[2].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[2].rotPointX = 190;
-                DeviceOperation.Instance.joints[2].rotPointY = -700;
-                DeviceOperation.Instance.joints[2].rotPointZ = 1595;
+                joints[2].angleMin = -90;
+                joints[2].angleMax = 90;
+                joints[2].rotAxisX = 0;
+                joints[2].rotAxisY = 1;
+                joints[2].rotAxisZ = 0;
+                joints[2].rotPointX = 190;
+                joints[2].rotPointY = -700;
+                joints[2].rotPointZ = 1595;
 
-                DeviceOperation.Instance.joints[3].angleMin = -180;
-                DeviceOperation.Instance.joints[3].angleMax = 180;
-                DeviceOperation.Instance.joints[3].rotAxisX = 1;
-                DeviceOperation.Instance.joints[3].rotAxisY = 0;
-                DeviceOperation.Instance.joints[3].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[3].rotPointX = 400;
-                DeviceOperation.Instance.joints[3].rotPointY = 0;
-                DeviceOperation.Instance.joints[3].rotPointZ = 1765;
+                joints[3].angleMin = -180;
+                joints[3].angleMax = 180;
+                joints[3].rotAxisX = 1;
+                joints[3].rotAxisY = 0;
+                joints[3].rotAxisZ = 0;
+                joints[3].rotPointX = 400;
+                joints[3].rotPointY = 0;
+                joints[3].rotPointZ = 1765;
 
-                DeviceOperation.Instance.joints[4].angleMin = -115;
-                DeviceOperation.Instance.joints[4].angleMax = 115;
-                DeviceOperation.Instance.joints[4].rotAxisX = 0;
-                DeviceOperation.Instance.joints[4].rotAxisY = 1;
-                DeviceOperation.Instance.joints[4].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[4].rotPointX = 1405;
-                DeviceOperation.Instance.joints[4].rotPointY = 50;
-                DeviceOperation.Instance.joints[4].rotPointZ = 1765;
+                joints[4].angleMin = -115;
+                joints[4].angleMax = 115;
+                joints[4].rotAxisX = 0;
+                joints[4].rotAxisY = 1;
+                joints[4].rotAxisZ = 0;
+                joints[4].rotPointX = 1405;
+                joints[4].rotPointY = 50;
+                joints[4].rotPointZ = 1765;
 
-                DeviceOperation.Instance.joints[5].angleMin = -180;
-                DeviceOperation.Instance.joints[5].angleMax = 180;
-                DeviceOperation.Instance.joints[5].rotAxisX = 1;
-                DeviceOperation.Instance.joints[5].rotAxisY = 0;
-                DeviceOperation.Instance.joints[5].rotAxisZ = 0;
-                DeviceOperation.Instance.joints[5].rotPointX = 1405;
-                DeviceOperation.Instance.joints[5].rotPointY = 0;
-                DeviceOperation.Instance.joints[5].rotPointZ = 1765;
+                joints[5].angleMin = -180;
+                joints[5].angleMax = 180;
+                joints[5].rotAxisX = 1;
+                joints[5].rotAxisY = 0;
+                joints[5].rotAxisZ = 0;
+                joints[5].rotPointX = 1405;
+                joints[5].rotPointY = 0;
+                joints[5].rotPointZ = 1765;
 #endif
+
 
             }
             catch (Exception e)
             {
                 Log.Error("Exception Error:" + e.StackTrace);
             }
+
+            jointsInfo = joints;
             return RA;
         }
 
@@ -882,7 +900,7 @@ namespace TeXiuSi
         /// <param name="canId">完整的 CAN ID (uint 类型)</param>
         /// <param name="canIdL">输出：CAN ID 的低字节 (D[0])</param>
         /// <param name="canIdH">输出：CAN ID 的高字节 (D[1])</param>
-        public  void SplitCanIdForLittleEndian(uint canId, out byte canIdL, out byte canIdH)
+        public void SplitCanIdForLittleEndian(uint canId, out byte canIdL, out byte canIdH)
         {
             // 1. 获取 CAN ID 的低 8 位 (Low Byte)
             // 使用 & 0xFF 掩码取出最低 8 位。
@@ -1014,7 +1032,7 @@ namespace TeXiuSi
                 case ControlFrame.PositionSpd:
                     //帧 ID 为设定的 CAN ID 值加上 0x100 的偏移 P_des：位置给定，浮点型，低位在前，高位在后 V_des：速度给定，浮点型，低位在前，高位在后
                     //此处发送命令的 CAN ID 是 0x100 + ID。速度给定是梯形加速度运行下最高速度的，即为匀速段的速度值。
-                    cANCommand.ID = ID + 0x100;
+                    cANCommand.ID = (uint)(ID + 0x100);
                     Buffer.BlockCopy(pBytes, 0, data, 0, 4); // 复制 P_des 到 data[0]..data[3]
                     Buffer.BlockCopy(vBytes, 0, data, 4, 4); // 复制 V_des 到 data[4]..data[7]
 
@@ -1022,7 +1040,7 @@ namespace TeXiuSi
                     break;
                 case ControlFrame.Spd:
                     //帧 ID 为设定的 CAN ID 值加上 0x200 的偏移 V_des：速度给定，浮点型，低位在前，高位在后此处发送命令的 CAN ID 是 0x200 + ID。
-                    cANCommand.ID = ID + 0x200;
+                    cANCommand.ID = (uint)(ID + 0x200);
 
                     Buffer.BlockCopy(vBytes, 0, data, 0, 4); // 复制 P_des 到 data[0]..data[3]
                     cANCommand.Data = data;
@@ -1033,7 +1051,7 @@ namespace TeXiuSi
                     //V_des：限速值，单位 rad/ s，放大 100 倍，类型为无符号 16 位，低位在前，高位在后， 范围为 0 - 10000，超过 10000 会限制在 10000，故对应的实际速度限定幅值为 0~100rad / s；
                     //I_des：扭矩电流限定标幺值，放大 10000 倍，类型为无符号 16 位，，低位在前，高位在 后，范围为 0 - 10000，超过 10000 会限制在 10000，对应的实际电流限定标幺幅值为 0 - 1.0
                     //电流标幺值：实际电流值除以最大相电流值。
-                    cANCommand.ID = ID + 0x300;
+                    cANCommand.ID = (uint)(ID + 0x300);
                     // 2. --- V_des (限速) 处理 ---
                     // a. 放大 100 倍并四舍五入
                     //    vValue 的范围是 0~10000

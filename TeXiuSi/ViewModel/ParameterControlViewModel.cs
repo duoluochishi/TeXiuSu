@@ -206,6 +206,7 @@ namespace TeXiuSi.ViewModel
         {
             #region Joint setting
             JointSettingEditorCommand = new RelayCommand(OnJointSettingEditor);
+            ConnectNodeModels = new ObservableCollection<Joint>();
 
             CancelCommand = new RelayCommand(CancleJoint);
 
@@ -217,7 +218,7 @@ namespace TeXiuSi.ViewModel
             {
                 if (opType==JointNode.NodelAll)
                 {
-                    return;
+                    break;
 
                 }
                 // 创建新的绑定项，并添加到集合中

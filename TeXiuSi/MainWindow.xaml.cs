@@ -325,7 +325,7 @@ namespace TeXiuSi
                 Model3DGroup models = ((Model3DGroup)pModel);
                 DeviceOperation.Instance._motorControl.oldSelectedModel = models.Children[0] as GeometryModel3D;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 DeviceOperation.Instance._motorControl.oldSelectedModel = (GeometryModel3D)pModel;
             }
@@ -816,7 +816,7 @@ namespace TeXiuSi
                 //reachingPoint = new Vector3D(Double.Parse(TbX.Text), Double.Parse(TbY.Text), Double.Parse(TbZ.Text));
                 //geom.Transform = new TranslateTransform3D(reachingPoint);
             }
-            catch (Exception exc)
+            catch (Exception)
             {
 
             }
@@ -1205,5 +1205,9 @@ namespace TeXiuSi
             }
         }
 
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            DeviceOperation.GetInstance().RefreshInfoEditorOfJoints(ControlPowModelOther.Refresh, Register.CTRL_MODE);
+        }
     }
 }
