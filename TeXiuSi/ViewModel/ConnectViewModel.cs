@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.PCAN;
@@ -17,6 +18,8 @@ namespace TeXiuSi.ViewModel
     {
 
         //private PANHelper _pANHelper;
+
+        public event EventHandler<EventArgs> StateInfoChange;
 
 
         private ObservableCollection<ConnectNodeModel> _observableCollectionSimple;
@@ -37,14 +40,14 @@ namespace TeXiuSi.ViewModel
 
                 // Get the handle fromt he text being shown
                 //
-               var strTemp = _selectedNode.Name;
+                var strTemp = _selectedNode.Name;
                 strTemp = strTemp.Substring(strTemp.IndexOf('(') + 1, 3);
 
                 strTemp = strTemp.Replace('h', ' ').Trim(' ');
 
                 // Determines if the handle belong to a No Plug&Play hardware 
                 //
-                DeviceOperation.Instance.m_PcanHandle =System.Convert.ToUInt16(strTemp, 16);
+                DeviceOperation.Instance.m_PcanHandle = System.Convert.ToUInt16(strTemp, 16);
             }
         }
 
@@ -220,7 +223,17 @@ namespace TeXiuSi.ViewModel
         private void Connect()
         {
 
-            DeviceOperation.Instance.Connect(SelectedIOModel.Value, SelectedInterruptModel.Value, SelectedTPCANBaudrate.Value, SelectedTPCANType.Value);
+            TPCANStatus tPCANStatus = DeviceOperation.Instance.Connect(SelectedIOModel.Value, SelectedInterruptModel.Value, SelectedTPCANBaudrate.Value, SelectedTPCANType.Value);
+
+            if (tPCANStatus == TPCANStatus.PCAN_ERROR_OK)
+            {
+                MessageBox.Show("连接成功！");
+                StateInfoChange?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                MessageBox.Show("连接失败！");
+            }
         }
 
 

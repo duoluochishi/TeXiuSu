@@ -151,7 +151,7 @@ Text="rand/s∧2" Grid.Row="4" Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left" Margin="0 0 0 0" FontSize="12"
 IsHitTestVisible="False" />
-                        
+
                         <Button  Grid.Row="5" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  Margin="205,0,0,0"
 Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding JointSettingEditorCommand}" Visibility="{Binding JointIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
@@ -200,16 +200,20 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding SaveComm
             <TabItem IsEnabled="{Binding IsEditing,Converter={StaticResource BooleanNegationConverter},UpdateSourceTrigger=PropertyChanged}"
       Header="末端设置">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="99*"/>
+                        <ColumnDefinition Width="61*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"></RowDefinition>
                         <RowDefinition Height="3*"></RowDefinition>
                         <RowDefinition Height="1*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <GroupBox
-Margin="16"
+Margin="16,16,16,16"
 materialDesign:ElevationAssist.Elevation="Dp6"
 Header="关节限制参数"
-Style="{StaticResource MaterialDesignCardGroupBox}">
+Style="{StaticResource MaterialDesignCardGroupBox}" Grid.ColumnSpan="2">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -227,7 +231,7 @@ ItemsSource="{StaticResource LoadValues}"
                             <Button Height="45" Width="180" Grid.Column="2" Command="{Binding TerminalSettingConfirmCommand}">确定</Button>
                         </Grid>
                     </GroupBox>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.ColumnSpan="2" Margin="0,160,0,160" Grid.RowSpan="3">
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
                             <RowDefinition></RowDefinition>
@@ -308,11 +312,11 @@ Text="rad/s"  Grid.Column="3"
 VerticalAlignment="Center" 
 HorizontalAlignment="Left"  FontSize="12"
 IsHitTestVisible="False" />
-                        
-                        
+
+
                     </Grid>
-                    <Button  Grid.Row="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}" Visibility="{Binding TerminalIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
+                    <Button  Grid.Row="2"  HorizontalAlignment="Left" VerticalAlignment="Center" Width="240" Height="45"  
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSettingEditorCommand}" Visibility="{Binding TerminalIsEditing, Converter={StaticResource StandardVisibilityConverter}}" Grid.ColumnSpan="2" Margin="280,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon
         Kind="ClipboardEditOutline" 
@@ -321,7 +325,7 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
         Text="编辑" />
                         </StackPanel>
                     </Button>
-                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding TerminalIsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding TerminalIsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Margin="50,0,0,0">
                         <Button  HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" Height="45"  
 Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalCancelCommand}">
                             <StackPanel Orientation="Horizontal">
@@ -476,7 +480,7 @@ Minimum="0" Maximum="8" >
                             </materialDesign:NumericUpDown.DecreaseContent>
                         </materialDesign:NumericUpDown>
                         <Button  Grid.Row="6" Grid.ColumnSpan="3"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="240" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollisionGradeEditor}" Visibility="{Binding CollisionIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding CollisionGradeEditorCommand}" Visibility="{Binding CollisionIsEditing, Converter={StaticResource StandardVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon
         Kind="ClipboardEditOutline" 
@@ -487,7 +491,7 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding OnCollis
                         </Button>
                         <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding CollisionIsEditing, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                             <Button  HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" Height="45"  
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalCancelCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding CollisionCancelCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon
         Kind="KeyboardReturn" 
@@ -496,9 +500,9 @@ Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding Terminal
         Text="取消" />
                                 </StackPanel>
                             </Button>
-                            
+
                             <Button  HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" Height="45" Margin="20 0 0 0" 
-Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding TerminalSaveCommand}">
+Style="{StaticResource MaterialDesignRaisedButton}"   Command="{Binding CollisionSaveCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon
         Kind="ContentSave" 

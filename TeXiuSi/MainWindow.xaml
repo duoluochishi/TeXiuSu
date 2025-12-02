@@ -19,6 +19,9 @@
             <helper:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
             <cvt:PercentageConverter x:Key="PercentConverter"/>
+            <converters:BooleanToColorConverter x:Key="StatusColorConverter" 
+                                       TrueBrush="Green" 
+                                       FalseBrush="Red"/>
             <x:Array x:Key="JointNames" Type="sys:String">
                 <sys:String>1</sys:String>
                 <sys:String>2</sys:String>
@@ -54,6 +57,12 @@
             </Grid.ColumnDefinitions>
 
             <Button Width='120' HorizontalAlignment="Left" Margin="10 0 0 0" Click="Button_Click">机械臂通讯</Button>
+            <Ellipse Width="30" Height="30" Margin="160 0 0 0" 
+                 HorizontalAlignment="Left" 
+                 VerticalAlignment="Center"
+                 Stroke="Black" 
+                 StrokeThickness="2"
+                 Fill="{Binding IsConnected, Converter={StaticResource StatusColorConverter}}"/>
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 20 0">
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">速度：</TextBlock>
                 <Slider  HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -63,7 +72,12 @@
             </StackPanel>
 
 
-            <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White" Command="{Binding DisabledCommand}">失能</Button>
+            <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White" Command="{Binding DisabledCommand}"
+                    Visibility="{Binding IsJointConnected, Converter={StaticResource BooleanToVisibilityConverter}}">失能</Button>
+            <Button Grid.Column="3" Width='80' HorizontalAlignment="Left" Foreground="White" Command="{Binding ConnectCommand}"
+                    Visibility="{Binding IsJointConnected, 
+                                     Converter={StaticResource InverseBooleanToVisibilityConverter},
+                                     ConverterParameter=Inverse}">使能</Button>
             <Button Grid.Column="1" Width='80' HorizontalAlignment="Left" Foreground="White" Click="Button_Click_3">获取信息</Button>
             <Button Grid.Column="4" Width='80' HorizontalAlignment="Left" Margin="10 0 0 0" Foreground="White" Command="{Binding ScramCommand}">急停</Button>
             <Button x:Name="btnMin" Grid.Column="6"

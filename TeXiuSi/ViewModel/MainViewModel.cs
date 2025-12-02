@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using TeXiuSi.Helper;
+using TeXiuSi.Message;
 using TeXiuSi.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
@@ -73,6 +75,35 @@ namespace TeXiuSi.ViewModel
         public double targetYaw;        // Rz
 
 
+        // 连接状态
+        private bool _isConnected;
+        /// <summary>
+        /// 连接状态
+        /// </summary>
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                if (Equals(_isConnected, value)) return;
+                _isConnected = value;
+            }
+        }
+
+        // 连接状态
+        private bool _isJointConnected;
+        /// <summary>
+        /// 连接状态
+        /// </summary>
+        public bool IsJointConnected
+        {
+            get { return _isJointConnected; }
+            set
+            {
+                if (Equals(_isJointConnected, value)) return;
+                _isJointConnected = value;
+            }
+        }
 
 
 
@@ -104,6 +135,7 @@ namespace TeXiuSi.ViewModel
 
         //失能 急停 视角还原 设置（直接）disabled scram
         public IRelayCommand DisabledCommand { get; }
+        public IRelayCommand ConnectCommand { get; }
 
         public IRelayCommand ScramCommand { get; }
 
@@ -1221,6 +1253,10 @@ namespace TeXiuSi.ViewModel
             //controller.ArcMotionChangeEvent += ControlArcMotion;
             SharedJawValue = 0;
 
+            IsConnected = false;
+
+            IsJointConnected = false;
+
             OperationModes = new ObservableCollection<EnumBindingItem<OperationType>>();
 
             SportTypes = new ObservableCollection<EnumBindingItem<ControlFrame>>();
@@ -1238,7 +1274,7 @@ namespace TeXiuSi.ViewModel
 
             if (SportTypes.Count > 0)
             {
-                SelectedSportType = SportTypes.Where(o=>o.DisplayName== "点位运动模式").First();
+                SelectedSportType = SportTypes.Where(o => o.DisplayName == "点位运动模式").First();
             }
 
 
@@ -1374,7 +1410,7 @@ namespace TeXiuSi.ViewModel
 
             #region MainControl
             DisabledCommand = new RelayCommand(OnDisabled);
-
+            ConnectCommand = new RelayCommand(OnConnected);
             ScramCommand = new RelayCommand(OnScram);
             #endregion
 
@@ -1468,10 +1504,29 @@ namespace TeXiuSi.ViewModel
             SetZeroPointCommand = new RelayCommand(OnSetZeroPointControl);
             GripperDysfunctionalCommand = new RelayCommand(OnGripperDysfunctionalControl);
             #endregion
+
+            ReceiveMessage<TherapyMessage>(message =>
+            {
+                try
+                {
+                    IsConnected = message.isConnected;
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"{e}");
+                }
+            });
+
         }
 
-
-
+        /// <summary>
+        /// 接收外部消息
+        /// </summary>
+        private void ReceiveMessage<TMessage>(Action<TMessage> callback) where TMessage : class
+        {
+            WeakReferenceMessenger.Default.Register<TMessage>(this,
+                ((recipient, message) => { callback.Invoke(message); }));
+        }
         public void Init() { }
         private void InitializeDefaultValues()
         {
@@ -1494,7 +1549,23 @@ namespace TeXiuSi.ViewModel
             try
             {
                 //发送给每个关节失能
+                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.Spd);
 
+                IsJointConnected = false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"失能失败: {ex.Message}");
+            }
+        }
+        private void OnConnected()
+        {
+            try
+            {
+                //发送给每个关节失能
+                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.PositionSpd);
+
+                IsJointConnected = true;
             }
             catch (Exception ex)
             {
@@ -1505,7 +1576,7 @@ namespace TeXiuSi.ViewModel
         {
             try
             {
-
+                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.PositionSpd);
             }
             catch (Exception ex)
             {

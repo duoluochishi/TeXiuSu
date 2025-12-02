@@ -253,6 +253,10 @@ namespace TeXiuSi.ViewModel
             #region Collision grade
 
             CollisionGradeEditorCommand = new RelayCommand(OnCollisionGradeEditor);
+
+            CollisionCancelCommand = new RelayCommand(CollisionGradeCancelJoint);
+
+            CollisionSaveCommand = new RelayCommand(CollisionGradeSaveJoint);
             #endregion
 
             #region Joint information
@@ -359,7 +363,7 @@ namespace TeXiuSi.ViewModel
         {
             try
             {
-
+                IsEditing = true;
             }
             catch (Exception ex)
             {
@@ -425,7 +429,8 @@ namespace TeXiuSi.ViewModel
         {
             try
             {
-
+                CollisionIsEditing=false;
+                IsEditing = true;
             }
             catch (Exception ex)
             {
@@ -434,6 +439,37 @@ namespace TeXiuSi.ViewModel
         }
 
         //公共enable
+        private void CollisionGradeCancelJoint()
+        {
+            try
+            {
+                //当前界面visual切换
+                CollisionIsEditing = true;
+                //tab封锁 
 
+                IsEditing = false;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void CollisionGradeSaveJoint()
+        {
+            try
+            {
+                //当前界面visual切换
+                CollisionIsEditing = true;
+                //tab封锁 
+                IsEditing = false;
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

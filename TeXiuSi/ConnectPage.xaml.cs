@@ -25,7 +25,13 @@ namespace TeXiuSi
             InitializeComponent();
 
             ConnectViewModel connectViewModel = new ConnectViewModel();
+            connectViewModel.StateInfoChange += ConnectViewModel_StateInfoChange;
             this.DataContext = connectViewModel;
+        }
+
+        private void ConnectViewModel_StateInfoChange(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

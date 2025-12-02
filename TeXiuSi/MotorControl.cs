@@ -261,9 +261,12 @@ namespace TeXiuSi
         /// <param name="cmd"></param>
         public byte[] ControlRefreshCmd(byte Id, byte cmd, byte jicunInfo)
         {
-            int info = 0x7FF;
-            byte[] data = { (byte)info, 0x00, cmd, jicunInfo, 0x00, 0x00, 0x00, 0x00 };
-
+            byte CanIDL = 0;
+            byte CanIDH = 0;
+            SplitCanIdForLittleEndian(Id, out CanIDL, out CanIDH);
+            //int info = 0x7FF;
+            byte[] data = { CanIDL, CanIDH, cmd, jicunInfo, 0x00, 0x00, 0x00, 0x00 };
+            Log.Information($"Send Refresh Data {data}");
             return data;
             //_usbHw.FdcanFrameSend(data, id);
         }

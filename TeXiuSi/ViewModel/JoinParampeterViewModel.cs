@@ -23,6 +23,8 @@ namespace TeXiuSi.ViewModel
 
         public JoinParampeterViewModel()
         {
+            DeviceOperation.Instance.bufferBlock.LinkTo(SerialCTBlock, new DataflowLinkOptions { PropagateCompletion = true });
+
             SerialCTBlock = new ActionBlock<MotorFeedbackFrame>(async data =>
                     {
                         //var ithread = IsUiThread();

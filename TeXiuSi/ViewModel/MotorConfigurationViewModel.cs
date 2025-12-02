@@ -158,7 +158,10 @@ namespace TeXiuSi.ViewModel
                     switch (selectedModel)
                     {
                         case ControlPowModel.PositionSpd:
-                            DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.PositionSpd);
+
+                            DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.PositionSpd, SelectedZeroNode.JointInfo);
+
+
                             break;
                         case ControlPowModel.Spd:
                             string message = "机械臂失能会直接落下，请确保机械臂已处于安全位置？";
@@ -175,7 +178,7 @@ namespace TeXiuSi.ViewModel
                             // 3. 根据用户的选择进行判断
                             if (result == MessageBoxResult.Yes)
                             {
-                                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.Spd);
+                                DeviceOperation.Instance.ControlConnectOfJoints(ControlPowModel.Spd, SelectedZeroNode.JointInfo);
                                 // 用户点击了“是” (Yes)
                                 Console.WriteLine("用户选择了保存并退出。");
                                 // 执行保存和退出逻辑...

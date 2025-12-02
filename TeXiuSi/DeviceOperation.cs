@@ -25,6 +25,7 @@ namespace TeXiuSi
     using System.Windows.Markup;
     using System.Windows.Media.Media3D;
     using System.Windows.Threading;
+    using TeXiuSi.Message;
     using TeXiuSi.Model;
     using TeXiuSi.PCAN;
     using TPCANBitrateFD = System.String;
@@ -159,6 +160,8 @@ namespace TeXiuSi
 
             //链接后调用
             //InitMessageRev();
+
+            //bufferBlock.LinkTo(scCT.SerialCTBlock, new DataflowLinkOptions { PropagateCompletion = true });
         }
 
         private void InitData()
@@ -320,7 +323,7 @@ namespace TeXiuSi
         }
 
         #region  CANControl
-        public void Connect(UInt32 IOPort,
+        public TPCANStatus Connect(UInt32 IOPort,
             UInt16 Interrupt, TPCANBaudrate m_Baudrate, TPCANType m_HwType)
         {
 
@@ -364,6 +367,7 @@ namespace TeXiuSi
                 ConfigureTraceFile();
 
                 _stsResult = TPCANStatus.PCAN_ERROR_OK;
+                SendMessage(new TherapyMessage(1) { isConnected = true });
             }
             else if (_stsResult == TPCANStatus.PCAN_ERROR_CAUTION)
             {
@@ -371,24 +375,29 @@ namespace TeXiuSi
                 Console.WriteLine($"通道 {m_PcanHandle} 初始化成功，但有警告。");
                 ConfigureTraceFile();
                 _stsResult = TPCANStatus.PCAN_ERROR_OK;
+
+                SendMessage(new TherapyMessage(1) { isConnected = false });
             }
             else if (_stsResult == TPCANStatus.PCAN_ERROR_ILLHANDLE)
             {
                 // 通道句柄无效，说明您选择的 PCAN_xx 句柄可能不正确
                 Console.WriteLine($"错误：句柄无效。");
                 Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+                SendMessage(new TherapyMessage(1) { isConnected = false });
             }
             else if (_stsResult == TPCANStatus.PCAN_ERROR_ILLHW)
             {
                 // 硬件不可用，可能是未插入或驱动问题
                 Console.WriteLine($"错误：硬件不可用。");
                 Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+                SendMessage(new TherapyMessage(1) { isConnected = false });
             }
             else
             {
                 // 其他错误
                 Console.WriteLine($"通道初始化失败，错误代码：{_stsResult}");
                 Log.Error(DeviceOperation.Instance._pANHelper.GetFormatedError(_stsResult));
+                SendMessage(new TherapyMessage(1) { isConnected = false });
             }
 
             // Sets the connection status of the main-form
@@ -396,6 +405,17 @@ namespace TeXiuSi
             //SetConnectionStatus(stsResult == TPCANStatus.PCAN_ERROR_OK);
             //链接后获取状态
             InitMessageRev();
+
+            return _stsResult;
+        }
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <typeparam name="TMessage">消息类型</typeparam>
+        /// <param name="message">消息实例</param>
+        protected void SendMessage<TMessage>(TMessage message) where TMessage : class
+        {
+            WeakReferenceMessenger.Default.Send(message);
         }
         private void Release()
         {
@@ -528,13 +548,12 @@ namespace TeXiuSi
                     Log.Error($"失能失败连接丢失");
                     return;
                 }
-                //这里先写死
 
                 foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
                 {
                     var typeCommad = _motorControl.ControlRefreshCmd((byte)opType, (byte)controlPowModelOther, (byte)register);
 
-                    Write(((int)opType).ToString("X2"), typeCommad);
+                    Write(((int)opType).ToString("X2"), typeCommad, true);
                 }
 
 
@@ -679,19 +698,136 @@ namespace TeXiuSi
         }
         #endregion
 
+
+        #region  轮询获取状态
+        // --- 核心控制变量 ---
+        private CancellationTokenSource _RefreshcancellationTokenSource;
+        private Task _pollingTask;
+        private bool IsPollingRunning = false;
+
+        // 控制发送状态的间隔，例如每 50 毫秒发送一次
+        private const int PollingIntervalMs = 50;
+        /// <summary>
+        /// 启动后台轮询任务
+        /// </summary>
+        public void StartPolling(object parameter = null)
+        {
+            if (IsPollingRunning) return;
+
+            _RefreshcancellationTokenSource = new CancellationTokenSource();
+            IsPollingRunning = true;
+
+            // Task.Run 确保任务在后台线程运行
+            _pollingTask = Task.Run(() => PollingLoop(_RefreshcancellationTokenSource.Token));
+        }
+
+        /// <summary>
+        /// 停止后台轮询任务
+        /// </summary>
+        public void StopPolling(object parameter = null)
+        {
+            if (!IsPollingRunning) return;
+
+            // 请求取消
+            _RefreshcancellationTokenSource?.Cancel();
+            IsPollingRunning = false;
+
+            try
+            {
+                // 等待任务完成，但只等待一小段时间以防阻塞
+                _pollingTask?.Wait(100);
+            }
+            catch (Exception ex)
+            {
+                // 捕获任务取消时可能抛出的异常，是正常现象
+                Log.Error($"停止轮询任务时发生异常: {ex.Message}");
+            }
+            finally
+            {
+                _RefreshcancellationTokenSource?.Dispose();
+            }
+        }
+        /// <summary>
+        /// 后台轮询循环
+        /// </summary>
+        private async Task PollingLoop(CancellationToken cancellationToken)
+        {
+            // 您希望持续轮询的所有状态（例如：Status1, Position, Velocity）
+            Register[] registersToPoll = { Register.CTRL_MODE, Register.ACC, Register.DEC, Register.MAX_SPD };
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    // 1. 检查连接状态
+                    if (_stsResult != TPCANStatus.PCAN_ERROR_OK)
+                    {
+                        Log.Error($"后台轮询失败：连接丢失。");
+                        // 可以选择在这里调用 StopPolling 或等待重新连接
+                        await Task.Delay(1000, cancellationToken); // 暂停 1 秒后重试
+                        continue;
+                    }
+
+                    // 2. 遍历所有需要刷新的寄存器
+                    foreach (var register in registersToPoll)
+                    {
+                        // 3. 遍历所有 JointNode (关节)
+                        foreach (JointNode opType in Enum.GetValues(typeof(JointNode)))
+                        {
+                            RefreshInfoEditorOfJoints(ControlPowModelOther.Refresh, register, opType);
+                        }
+                    }
+
+                    // 4. 等待指定的间隔时间
+                    await Task.Delay(PollingIntervalMs, cancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    // 任务被取消，正常退出循环
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"后台轮询循环中发生致命错误: {ex.Message}");
+                    // 发生意外错误后，为了安全，可以退出循环
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 单次发送 CAN 帧的逻辑（与您提供的代码类似）
+        /// </summary>
+        private void RefreshInfoEditorOfJoints(ControlPowModelOther controlPowModelOther, Register register, JointNode opType)
+        {
+            try
+            {
+                var typeCommad = _motorControl.ControlRefreshCmd((byte)opType, (byte)controlPowModelOther, (byte)register);
+
+                // 这里的 Write 是您实际的 CAN 发送函数
+                Write(((int)opType).ToString("X2"), typeCommad, true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"发送刷新命令失败 ({opType}-{register})：{ex.Message}");
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 写入消息
         /// </summary>
         /// <param name="textID"></param>
         /// <param name="byteMessage"></param>
-        public void Write(string textID, byte[] byteMessage)
+        public void Write(string textID, byte[] byteMessage, bool isRefresh = false)
         {
 
             TPCANStatus stsResult;
 
             // Send the message
             //
-            stsResult = m_IsFD ? WriteFrameFD() : WriteFrame(textID, byteMessage);
+            stsResult = m_IsFD ? WriteFrameFD() : WriteFrame(textID, byteMessage, isRefresh);
 
             // The message was successfully sent
             //
@@ -746,7 +882,7 @@ namespace TeXiuSi
             //
             return PCANBasic.WriteFD(m_PcanHandle, ref CANMsg);
         }
-        private TPCANStatus WriteFrame(string txtID, byte[] bytesWrite)
+        private TPCANStatus WriteFrame(string txtID, byte[] bytesWrite, bool isRefresh)
         {
             if (bytesWrite == null || bytesWrite.Count() == 0)
             {
@@ -765,7 +901,7 @@ namespace TeXiuSi
             // Length of the Data, Message Type
             // and the data
             //关节ID 或者下参数加偏移 ---待补充
-            CANMsg.ID = System.Convert.ToUInt32(txtID, 16);
+            CANMsg.ID = isRefresh ? 0x7FF : System.Convert.ToUInt32(txtID, 16);
             CANMsg.LEN = System.Convert.ToByte(8);
 
             //扩展协议逻辑保留

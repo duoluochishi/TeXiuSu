@@ -850,7 +850,7 @@ namespace TeXiuSi.Helper
         /// RO-/-float
         /// </summary>
         [Description("输出轴位置")]
-        xout = 0x51
+        xout = 0x51,
     }
 
     /// <summary>
