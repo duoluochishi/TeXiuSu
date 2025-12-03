@@ -1,5 +1,5 @@
 ﻿
-#define IRB6700
+#define IRB67001
 using HelixToolkit.Wpf;
 using Serilog;
 using System;
@@ -68,17 +68,15 @@ namespace TeXiuSi
         private const string MODEL_PATH20 = "IRB6700-MH3_245-300_IRC5_rev00_CYLINDER_CAD.stl";
 #else
 
-        private const string MODEL_PATH1 = "IRB4600_20kg-250_LINK1_CAD_rev04.stl";
-        private const string MODEL_PATH2 = "IRB4600_20kg-250_LINK2_CAD_rev04.stl";
-        private const string MODEL_PATH3 = "IRB4600_20kg-250_LINK3_CAD_rev005.stl";
-        private const string MODEL_PATH4 = "IRB4600_20kg-250_LINK4_CAD_rev04.stl";
-        private const string MODEL_PATH5 = "IRB4600_20kg-250_LINK5_CAD_rev04.stl";
-        private const string MODEL_PATH6 = "IRB4600_20kg-250_LINK6_CAD_rev04.stl";
-        private const string MODEL_PATH7 = "IRB4600_20kg-250_LINK3_CAD_rev04.stl";
-        private const string MODEL_PATH8 = "IRB4600_20kg-250_CABLES_LINK1_rev03.stl";
-        private const string MODEL_PATH9 = "IRB4600_20kg-250_CABLES_LINK2_rev03.stl";
-        private const string MODEL_PATH10 = "IRB4600_20kg-250_CABLES_LINK3_rev03.stl";
-        private const string MODEL_PATH11 = "IRB4600_20kg-250_BASE_CAD_rev04.stl";
+        private const string MODEL_PATH1 = "Txs-base.stl";
+        private const string MODEL_PATH2 = "Txs-s1.stl";
+        private const string MODEL_PATH3 = "Txs-s2.stl";
+        private const string MODEL_PATH4 = "Txs-s3.stl";
+        private const string MODEL_PATH5 = "Txs-s4.stl";
+        private const string MODEL_PATH6 = "Txs-s5.stl";
+        private const string MODEL_PATH7 = "Txs-s6-fen.stl";
+        private const string MODEL_PATH8 = "Txs-s7-zhua1.stl";
+        private const string MODEL_PATH9 = "Txs-s8-zhua2.stl";
 #endif
         #endregion
 
@@ -560,8 +558,6 @@ namespace TeXiuSi
             modelsNames.Add(MODEL_PATH7);
             modelsNames.Add(MODEL_PATH8);
             modelsNames.Add(MODEL_PATH9);
-            modelsNames.Add(MODEL_PATH10);
-            modelsNames.Add(MODEL_PATH11);//Until here for the 4600
 #if IRB6700
             modelsNames.Add(MODEL_PATH12);
             modelsNames.Add(MODEL_PATH13);
@@ -727,77 +723,250 @@ namespace TeXiuSi
                 joints[5].rotPointZ = 2125;
 
 #else
-                changeModelColor(joints[6], Colors.Red);
+                changeModelColor(joints[0], Colors.Red);
                 changeModelColor(joints[7], Colors.Black);
                 changeModelColor(joints[8], Colors.Black);
-                changeModelColor(joints[9], Colors.Black);
-                changeModelColor(joints[10], Colors.Gray);
 
-                RA.Children.Add(joints[0].model);
-                RA.Children.Add(joints[1].model);
-                RA.Children.Add(joints[2].model);
-                RA.Children.Add(joints[3].model);
-                RA.Children.Add(joints[4].model);
-                RA.Children.Add(joints[5].model);
                 RA.Children.Add(joints[6].model);
                 RA.Children.Add(joints[7].model);
                 RA.Children.Add(joints[8].model);
-                RA.Children.Add(joints[9].model);
-                RA.Children.Add(joints[10].model);
-                
-                joints[0].angleMin = -180;
-                joints[0].angleMax = 180;
-                joints[0].rotAxisX = 0;
-                joints[0].rotAxisY = 0;
-                joints[0].rotAxisZ = 1;
-                joints[0].rotPointX = 0;
-                joints[0].rotPointY = 0;
-                joints[0].rotPointZ = 0;
+                // 确保在加载模型并添加到 joints[0] 之后执行此诊断代码
+                //var baseModel = joints[1].model;
+                //GeometryModel3D geometryModel = null;
 
-                joints[1].angleMin = -100;
-                joints[1].angleMax = 60;
+                //// 尝试获取 GeometryModel3D
+                //if (baseModel is GeometryModel3D gModel)
+                //{
+                //    geometryModel = gModel;
+                //}
+                //else if (baseModel is Model3DGroup group && group.Children.Count > 0 && group.Children[0] is GeometryModel3D firstChild)
+                //{
+                //    // 如果 joints[0].model 是 Model3DGroup，通常第一个子元素是实际的几何模型
+                //    geometryModel = firstChild;
+                //}
+
+                //if (geometryModel != null)
+                //{
+                //    // 关键步骤：获取模型的边界框。边界框是相对于模型自身的局部坐标系而言的。
+                //    var bounds = geometryModel.Bounds;
+
+                //    // 输出边界框的最小值和最大值
+                //    // 这代表了模型在各个轴上的范围 (X, Y, Z)
+                //    // 假设您的Z轴是垂直向上的：
+
+                //    double minZ = bounds.Z;
+                //    double maxZ = bounds.Z + bounds.SizeZ;
+
+                //    // 输出到调试或日志中（使用 C# 的 Console.WriteLine 或 Log.Debug）
+                //    System.Console.WriteLine("--- J0 Model Local Bounds ---");
+                //    System.Console.WriteLine($"X 范围: {bounds.X} 到 {bounds.X + bounds.SizeX}");
+                //    System.Console.WriteLine($"Y 范围: {bounds.Y} 到 {bounds.Y + bounds.SizeY}");
+                //    System.Console.WriteLine($"Z 范围: {minZ} 到 {maxZ}");
+                //    System.Console.WriteLine("-----------------------------");
+
+                //    // 假设您希望模型的最低点（基座底部）位于 Z=0
+                //    // 如果 Z 轴垂直向上，模型在局部坐标系中的最低点就是 minZ。
+                //    // 要将模型抬升到 Z=0，需要的额外抬升量就是 -minZ。
+
+                //    // 示例：如果 minZ = -100，则需要抬升 100。
+                //    // 示例：如果 minZ = 50，则说明模型基座已经位于 Z=50，需要下移 -50。
+                //    double Z_Local_Offset_To_Zero = -minZ;
+
+                //    System.Console.WriteLine($"建议的 STL 自身 Z 轴补偿量: {Z_Local_Offset_To_Zero}");
+                //}
+                //else
+                //{
+                //    System.Console.WriteLine("无法获取 GeometryModel3D 的边界信息。");
+                //}
+
+                //if (joints.Count > 0)
+                //{
+                //    // *** 尝试修正 Z 轴补偿方向 ***
+                //    // X, Y 轴：抵消 XML 中 1_Link Body 的初始偏移
+                //    double compensationX_mm = 63.55;
+                //    double compensationY_mm = 0;
+                //    // Z 轴：(抵消 XML 偏移 27.15) + (抬升 STL 底部 120) = 92.85
+                //    double compensationZ_mm = 120;
+
+                //    // ⭐ X, Y 补偿 XML 偏移，使 J1 关节中心回到 (0, 0, Z)
+                //    //double compensationX_mm = 8.3638;
+                //    //double compensationY_mm = 12.614;
+                //    //// Z 补偿 XML 偏移，使 J1 关节中心回到 Z=0
+                //    //double compensationZ_mm = -27.15;
+
+                //    var compensationTransform = new TranslateTransform3D(
+                //        compensationX_mm,
+                //        compensationY_mm,
+                //        compensationZ_mm
+                //    );
+
+                //     //baseModel = joints[0].model;
+
+                //    // 应用变换逻辑不变 (Transform3DGroup 或直接赋值)
+                //    if (baseModel.Transform != null)
+                //    {
+                //        var group = new Transform3DGroup();
+                //        group.Children.Add(baseModel.Transform);
+                //        group.Children.Add(compensationTransform);
+                //        baseModel.Transform = group;
+                //    }
+                //    else
+                //    {
+                //        baseModel.Transform = compensationTransform;
+                //    }
+
+                //    // 保持旋转中心设置在 (0, 0, 0)，以确保关节在世界原点旋转
+                //    joints[0].rotPointX = 0;
+                //    joints[0].rotPointY = 0;
+                //    joints[0].rotPointZ = 0;
+                //}
+
+                //foreach (string modelName in modelsNames)
+                //{
+                //    // ... (模型加载和 joints.Add(new Joint(link) { ... }) 代码保持不变) ...
+
+                //    // 假设此时 joints 列表中已经包含了所有模型
+                //}
+
+                // ... (RA.Children.Add(joints[i].model) 代码保持不变) ...
+
+                // ----------------------------------------------------
+                // ⭐ 步骤 1: 应用 joints[0] (基座) 的指定平移
+                // ----------------------------------------------------
+                if (joints.Count > 0)
+                {
+                    // 用户指定的 joints[0] 补偿值 (mm)
+                    double compensationX_mm_J0 = 63.55;
+                    double compensationY_mm_J0 = 0.0;
+                    double compensationZ_mm_J0 = 120.0;
+
+                    var compensationTransform_J0 = new TranslateTransform3D(
+                        compensationX_mm_J0,
+                        compensationY_mm_J0,
+                        compensationZ_mm_J0
+                    );
+
+                    var baseModel = joints[0].model;
+
+                    // 应用变换逻辑
+                    if (baseModel.Transform != null)
+                    {
+                        var group = new Transform3DGroup();
+                        group.Children.Add(baseModel.Transform);
+                        group.Children.Add(compensationTransform_J0);
+                        baseModel.Transform = group;
+                    }
+                    else
+                    {
+                        baseModel.Transform = compensationTransform_J0;
+                    }
+
+                    // 保持旋转中心设置在 (0, 0, 0)
+                    joints[0].rotPointX = 0;
+                    joints[0].rotPointY = 0;
+                    joints[0].rotPointZ = 0;
+                }
+
+                // ----------------------------------------------------
+                // ⭐ 步骤 2: 对 joints[1] 及所有后续关节应用 Y 轴 +100 mm 的额外偏移
+                // ----------------------------------------------------
+                if (joints.Count > 1)
+                {
+                    // Y 轴额外偏移量
+                    double extraY_offset = -500.0; // mm
+
+                    // 创建额外的 Y 轴平移变换
+                    var extraYTransform = new TranslateTransform3D(63.5, extraY_offset, 118);
+
+                    // 从索引 1 开始遍历所有后续关节
+                    for (int i = 1; i < joints.Count; i++)
+                    {
+                        var currentModel = joints[i].model;
+
+                        // 应用变换逻辑（组合变换）
+                        if (currentModel.Transform != null)
+                        {
+                            var group = new Transform3DGroup();
+                            group.Children.Add(currentModel.Transform);
+                            group.Children.Add(extraYTransform);
+                            currentModel.Transform = group;
+                        }
+                        else
+                        {
+                            currentModel.Transform = extraYTransform;
+                        }
+
+                        // 【注意】如果这些关节的 rotPoint 坐标是相对于世界坐标系的，
+                        // 那么它们的 rotPointY 也需要相应增加 100 mm。
+                        // 示例（仅作演示，实际值请根据您之前的计算来确定）：
+                        // joints[i].rotPointY += extraY_offset;
+                    }
+                }
+
+
+                joints[1].angleMin = -180;
+                joints[1].angleMax = 180;
                 joints[1].rotAxisX = 0;
-                joints[1].rotAxisY = 1;
-                joints[1].rotAxisZ = 0;
-                joints[1].rotPointX = 175; 
-                joints[1].rotPointY = -200;
-                joints[1].rotPointZ = 500;
+                joints[1].rotAxisY = 0;
+                joints[1].rotAxisZ = 1;
+                joints[1].rotPointX = 0;
+                joints[1].rotPointY = 0;
+                joints[1].rotPointZ = 0;
 
-                joints[2].angleMin = -90;
-                joints[2].angleMax = 90;
+
+                joints[2].angleMin = -100;
+                joints[2].angleMax = 60;
                 joints[2].rotAxisX = 0;
                 joints[2].rotAxisY = 1;
                 joints[2].rotAxisZ = 0;
-                joints[2].rotPointX = 190;
-                joints[2].rotPointY = -700;
-                joints[2].rotPointZ = 1595;
+                joints[2].rotPointX = 175;
+                joints[2].rotPointY = -200;
+                joints[2].rotPointZ = 500;
 
-                joints[3].angleMin = -180;
-                joints[3].angleMax = 180;
-                joints[3].rotAxisX = 1;
-                joints[3].rotAxisY = 0;
+                joints[3].angleMin = -90;
+                joints[3].angleMax = 90;
+                joints[3].rotAxisX = 0;
+                joints[3].rotAxisY = 1;
                 joints[3].rotAxisZ = 0;
-                joints[3].rotPointX = 400;
-                joints[3].rotPointY = 0;
-                joints[3].rotPointZ = 1765;
+                joints[3].rotPointX = 190;
+                joints[3].rotPointY = -700;
+                joints[3].rotPointZ = 1595;
 
-                joints[4].angleMin = -115;
-                joints[4].angleMax = 115;
-                joints[4].rotAxisX = 0;
-                joints[4].rotAxisY = 1;
+                joints[4].angleMin = -180;
+                joints[4].angleMax = 180;
+                joints[4].rotAxisX = 1;
+                joints[4].rotAxisY = 0;
                 joints[4].rotAxisZ = 0;
-                joints[4].rotPointX = 1405;
-                joints[4].rotPointY = 50;
+                joints[4].rotPointX = 400;
+                joints[4].rotPointY = 0;
                 joints[4].rotPointZ = 1765;
 
-                joints[5].angleMin = -180;
-                joints[5].angleMax = 180;
-                joints[5].rotAxisX = 1;
-                joints[5].rotAxisY = 0;
+                joints[5].angleMin = -115;
+                joints[5].angleMax = 115;
+                joints[5].rotAxisX = 0;
+                joints[5].rotAxisY = 1;
                 joints[5].rotAxisZ = 0;
                 joints[5].rotPointX = 1405;
-                joints[5].rotPointY = 0;
+                joints[5].rotPointY = 50;
                 joints[5].rotPointZ = 1765;
+
+                joints[6].angleMin = -180;
+                joints[6].angleMax = 180;
+                joints[6].rotAxisX = 1;
+                joints[6].rotAxisY = 0;
+                joints[6].rotAxisZ = 0;
+                joints[6].rotPointX = 1405;
+                joints[6].rotPointY = 0;
+                joints[6].rotPointZ = 1765;
+
+                joints[7].angleMin = -180;
+                joints[7].angleMax = 180;
+                joints[7].rotAxisX = 1;
+                joints[7].rotAxisY = 0;
+                joints[7].rotAxisZ = 0;
+                joints[7].rotPointX = 1405;
+                joints[7].rotPointY = 0;
+                joints[7].rotPointZ = 1765;
 #endif
 
 

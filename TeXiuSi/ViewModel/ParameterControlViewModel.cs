@@ -363,6 +363,7 @@ namespace TeXiuSi.ViewModel
         {
             try
             {
+                TerminalIsEditing = false;
                 IsEditing = true;
             }
             catch (Exception ex)

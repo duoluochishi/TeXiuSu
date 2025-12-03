@@ -60,7 +60,7 @@
             <Ellipse Width="30" Height="30" Margin="160 0 0 0" 
                  HorizontalAlignment="Left" 
                  VerticalAlignment="Center"
-                 Stroke="Black" 
+                 Stroke="Transparent" 
                  StrokeThickness="2"
                  Fill="{Binding IsConnected, Converter={StaticResource StatusColorConverter}}"/>
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Horizontal" Margin="0 0 20 0">

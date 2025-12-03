@@ -115,12 +115,12 @@ namespace TeXiuSi
             viewPort3d.PanGesture = new MouseGesture(MouseAction.LeftClick);
             viewPort3d.Children.Add(visual);
             viewPort3d.Children.Add(RoboticArm);
-            viewPort3d.Camera.LookDirection = new Vector3D(2038, -5200, -2930);
-            viewPort3d.Camera.UpDirection = new Vector3D(-0.145, 0.372, 0.917);
-            viewPort3d.Camera.Position = new Point3D(-1571, 4801, 3774);
+            viewPort3d.Camera.LookDirection = new Vector3D(-155, -2521, -1316);
+            viewPort3d.Camera.UpDirection = new Vector3D(0.025, 0.4000, 0.917);
+            viewPort3d.Camera.Position = new Point3D(-155, 2521, 1316);
 
             double[] angles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
-            ForwardKinematics(angles);
+            //ForwardKinematics(angles);
 
             changeSelectedJoint();
 
@@ -432,7 +432,7 @@ namespace TeXiuSi
             DeviceOperation.Instance.joints[8].model.Transform = F2; //Cables
 
             DeviceOperation.Instance.joints[6].model.Transform = F3; //The ABB writing
-            DeviceOperation.Instance.joints[9].model.Transform = F3; //Cables
+            //DeviceOperation.Instance.joints[9].model.Transform = F3; //Cables
 
             return new Vector3D(DeviceOperation.Instance.joints[5].model.Bounds.Location.X, DeviceOperation.Instance.joints[5].model.Bounds.Location.Y, DeviceOperation.Instance.joints[5].model.Bounds.Location.Z);
         }
@@ -1042,9 +1042,9 @@ namespace TeXiuSi
             // 如果想重置到默认相机位置，可以使用：
             // viewPort3d.ResetCamera();
 
-            viewPort3d.Camera.LookDirection = new Vector3D(2038, -5200, -2930);
-            viewPort3d.Camera.UpDirection = new Vector3D(-0.145, 0.372, 0.917);
-            viewPort3d.Camera.Position = new Point3D(-1571, 4801, 3774);
+            viewPort3d.Camera.LookDirection = new Vector3D(-155, -2521, -1316);
+            viewPort3d.Camera.UpDirection = new Vector3D(0.025, 0.4000, 0.917);
+            viewPort3d.Camera.Position = new Point3D(-155, 2521, 1316);
         }
 
         private void btnSet_Click(object sender, RoutedEventArgs e)
