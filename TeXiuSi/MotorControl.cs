@@ -5,6 +5,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Xml.Linq;
 using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.Protocol;
@@ -41,6 +43,7 @@ namespace TeXiuSi
         public GeometryModel3D oldSelectedModel = null;
 
         string basePath = "";
+        string baseUrdfPath = "";
         //provides functionality to 3d models
         //这是一个Model3DGroup对象，它像一个容器，把机械臂的所有独立部件（如底座、大臂、小臂等）组合在一起，方便统一管理。
         Model3DGroup RA = new Model3DGroup(); //RoboticArm 3d group
@@ -68,16 +71,37 @@ namespace TeXiuSi
         private const string MODEL_PATH20 = "IRB6700-MH3_245-300_IRC5_rev00_CYLINDER_CAD.stl";
 #else
 
-        private const string MODEL_PATH1 = "Txs-base.stl";
-        private const string MODEL_PATH2 = "Txs-s1.stl";
-        private const string MODEL_PATH3 = "Txs-s2.stl";
-        private const string MODEL_PATH4 = "Txs-s3.stl";
-        private const string MODEL_PATH5 = "Txs-s4.stl";
-        private const string MODEL_PATH6 = "Txs-s5.stl";
-        private const string MODEL_PATH7 = "Txs-s6-fen.stl";
-        private const string MODEL_PATH8 = "Txs-s7-zhua1.stl";
-        private const string MODEL_PATH9 = "Txs-s8-zhua2.stl";
+        //private const string MODEL_PATH1 = "Txs-base.stl";
+        //private const string MODEL_PATH2 = "Txs-s1.stl";
+        //private const string MODEL_PATH3 = "Txs-s2.stl";
+        //private const string MODEL_PATH4 = "Txs-s3.stl";
+        //private const string MODEL_PATH5 = "Txs-s4.stl";
+        //private const string MODEL_PATH6 = "Txs-s5.stl";
+        //private const string MODEL_PATH7 = "Txs-s6.stl";
+        //private const string MODEL_PATH8 = "Txs-s7.stl";
+        //private const string MODEL_PATH9 = "Txs-s8.stl";
+        //private const string MODEL_PATH1 = "Txs-base.stl";
+        private const string MODEL_PATH1 = "Txs-s1.stl";
+        private const string MODEL_PATH2 = "Txs-s2.stl";
+        private const string MODEL_PATH3 = "Txs-s3.stl";
+        private const string MODEL_PATH4 = "Txs-s4.stl";
+        private const string MODEL_PATH5 = "Txs-s5.stl";
+        private const string MODEL_PATH6 = "Txs-s6.stl";
+        private const string MODEL_PATH7 = "Txs-s7.stl";
+        private const string MODEL_PATH8 = "Txs-s8.stl";
+        //private const string MODEL_PATH9 = "Txs-s8.stl";
+
+        //private const string MODEL_PATH10 = "HG13133-HTX1001.stl";
+
+
 #endif
+        #endregion
+
+
+        #region URDF_Param
+        // 存储关节名称和对应的旋转对象，用于后续 UI 绑定
+        // Key: 关节名称 (如 "shoulder_pan_joint"), Value: 旋转轴对象
+        private Dictionary<string, AxisAngleRotation3D> jointControls = new Dictionary<string, AxisAngleRotation3D>();
         #endregion
 
         public MotorControl(uint nomBaud, uint datBaud, string sn, List<DmActData> dataPtr)
@@ -548,6 +572,8 @@ namespace TeXiuSi
         {
 
             basePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models\\";
+
+
             modelsNames = new List<string>();
             modelsNames.Add(MODEL_PATH1);
             modelsNames.Add(MODEL_PATH2);
@@ -557,7 +583,10 @@ namespace TeXiuSi
             modelsNames.Add(MODEL_PATH6);
             modelsNames.Add(MODEL_PATH7);
             modelsNames.Add(MODEL_PATH8);
-            modelsNames.Add(MODEL_PATH9);
+            //modelsNames.Add(MODEL_PATH9);
+            //modelsNames.Add(MODEL_PATH10);
+
+
 #if IRB6700
             modelsNames.Add(MODEL_PATH12);
             modelsNames.Add(MODEL_PATH13);
@@ -571,7 +600,243 @@ namespace TeXiuSi
 #endif
 
 
+            #region UrdfLoad
+
+            //baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf\\DM9_URDF.urdf";
+            //var goupInfo = LoadUrdf(baseUrdfPath);
+
+            //var ins = 00;
+
+            #endregion
+
         }
+        #region UrdfLoad
+
+        public Model3DGroup LoadUrdf(string urdfPath)
+        {
+            XDocument doc = XDocument.Load(urdfPath);
+            // 1. 找到 Base Link (通常是没有 Parent 的 Link)
+            // ... (XML解析逻辑，找到根节点名)
+
+            // 2. 开始递归构建
+            return BuildLink("base_link", doc);
+        }
+
+        private Model3DGroup BuildLink(string linkName, XDocument doc)
+        {
+            Model3DGroup currentGroup = new Model3DGroup();
+
+            // A. 加载当前 Link 的 STL 模型
+            // 解析 XML 找到 <link name="linkName"> 下的 <visual> <mesh filename="...">
+            string stlPath = GetMeshPathFromXml(doc, linkName);
+            if (!string.IsNullOrEmpty(stlPath))
+            {
+                // 使用 HelixToolkit 的 ModelImporter 加载 STL
+                var importer = new ModelImporter();
+                var model = importer.Load(stlPath);
+                currentGroup.Children.Add(model);
+            }
+
+            // B. 寻找连接到这个 Link 的所有子关节 (Joints)
+            // 查找所有 <joint> 标签中 parent link 是当前 linkName 的
+            var childJoints = GetChildJointsFromXml(doc, linkName);
+
+            foreach (var jointXml in childJoints)
+            {
+                // --- 关键步骤：处理关节变换 ---
+
+                // 1. 读取 URDF 中的 Origin (XYZ 和 RPY)
+                // URDF 的 RPY 通常是欧拉角，需要转换成 WPF 的 Matrix3D 或 Transform3D
+                var offsetTransform = ParseOriginToTransform(jointXml);
+
+                // 2. 创建用于动态旋转的 Transform (这就是你要控制运动的地方)
+                // 读取 <axis xyz="0 0 1"/> 确定绕哪个轴转
+                var rotationAxis = ParseAxis(jointXml);
+                var dynamicRotation = new AxisAngleRotation3D(rotationAxis, 0); // 初始0度
+                var rotateTransform = new RotateTransform3D(dynamicRotation);
+
+                // 保存引用，以便界面滑块可以控制它
+                string jointName = jointXml.Attribute("name").Value;
+                jointControls[jointName] = dynamicRotation;
+
+                // 3. 递归构建子 Link
+                string childLinkName = jointXml.Element("child").Attribute("link").Value;
+                Model3DGroup childGroup = BuildLink(childLinkName, doc);
+
+                // 4. 组装层级 (最重要的部分！)
+                // 创建一个包装组，把 偏移(Origin) 和 旋转(Motion) 应用上去
+                var jointWrapper = new Model3DGroup();
+                System.Windows.Media.Media3D.Transform3DGroup transformGroup = new System.Windows.Media.Media3D.Transform3DGroup();
+                transformGroup.Children.Add(rotateTransform); // 先应用动态旋转
+                transformGroup.Children.Add(offsetTransform); // 再应用安装偏移
+
+                jointWrapper.Transform = transformGroup;
+                jointWrapper.Children.Add(childGroup); // 将子 Link 放入包装组
+
+                // 将包装好的子结构加入当前结构
+                currentGroup.Children.Add(jointWrapper);
+            }
+
+            return currentGroup;
+        }
+
+        // 设置你的模型存放的根目录 (Assets 文件夹的绝对路径)
+        // 比如：AppDomain.CurrentDomain.BaseDirectory + "Assets\\"
+
+        private string GetMeshPathFromXml(XDocument doc, string linkName)
+        {
+            baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf";
+
+            // 1. 找到对应的 Link 节点
+            var linkNode = doc.Descendants("link")
+                              .FirstOrDefault(x => (string)x.Attribute("name") == linkName);
+
+            if (linkNode == null) return null;
+
+            // 2. 找到 visual -> geometry -> mesh 节点
+            var meshNode = linkNode.Element("visual")?
+                                   .Element("geometry")?
+                                   .Element("mesh");
+
+            if (meshNode == null) return null;
+
+            //// 3. 获取 filename 属性
+            //string rawPath = (string)meshNode.Attribute("filename");
+            //if (string.IsNullOrEmpty(rawPath)) return null;
+
+            //// 4. 路径处理：将 package:// 替换为本地路径
+            //// 假设 rawPath 是 "package://ur_description/meshes/ur5/visual/base.stl"
+            //if (rawPath.StartsWith("package://"))
+            //{
+            //    // 去掉前缀，拼接本地根目录
+            //    // 这里只是个示例，具体截取逻辑看你的文件夹结构
+            //    string relativePath = rawPath.Substring("package://".Length);
+            //    return Path.Combine(_modelBaseDirectory, relativePath);
+            //}
+
+            //// 如果是相对路径或绝对路径直接返回
+            //return rawPath;
+
+            //// 获取 filename，例如 "package://DM9_URDF_2/meshes/base_link.STL"
+            string rawPath = (string)meshNode.Attribute("filename");
+
+            if (string.IsNullOrEmpty(rawPath)) return null;
+
+            // 处理 package:// 路径
+            if (rawPath.StartsWith("package://"))
+            {
+                // 1. 去掉 "package://" 前缀
+                // 结果变成: "DM9_URDF_2/meshes/base_link.STL"
+                string pathWithoutPrefix = rawPath.Substring("package://".Length);
+
+                // 2. 将正斜杠 / 替换为 Windows 的反斜杠 \
+                pathWithoutPrefix = pathWithoutPrefix.Replace('/', '\\');
+
+                // 3. 拼接成本地绝对路径
+                // 结果变成: "C:\MyRobotProject\Assets\DM9_URDF_2\meshes\base_link.STL"
+                return Path.Combine(baseUrdfPath, pathWithoutPrefix);
+            }
+
+            return rawPath;
+        }
+        private IEnumerable<XElement> GetChildJointsFromXml(XDocument doc, string currentLinkName)
+        {
+            // 查找所有 <joint> 节点
+            // 且该节点的 <parent link="..."> 属性等于 currentLinkName
+            return doc.Descendants("joint")
+                      .Where(j => (string)j.Element("parent")?.Attribute("link") == currentLinkName);
+        }
+        private Vector3D ParseAxis(XElement jointXml)
+        {
+            var axisElem = jointXml.Element("axis");
+            if (axisElem == null) return new Vector3D(0, 0, 1); // 默认 Z 轴
+
+            string xyz = (string)axisElem.Attribute("xyz");
+            var parts = ParseStringArray(xyz);
+
+            // 返回旋转轴向量
+            return new Vector3D(parts[0], parts[1], parts[2]);
+        }
+
+        private Transform3D ParseOriginToTransform(XElement jointXml)
+        {
+            var originElem = jointXml.Element("origin");
+
+            // 默认值
+            double x = 0, y = 0, z = 0;
+            double roll = 0, pitch = 0, yaw = 0; // rpy in radians
+
+            if (originElem != null)
+            {
+                // 1. 解析 XYZ (位移)
+                var xyzAttr = (string)originElem.Attribute("xyz");
+                if (!string.IsNullOrEmpty(xyzAttr))
+                {
+                    var parts = ParseStringArray(xyzAttr);
+                    x = parts[0];
+                    y = parts[1];
+                    z = parts[2];
+                }
+
+                // 2. 解析 RPY (旋转 - 弧度)
+                var rpyAttr = (string)originElem.Attribute("rpy");
+                if (!string.IsNullOrEmpty(rpyAttr))
+                {
+                    var parts = ParseStringArray(rpyAttr);
+                    roll = parts[0];
+                    pitch = parts[1];
+                    yaw = parts[2];
+                }
+            }
+
+            // --- 构建变换矩阵 ---
+            var group = new System.Windows.Media.Media3D.Transform3DGroup();
+
+            // 1. 处理旋转 (URDF RPY -> WPF RotateTransform)
+            // 这里的顺序很重要。URDF 标准 RPY 通常对应：先绕X转，再绕Y转，再绕Z转 (Fixed Frame)
+            // 在 WPF TransformGroup 中，顺序是相反的（因为是矩阵乘法），或者我们直接计算矩阵
+
+            // 将弧度转换为角度
+            double rDeg = RadToDeg(roll);
+            double pDeg = RadToDeg(pitch);
+            double yDeg = RadToDeg(yaw);
+
+            // 注意：这里的旋转顺序可能需要根据具体的 URDF 文件微调
+            // 标准顺序通常是 Z * Y * X (Intrinsic) 或 X * Y * Z (Extrinsic)
+            // 最稳妥的方法是分别添加旋转：
+            group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rDeg))); // Roll
+            group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), pDeg))); // Pitch
+            group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), yDeg))); // Yaw
+
+            // 2. 处理位移
+            group.Children.Add(new TranslateTransform3D(x, y, z));
+
+            return group;
+        }
+        // 辅助：解析 "0.1 -0.5 3.14" 这样的字符串为 double[]
+        private double[] ParseStringArray(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str)) return new double[] { 0, 0, 0 };
+
+            // Split 按照空格分割，移除空项
+            var parts = str.Split(new char[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            double[] result = new double[parts.Length];
+            for (int i = 0; i < parts.Length; i++)
+            {
+                // 关键：使用 InvariantCulture 确保 "." 总是被识别为小数点
+                double.TryParse(parts[i], NumberStyles.Any, CultureInfo.InvariantCulture, out result[i]);
+            }
+            return result;
+        }
+
+        // 辅助：弧度转角度
+        private double RadToDeg(double radians)
+        {
+            return radians * (180.0 / Math.PI);
+        }
+        #endregion
+
         /// <summary>
         /// 读取并组合机械臂模型
         /// </summary>
@@ -627,12 +892,12 @@ namespace TeXiuSi
                 //RA.Children.Add(DeviceOperation.Instance.joints[11].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[12].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[13].model);
-                RA.Children.Add(joints[14].model);
+                //RA.Children.Add(joints[14].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[15].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[16].model);
                 //RA.Children.Add(DeviceOperation.Instance.joints[17].model);
-                RA.Children.Add(joints[18].model);
-                RA.Children.Add(joints[19].model);
+                //RA.Children.Add(joints[18].model);
+                //RA.Children.Add(joints[19].model);
 #endif
 
 #if IRB6700
@@ -640,20 +905,20 @@ namespace TeXiuSi
                 changeModelColor(joints[6], cableColor);
                 changeModelColor(joints[7], cableColor);
                 changeModelColor(joints[8], cableColor);
-                changeModelColor(joints[9], cableColor);
-                changeModelColor(joints[10], cableColor);
-                changeModelColor(joints[11], cableColor);
-                changeModelColor(joints[12], cableColor);
-                changeModelColor(joints[13], cableColor);
+                //changeModelColor(joints[9], cableColor);
+                //changeModelColor(joints[10], cableColor);
+                //changeModelColor(joints[11], cableColor);
+                //changeModelColor(joints[12], cableColor);
+                //changeModelColor(joints[13], cableColor);
 
-                changeModelColor(joints[14], Colors.Gray);
+                //changeModelColor(joints[14], Colors.Gray);
 
-                changeModelColor(joints[15], Colors.Red);
-                changeModelColor(joints[16], Colors.Red);
-                changeModelColor(joints[17], Colors.Red);
+                //changeModelColor(joints[15], Colors.Red);
+                //changeModelColor(joints[16], Colors.Red);
+                //changeModelColor(joints[17], Colors.Red);
 
-                changeModelColor(joints[18], Colors.Gray);
-                changeModelColor(joints[19], Colors.Gray);
+                //changeModelColor(joints[18], Colors.Gray);
+                //changeModelColor(joints[19], Colors.Gray);
                 //关节的运动范围
                 joints[0].angleMin = -180;
                 joints[0].angleMax = 180;
@@ -724,12 +989,14 @@ namespace TeXiuSi
 
 #else
                 changeModelColor(joints[0], Colors.Red);
+                changeModelColor(joints[6], Colors.Black);
                 changeModelColor(joints[7], Colors.Black);
-                changeModelColor(joints[8], Colors.Black);
 
                 RA.Children.Add(joints[6].model);
                 RA.Children.Add(joints[7].model);
-                RA.Children.Add(joints[8].model);
+                //RA.Children.Add(joints[8].model);
+
+                #region
                 // 确保在加载模型并添加到 joints[0] 之后执行此诊断代码
                 //var baseModel = joints[1].model;
                 //GeometryModel3D geometryModel = null;
@@ -800,7 +1067,7 @@ namespace TeXiuSi
                 //        compensationZ_mm
                 //    );
 
-                //     //baseModel = joints[0].model;
+                //    //baseModel = joints[0].model;
 
                 //    // 应用变换逻辑不变 (Transform3DGroup 或直接赋值)
                 //    if (baseModel.Transform != null)
@@ -828,145 +1095,148 @@ namespace TeXiuSi
                 //    // 假设此时 joints 列表中已经包含了所有模型
                 //}
 
-                // ... (RA.Children.Add(joints[i].model) 代码保持不变) ...
+                //... (RA.Children.Add(joints[i].model) 代码保持不变) ...
 
                 // ----------------------------------------------------
-                // ⭐ 步骤 1: 应用 joints[0] (基座) 的指定平移
+                // ⭐ 步骤 1: 应用 joints[0] (基座)的指定平移
                 // ----------------------------------------------------
-                if (joints.Count > 0)
-                {
-                    // 用户指定的 joints[0] 补偿值 (mm)
-                    double compensationX_mm_J0 = 63.55;
-                    double compensationY_mm_J0 = 0.0;
-                    double compensationZ_mm_J0 = 120.0;
+                //if (joints.Count > 0)
+                //{
+                //    // 用户指定的 joints[0] 补偿值 (mm)
+                //    double compensationX_mm_J0 = 63.55;
+                //    double compensationY_mm_J0 = 0.0;
+                //    double compensationZ_mm_J0 = 120.0;
 
-                    var compensationTransform_J0 = new TranslateTransform3D(
-                        compensationX_mm_J0,
-                        compensationY_mm_J0,
-                        compensationZ_mm_J0
-                    );
+                //    var compensationTransform_J0 = new TranslateTransform3D(
+                //        compensationX_mm_J0,
+                //        compensationY_mm_J0,
+                //        compensationZ_mm_J0
+                //    );
 
-                    var baseModel = joints[0].model;
+                //    var baseModel = joints[0].model;
 
-                    // 应用变换逻辑
-                    if (baseModel.Transform != null)
-                    {
-                        var group = new Transform3DGroup();
-                        group.Children.Add(baseModel.Transform);
-                        group.Children.Add(compensationTransform_J0);
-                        baseModel.Transform = group;
-                    }
-                    else
-                    {
-                        baseModel.Transform = compensationTransform_J0;
-                    }
+                //    // 应用变换逻辑
+                //    if (baseModel.Transform != null)
+                //    {
+                //        var group = new Transform3DGroup();
+                //        group.Children.Add(baseModel.Transform);
+                //        group.Children.Add(compensationTransform_J0);
+                //        baseModel.Transform = group;
+                //    }
+                //    else
+                //    {
+                //        baseModel.Transform = compensationTransform_J0;
+                //    }
 
-                    // 保持旋转中心设置在 (0, 0, 0)
-                    joints[0].rotPointX = 0;
-                    joints[0].rotPointY = 0;
-                    joints[0].rotPointZ = 0;
-                }
+                //    // 保持旋转中心设置在 (0, 0, 0)
+                //    joints[0].rotPointX = 0;
+                //    joints[0].rotPointY = 0;
+                //    joints[0].rotPointZ = 0;
+                //}
 
-                // ----------------------------------------------------
-                // ⭐ 步骤 2: 对 joints[1] 及所有后续关节应用 Y 轴 +100 mm 的额外偏移
-                // ----------------------------------------------------
-                if (joints.Count > 1)
-                {
-                    // Y 轴额外偏移量
-                    double extraY_offset = -500.0; // mm
+                //// ----------------------------------------------------
+                //// ⭐ 步骤 2: 对 joints[1] 及所有后续关节应用 Y 轴 +100 mm 的额外偏移
+                //// ----------------------------------------------------
+                //if (joints.Count > 1)
+                //{
+                //    // Y 轴额外偏移量
+                //    double extraY_offset = -500.0; // mm
 
-                    // 创建额外的 Y 轴平移变换
-                    var extraYTransform = new TranslateTransform3D(63.5, extraY_offset, 118);
+                //    // 创建额外的 Y 轴平移变换
+                //    var extraYTransform = new TranslateTransform3D(63.5, extraY_offset, 118);
 
-                    // 从索引 1 开始遍历所有后续关节
-                    for (int i = 1; i < joints.Count; i++)
-                    {
-                        var currentModel = joints[i].model;
+                //    // 从索引 1 开始遍历所有后续关节
+                //    for (int i = 1; i < joints.Count; i++)
+                //    {
+                //        var currentModel = joints[i].model;
 
-                        // 应用变换逻辑（组合变换）
-                        if (currentModel.Transform != null)
-                        {
-                            var group = new Transform3DGroup();
-                            group.Children.Add(currentModel.Transform);
-                            group.Children.Add(extraYTransform);
-                            currentModel.Transform = group;
-                        }
-                        else
-                        {
-                            currentModel.Transform = extraYTransform;
-                        }
+                //        // 应用变换逻辑（组合变换）
+                //        if (currentModel.Transform != null)
+                //        {
+                //            var group = new Transform3DGroup();
+                //            group.Children.Add(currentModel.Transform);
+                //            group.Children.Add(extraYTransform);
+                //            currentModel.Transform = group;
+                //        }
+                //        else
+                //        {
+                //            currentModel.Transform = extraYTransform;
+                //        }
 
-                        // 【注意】如果这些关节的 rotPoint 坐标是相对于世界坐标系的，
-                        // 那么它们的 rotPointY 也需要相应增加 100 mm。
-                        // 示例（仅作演示，实际值请根据您之前的计算来确定）：
-                        // joints[i].rotPointY += extraY_offset;
-                    }
-                }
+                //        // 【注意】如果这些关节的 rotPoint 坐标是相对于世界坐标系的，
+                //        // 那么它们的 rotPointY 也需要相应增加 100 mm。
+                //        // 示例（仅作演示，实际值请根据您之前的计算来确定）：
+                //        // joints[i].rotPointY += extraY_offset;
+                //    }
+                //}
+
+                #endregion
 
 
-                joints[1].angleMin = -180;
-                joints[1].angleMax = 180;
+
+                joints[0].angleMin = -180;
+                joints[0].angleMax = 180;
+                joints[0].rotAxisX = 0;
+                joints[0].rotAxisY = 0;
+                joints[0].rotAxisZ = 1;
+                joints[0].rotPointX = 0;
+                joints[0].rotPointY = 0;
+                joints[0].rotPointZ = 0;
+
+
+                joints[1].angleMin = -100;
+                joints[1].angleMax = 60;
                 joints[1].rotAxisX = 0;
-                joints[1].rotAxisY = 0;
-                joints[1].rotAxisZ = 1;
-                joints[1].rotPointX = 0;
-                joints[1].rotPointY = 0;
-                joints[1].rotPointZ = 0;
+                joints[1].rotAxisY = 1;
+                joints[1].rotAxisZ = 0;
+                joints[1].rotPointX = 175;
+                joints[1].rotPointY = -200;
+                joints[1].rotPointZ = 500;
 
-
-                joints[2].angleMin = -100;
-                joints[2].angleMax = 60;
+                joints[2].angleMin = -90;
+                joints[2].angleMax = 90;
                 joints[2].rotAxisX = 0;
                 joints[2].rotAxisY = 1;
                 joints[2].rotAxisZ = 0;
-                joints[2].rotPointX = 175;
-                joints[2].rotPointY = -200;
-                joints[2].rotPointZ = 500;
+                joints[2].rotPointX = 190;
+                joints[2].rotPointY = -700;
+                joints[2].rotPointZ = 1595;
 
-                joints[3].angleMin = -90;
-                joints[3].angleMax = 90;
-                joints[3].rotAxisX = 0;
-                joints[3].rotAxisY = 1;
+                joints[3].angleMin = -180;
+                joints[3].angleMax = 180;
+                joints[3].rotAxisX = 1;
+                joints[3].rotAxisY = 0;
                 joints[3].rotAxisZ = 0;
-                joints[3].rotPointX = 190;
-                joints[3].rotPointY = -700;
-                joints[3].rotPointZ = 1595;
+                joints[3].rotPointX = 400;
+                joints[3].rotPointY = 0;
+                joints[3].rotPointZ = 1765;
 
-                joints[4].angleMin = -180;
-                joints[4].angleMax = 180;
-                joints[4].rotAxisX = 1;
-                joints[4].rotAxisY = 0;
+                joints[4].angleMin = -115;
+                joints[4].angleMax = 115;
+                joints[4].rotAxisX = 0;
+                joints[4].rotAxisY = 1;
                 joints[4].rotAxisZ = 0;
-                joints[4].rotPointX = 400;
-                joints[4].rotPointY = 0;
+                joints[4].rotPointX = 1405;
+                joints[4].rotPointY = 50;
                 joints[4].rotPointZ = 1765;
 
-                joints[5].angleMin = -115;
-                joints[5].angleMax = 115;
-                joints[5].rotAxisX = 0;
-                joints[5].rotAxisY = 1;
+                joints[5].angleMin = -180;
+                joints[5].angleMax = 180;
+                joints[5].rotAxisX = 1;
+                joints[5].rotAxisY = 0;
                 joints[5].rotAxisZ = 0;
                 joints[5].rotPointX = 1405;
-                joints[5].rotPointY = 50;
+                joints[5].rotPointY = 0;
                 joints[5].rotPointZ = 1765;
 
-                joints[6].angleMin = -180;
-                joints[6].angleMax = 180;
-                joints[6].rotAxisX = 1;
-                joints[6].rotAxisY = 0;
-                joints[6].rotAxisZ = 0;
-                joints[6].rotPointX = 1405;
-                joints[6].rotPointY = 0;
-                joints[6].rotPointZ = 1765;
-
-                joints[7].angleMin = -180;
-                joints[7].angleMax = 180;
-                joints[7].rotAxisX = 1;
-                joints[7].rotAxisY = 0;
-                joints[7].rotAxisZ = 0;
-                joints[7].rotPointX = 1405;
-                joints[7].rotPointY = 0;
-                joints[7].rotPointZ = 1765;
+                //joints[7].angleMin = -180;
+                //joints[7].angleMax = 180;
+                //joints[7].rotAxisX = 1;
+                //joints[7].rotAxisY = 0;
+                //joints[7].rotAxisZ = 0;
+                //joints[7].rotPointX = 1405;
+                //joints[7].rotPointY = 0;
+                //joints[7].rotPointZ = 1765;
 #endif
 
 

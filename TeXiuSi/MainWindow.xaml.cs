@@ -27,6 +27,7 @@ using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TeXiuSi
 {
@@ -115,14 +116,14 @@ namespace TeXiuSi
             viewPort3d.PanGesture = new MouseGesture(MouseAction.LeftClick);
             viewPort3d.Children.Add(visual);
             viewPort3d.Children.Add(RoboticArm);
-            viewPort3d.Camera.LookDirection = new Vector3D(-155, -2521, -1316);
+            viewPort3d.Camera.LookDirection = new Vector3D(-74, -1206, -629);
             viewPort3d.Camera.UpDirection = new Vector3D(0.025, 0.4000, 0.917);
-            viewPort3d.Camera.Position = new Point3D(-155, 2521, 1316);
+            viewPort3d.Camera.Position = new Point3D(-96.3, 1131, 735);
 
             double[] angles = { DeviceOperation.Instance.joints[0].angle, DeviceOperation.Instance.joints[1].angle, DeviceOperation.Instance.joints[2].angle, DeviceOperation.Instance.joints[3].angle, DeviceOperation.Instance.joints[4].angle, DeviceOperation.Instance.joints[5].angle };
-            //ForwardKinematics(angles);
+            ForwardKinematics(angles);
 
-            changeSelectedJoint();
+            //changeSelectedJoint();
 
             #region Timer
             timerPoint = new System.Windows.Forms.Timer();
@@ -135,6 +136,15 @@ namespace TeXiuSi
 
             robotDynamicsHelper.ConfigureRobot();
             #endregion
+
+    
+            // 假设 get_current_pose() 能返回当前位姿的六个值
+            double[] currentPose = GetCurrentEndEffectorPose(angles);
+
+            double[] angles1 = robotDynamicsHelper.UserComputeInverseKinematicsMethod(
+                   currentPose[0], currentPose[1], currentPose[2],
+                   currentPose[3], currentPose[4], currentPose[5]
+               );
         }
         // 接收 ViewModel 发出的“轨迹已准备好”事件
         private void OnTrajectoryReady(object sender, EventArgs e)
@@ -429,7 +439,7 @@ namespace TeXiuSi
 
             DeviceOperation.Instance.joints[7].model.Transform = F1; //Cables
 
-            DeviceOperation.Instance.joints[8].model.Transform = F2; //Cables
+            //DeviceOperation.Instance.joints[8].model.Transform = F2; //Cables
 
             DeviceOperation.Instance.joints[6].model.Transform = F3; //The ABB writing
             //DeviceOperation.Instance.joints[9].model.Transform = F3; //Cables
@@ -1042,9 +1052,9 @@ namespace TeXiuSi
             // 如果想重置到默认相机位置，可以使用：
             // viewPort3d.ResetCamera();
 
-            viewPort3d.Camera.LookDirection = new Vector3D(-155, -2521, -1316);
+            viewPort3d.Camera.LookDirection = new Vector3D(-74, -1206, -629);
             viewPort3d.Camera.UpDirection = new Vector3D(0.025, 0.4000, 0.917);
-            viewPort3d.Camera.Position = new Point3D(-155, 2521, 1316);
+            viewPort3d.Camera.Position = new Point3D(-96.3, 1131, 735);
         }
 
         private void btnSet_Click(object sender, RoutedEventArgs e)

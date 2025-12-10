@@ -18,6 +18,7 @@ namespace TeXiuSi
     /// </summary>
     using Peak.Can.Basic;
     using Peak.Can.Basic.BackwardCompatibility;
+    using System.IO;
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows;
@@ -254,6 +255,8 @@ namespace TeXiuSi
             _motorControl = new MotorControl();
 
             model3D = _motorControl.Initialize_Environment(_motorControl.modelsNames, out joints);
+            var baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf\\DM9_URDF.urdf";
+            model3D = _motorControl.LoadUrdf(baseUrdfPath);
         }
 
 

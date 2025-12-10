@@ -23,7 +23,6 @@ namespace TeXiuSi.ViewModel
 
         public JoinParampeterViewModel()
         {
-            DeviceOperation.Instance.bufferBlock.LinkTo(SerialCTBlock, new DataflowLinkOptions { PropagateCompletion = true });
 
             SerialCTBlock = new ActionBlock<MotorFeedbackFrame>(async data =>
                     {
@@ -36,6 +35,8 @@ namespace TeXiuSi.ViewModel
                         BoundedCapacity = 1,  // 只保留最新的数据
                         SingleProducerConstrained = true  // 提高性能
                     });
+
+            DeviceOperation.Instance.bufferBlock.LinkTo(SerialCTBlock, new DataflowLinkOptions { PropagateCompletion = true });
 
             JointsInfo = new ObservableCollection<MotorFeedbackFrame>();
 

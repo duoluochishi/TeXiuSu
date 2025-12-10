@@ -1,0 +1,91 @@
+<mujoco model="DM9_URDF_2">
+  <compiler angle="radian"/>
+
+  <asset>
+    <mesh name="base_link" file="base_link.STL"/>
+    <mesh name="1_Link" content_type="model/stl" file="1_Link.STL"/>
+    <mesh name="2_Link" file="2_Link.STL"/>
+    <mesh name="3_Link" file="3_Link.STL"/>
+    <mesh name="4_Link" file="4_Link.STL"/>
+    <mesh name="5_Link" file="5_Link.STL"/>
+    <mesh name="6_Link" file="6_Link.STL"/>
+    <mesh name="7_Link" file="7_Link.STL"/>
+    <mesh name="8_2_Link" content_type="model/stl" file="8_2_Link.STL"/>
+    <mesh name="9_2_Link" content_type="model/stl" file="9_2_Link.STL"/>
+    <mesh name="8_1_Link" content_type="model/stl" file="8_1_Link.STL"/>
+    <mesh name="9_1_Link" content_type="model/stl" file="9_1_Link.STL"/>
+  </asset>
+
+  <worldbody>
+    <geom type="mesh" rgba="0.2 0.2 0.2 1" mesh="base_link"/>
+    <body name="1_Link" pos="-0.0083638 -0.012614 0.02715">
+      <inertial pos="2.18539e-05 -0.00138484 0.0609218" quat="0.0534725 0.706407 0.0544615 0.703679" mass="0.200584" diaginertia="8.94691e-05 8.67296e-05 8.53145e-05"/>
+      <joint name="1_joint" pos="0 0 0" axis="0 0 1" range="-2.967 2.967" actuatorfrcrange="-9 9"/>
+      <geom type="mesh" rgba="0.2 0.2 0.2 1" mesh="1_Link"/>
+      <body name="2_Link" pos="0 0 0.066099" quat="0.707105 0.707108 0 0">
+        <inertial pos="0.148858 0 0.000796112" quat="-0.000116619 0.70721 0.000227649 0.707003" mass="0.369258" diaginertia="0.000724104 0.000720409 7.37402e-05"/>
+        <joint name="2_joint" pos="0 0 0" axis="0 0 1" range="0 3.4" actuatorfrcrange="-9 9"/>
+        <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="2_Link"/>
+        <body name="3_Link" pos="0.3 0 0" quat="0.707105 0 0 0.707108">
+          <inertial pos="0.0338557 0.0959469 -0.000461495" quat="0.591826 0.382748 -0.595773 0.385097" mass="0.520123" diaginertia="0.000381645 0.000318402 0.000205443"/>
+          <joint name="3_joint" pos="0 0 0" axis="0 0 -1" range="0 3.4" actuatorfrcrange="-9 9"/>
+          <geom type="mesh" rgba="0.2 0.2 0.2 1" mesh="3_Link"/>
+          <body name="4_Link" pos="0.057 0.22 0">
+            <inertial pos="0.0399779 0.0596208 0.00430108" quat="0.692079 0.690724 -0.148817 0.147585" mass="0.208984" diaginertia="7.89854e-05 7.57516e-05 6.51738e-05"/>
+            <joint name="4_joint" pos="0 0 0" axis="0 0 1" range="-1.7 1.7" actuatorfrcrange="-3 3"/>
+            <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="4_Link"/>
+            <body name="5_Link" pos="0.06076 0.08 0" quat="0.707105 0 0.707108 0">
+              <inertial pos="8.10081e-06 0.00205206 -0.0521886" quat="0.506162 0.493244 0.506262 0.494175" mass="0.179446" diaginertia="6.79159e-05 6.45854e-05 5.7011e-05"/>
+              <joint name="5_joint" pos="0 0 0" axis="0 0 -1" range="-1.7 1.7" actuatorfrcrange="-3 3"/>
+              <geom type="mesh" rgba="0.898039 0.917647 0.929412 1" mesh="5_Link"/>
+              <body name="6_Link" pos="0 -0.00025999 -0.06076" quat="0.707105 -0.707108 0 0">
+                <inertial pos="2.61678e-07 -0.000160332 0.0661917" quat="-0.000355802 0.707107 -0.00036211 0.707107" mass="0.185191" diaginertia="0.00015017 0.000134172 5.67091e-05"/>
+                <joint name="6_joint" pos="0 0 0" axis="0 0 1" range="-1.57 1.57" actuatorfrcrange="-3 3"/>
+                <geom type="mesh" rgba="1 1 1 1" mesh="6_Link"/>
+                <body name="7_Link" pos="0 0 0.0675">
+                  <inertial pos="0 0 0.0280832" quat="0.191954 0.680554 -0.191954 0.680554" mass="0.00785618" diaginertia="1.98954e-06 1.59994e-06 4.67487e-07"/>
+                  <joint name="7_joint" pos="0 0 0" axis="0 0 -1" range="0 2.09" actuatorfrcrange="-3 3"/>
+                  <geom type="mesh" rgba="1 1 1 1" mesh="7_Link"/>
+                  <body name="8_2_Link" pos="-0.027284 0.016721 0.03426" quat="-3.67321e-06 0 0 -1">
+                    <inertial pos="-0.0205252 0.000360797 0" quat="0.00621412 0.707079 -0.00621412 0.707079" mass="0.0011421" diaginertia="2.71641e-07 2.56382e-07 1.83049e-08"/>
+                    <joint name="8_2_joint" pos="0 0 0" axis="0 0 1"/>
+                    <geom type="mesh" rgba="1 1 1 1" mesh="8_2_Link"/>
+                    <body name="9_2_Link" pos="-0.041034 0.0007213 0">
+                      <inertial pos="0.00503758 0.0152888 0.0269271" quat="0.996038 -0.0262999 0.0849237 0.00229093" mass="0.0307235" diaginertia="1.89385e-05 1.39963e-05 6.97248e-06"/>
+                      <joint name="9_2_joint" pos="0 0 0" axis="0 0 1"/>
+                      <geom type="mesh" rgba="1 1 1 1" mesh="9_2_Link"/>
+                    </body>
+                  </body>
+                  <body name="8_1_Link" pos="0.027284 -0.016721 0.03426" quat="-3.67321e-06 0 0 -1">
+                    <inertial pos="0.0205085 -0.000360502 0" quat="0.00621412 0.707079 -0.00621412 0.707079" mass="0.0011421" diaginertia="2.71641e-07 2.56382e-07 1.83049e-08"/>
+                    <joint name="8_1_joint" pos="0 0 0" axis="0 0 1"/>
+                    <geom type="mesh" rgba="1 1 1 1" mesh="8_1_Link"/>
+                    <body name="9_1_Link" pos="0.041034 -0.0007213 0">
+                      <inertial pos="-0.00496335 -0.015291 0.0266942" quat="0.995965 0.02589 -0.0858924 0.00238844" mass="0.0311589" diaginertia="1.91194e-05 1.41788e-05 7.01003e-06"/>
+                      <joint name="9_1_joint" pos="0 0 0" axis="0 0 1"/>
+                      <geom type="mesh" rgba="1 1 1 1" mesh="9_1_Link"/>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+    <actuator>
+    <position name="1_act" joint="1_joint" kp="50"/>
+    <position name="2_act" joint="2_joint" kp="50"/>
+    <position name="3_act" joint="3_joint" kp="50"/>
+    <position name="4_act" joint="4_joint" kp="50"/>
+    <position name="5_act" joint="5_joint" kp="50"/>
+    <position name="6_act" joint="6_joint" kp="50"/>
+    <position name="7_act" joint="7_joint" kp="50"/>
+    <position name="8_1_act" joint="8_1_joint" kp="50"/>
+    <position name="9_1_act" joint="9_1_joint" kp="50"/>
+    <position name="8_2_act" joint="8_2_joint" kp="50"/>
+    <position name="9_2_act" joint="9_2_joint" kp="50"/>
+    </actuator>
+</mujoco>
