@@ -4,11 +4,13 @@ using HelixToolkit.Wpf;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -16,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Xml;
 using System.Xml.Linq;
 using TeXiuSi.Helper;
 using TeXiuSi.Model;
@@ -24,7 +27,49 @@ using TeXiuSi.Protocol;
 namespace TeXiuSi
 {
 
+    public class JointInfo : INotifyPropertyChanged
+    {
+        public string Name { get; set; }
+        public string Type { get; set; } // "revolute", "fixed", "BASE"
+        public string ParentLink { get; set; }
+        public string ChildLink { get; set; }
 
+        // 新增：位置和旋转信息
+        public double OriginX { get; set; }
+        public double OriginY { get; set; }
+        public double OriginZ { get; set; }
+        public double OriginRoll { get; set; }
+        public double OriginPitch { get; set; }
+        public double OriginYaw { get; set; }
+
+        public String Velocity { get; set; }
+        public String Effort { get; set; }
+        // 新增：STL 模型文件的路径
+        public string VisualMeshPath { get; set; }
+
+        public Vector3D vector3D { get; set; }
+
+        // 相对矩阵 (Parent -> Child 的变换)
+        public Matrix3D LocalMatrix { get; set; }
+
+        // 【重要】绝对矩阵 (World -> Child 的变换，用来控制 Helix 模型位置)
+        private Matrix3D _globalMatrix;
+        public Matrix3D GlobalMatrix
+        {
+            get { return _globalMatrix; }
+            set
+            {
+                _globalMatrix = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
 
     public class MotorControl : IDisposable
     {
@@ -239,21 +284,6 @@ namespace TeXiuSi
             return 0f;
         }
 
-        //public void SaveMotorParam(Motor motor)
-        //{
-        //    ushort id = motor.CanId;
-        //    Control_Mode_Code mode = motor.GetMotorMode();
-        //    ControlCmd((ushort)(id + (int)mode), 0xFD);
-        //    Thread.Sleep(10);
-
-        //    _readWriteSave = true;
-        //    byte idLow = (byte)(id & 0xFF);
-        //    byte idHigh = (byte)((id >> 8) & 0xFF);
-
-        //    byte[] data = { idLow, idHigh, 0xAA, 0x01, 0x00, 0x00, 0x00, 0x00 };
-        //    _usbHw.FdcanFrameSend(data, 0x7FF);
-        //    Thread.Sleep(100);
-        //}
 
         public void RefreshMotorStatus(Motor motor)
         {
@@ -612,15 +642,267 @@ namespace TeXiuSi
         }
         #region UrdfLoad
 
-        public Model3DGroup LoadUrdf(string urdfPath)
+        public ObservableCollection<JointInfo> AllJoints { get; set; }
+        public void LoadUrdf(string filePath)
         {
-            XDocument doc = XDocument.Load(urdfPath);
-            // 1. 找到 Base Link (通常是没有 Parent 的 Link)
-            // ... (XML解析逻辑，找到根节点名)
+            try
+            {
+                AllJoints = new ObservableCollection<JointInfo>();
+                XDocument doc = XDocument.Load(filePath);
 
-            // 2. 开始递归构建
-            return BuildLink("base_link", doc);
+
+
+                // ==========================================
+                // 步骤 A: 建立 Link 到 Mesh 路径的映射字典
+                // ==========================================
+                var linkMeshMap = new Dictionary<string, string>();
+
+                foreach (var link in doc.Root.Descendants("link"))
+                {
+                    string linkName = (string)link.Attribute("name");
+
+                    // 获取 visual -> geometry -> mesh -> filename
+                    var meshPath = (string)link.Element("visual")
+                                              ?.Element("geometry")
+                                              ?.Element("mesh")
+                                              ?.Attribute("filename");
+
+                    if (!string.IsNullOrEmpty(linkName) && !string.IsNullOrEmpty(meshPath))
+                    {
+                        // 处理路径字符串
+                        string cleanPath = CleanMeshPath(meshPath);
+                        linkMeshMap[linkName] = cleanPath;
+                    }
+                }
+
+                //AllJoints.Clear();
+                // ==========================================
+                // 步骤 B: Base Link 处理 (手动添加的 Root)
+                // ==========================================
+                string baseLinkName = "base_link";
+                var baseLink = doc.Root.Elements("link")
+                                  .FirstOrDefault(x => (string)x.Attribute("name") == "base_link");
+
+                if (baseLink != null)
+                {
+                    // Base Link 在世界坐标系中通常默认为 0,0,0 (除非被固定在其他地方)
+                    AllJoints.Add(new JointInfo
+                    {
+                        Name = "base_link",
+                        Type = "ROOT_LINK", // 标记为根节点
+                        ParentLink = "World",
+                        ChildLink = "base_link",
+                        OriginX = 0,
+                        OriginY = 0,
+                        OriginZ = 0,
+                        OriginRoll = 0,
+                        OriginPitch = 0,
+                        OriginYaw = 0,
+                        Velocity = "-",
+                        Effort = "-",
+                        VisualMeshPath = linkMeshMap.ContainsKey(baseLinkName) ? linkMeshMap[baseLinkName] : "无模型",
+                    });
+                }
+
+                // ==========================================
+                // 2. 解析所有真实的 Joint
+                // ==========================================
+                var joints = doc.Root.Descendants("joint").Select(x =>
+                {
+                    // 获取 origin 元素
+                    var originElem = x.Element("origin");
+
+                    // 解析 xyz 属性字符串 "x y z"
+                    var xyzRaw = (string)originElem?.Attribute("xyz") ?? "0 0 0";
+                    var xyzArr = SplitString(xyzRaw); // 辅助函数见下方
+
+                    // 解析 rpy 属性字符串 "r p y"
+                    var rpyRaw = (string)originElem?.Attribute("rpy") ?? "0 0 0";
+                    var rpyArr = SplitString(rpyRaw);
+
+                    string childName = (string)x.Element("child")?.Attribute("link") ?? "None";
+
+                    var jointInfo = new JointInfo
+                    {
+                        Name = (string)x.Attribute("name") ?? "Unknown",
+                        Type = (string)x.Attribute("type") ?? "Unknown",
+                        ParentLink = (string)x.Element("parent")?.Attribute("link") ?? "None",
+                        ChildLink = (string)x.Element("child")?.Attribute("link") ?? "None",
+
+                        // 填充位置信息
+                        OriginX = double.Parse(xyzArr[0]),
+                        OriginY = double.Parse(xyzArr[1]),
+                        OriginZ = double.Parse(xyzArr[2]),
+                        OriginRoll = double.Parse(rpyArr[0]),
+                        OriginPitch = double.Parse(rpyArr[1]),
+                        OriginYaw = double.Parse(rpyArr[2]),
+
+                        Velocity = (string)x.Element("limit")?.Attribute("velocity") ?? "No Limit",
+                        Effort = (string)x.Element("limit")?.Attribute("effort") ?? "No Limit",
+                        VisualMeshPath = linkMeshMap.ContainsKey(childName) ? linkMeshMap[childName] : "无模型",
+                        vector3D = ParseAxis(x)
+
+
+                    };
+                    return jointInfo;
+                    //return ParseOriginToTransform(x, jointInfo);
+                });
+
+                foreach (var j in joints)
+                {
+                    AllJoints.Add(j);
+                }
+                // 1. 先把每个 Joint 的 LocalMatrix 算好存起来
+                foreach (var joint in AllJoints)
+                {
+                    double x = joint.OriginX;
+                    double y = joint.OriginY;
+                    double z = joint.OriginZ;
+                    double r = joint.OriginRoll;
+                    double p = joint.OriginPitch;
+                    double yaw = joint.OriginYaw;
+
+                    joint.LocalMatrix = CreateMatrix(x, y, z, r, p, yaw);
+                }
+
+                // 2. 建立父子查找表 (ParentLinkName -> List<JointInfo>)
+                // 这样我们可以快速找到某个 Link 下面连着哪些 Joint
+                var childrenMap = AllJoints
+                    .Where(j => j.Type != "ROOT_LINK") // 排除手动加的 Base 根节点
+                    .GroupBy(j => j.ParentLink)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                // 3. 开始递归计算 (从 Base 开始)
+                // 假设 Base 的初始位置是世界原点 (Identity)
+                var baseJoint = AllJoints.FirstOrDefault(j => j.Name == "base_link");
+                if (baseJoint != null)
+                {
+                    baseJoint.GlobalMatrix = Matrix3D.Identity; // 根节点在 (0,0,0)
+
+                    // 递归计算子节点
+                    // 注意：Base Link 的名字是 "base_link"
+                    ComputeChildrenTransforms("base_link", baseJoint.GlobalMatrix, childrenMap);
+                }
+                //先写在这
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"解析出错: {ex.Message}");
+            }
         }
+        // 递归函数
+        private void ComputeChildrenTransforms(string currentLinkName, Matrix3D parentGlobalMatrix, Dictionary<string, List<JointInfo>> map)
+        {
+            // 如果这个 Link 下面没有子关节了，就停止
+            if (!map.ContainsKey(currentLinkName)) return;
+
+            // 遍历当前 Link 下连接的所有子关节
+            foreach (var childJoint in map[currentLinkName])
+            {
+                // 【核心公式】 子绝对矩阵 = 父绝对矩阵 * 子相对矩阵
+                var childGlobal = childJoint.LocalMatrix * parentGlobalMatrix;
+
+                // 保存结果
+                childJoint.GlobalMatrix = childGlobal;
+
+                // 继续往下算 (现在的 child 变成了下一层的 parent)
+                ComputeChildrenTransforms(childJoint.ChildLink, childGlobal, map);
+            }
+        }
+        private Matrix3D CreateMatrix(double x, double y, double z, double roll, double pitch, double yaw)
+        {
+            var matrix = new Matrix3D();
+
+            // 1. 先旋转 (注意：WPF 的旋转方向可能需要根据右手坐标系微调，这里按标准处理)
+            // 这里的顺序很重要，URDF 标准通常是 R -> P -> Y
+            matrix.Rotate(new Quaternion(new Vector3D(1, 0, 0), roll * 180.0 / Math.PI));  // Roll (X)
+            matrix.Rotate(new Quaternion(new Vector3D(0, 1, 0), pitch * 180.0 / Math.PI)); // Pitch (Y)
+            matrix.Rotate(new Quaternion(new Vector3D(0, 0, 1), yaw * 180.0 / Math.PI));   // Yaw (Z)
+
+            // 2. 再平移
+            matrix.Translate(new Vector3D(x, y, z));
+
+            return matrix;
+        }
+        private JointInfo ParseOriginToTransform(XElement jointXml, JointInfo jointInfo)
+        {
+            var originElem = jointXml.Element("origin");
+
+            // 默认值
+            double x = 0, y = 0, z = 0;
+            double roll = 0, pitch = 0, yaw = 0; // rpy in radians
+
+            if (originElem != null)
+            {
+                // 1. 解析 XYZ (位移)
+                var xyzAttr = (string)originElem.Attribute("xyz");
+                if (!string.IsNullOrEmpty(xyzAttr))
+                {
+                    var parts = ParseStringArray(xyzAttr);
+                    x = parts[0];
+                    y = parts[1];
+                    z = parts[2];
+                }
+
+                // 2. 解析 RPY (旋转 - 弧度)
+                var rpyAttr = (string)originElem.Attribute("rpy");
+                if (!string.IsNullOrEmpty(rpyAttr))
+                {
+                    var parts = ParseStringArray(rpyAttr);
+                    roll = parts[0];
+                    pitch = parts[1];
+                    yaw = parts[2];
+                }
+            }
+
+            // --- 构建变换矩阵 ---
+            var group = new System.Windows.Media.Media3D.Transform3DGroup();
+
+            // 1. 处理旋转 (URDF RPY -> WPF RotateTransform)
+            // 这里的顺序很重要。URDF 标准 RPY 通常对应：先绕X转，再绕Y转，再绕Z转 (Fixed Frame)
+            // 在 WPF TransformGroup 中，顺序是相反的（因为是矩阵乘法），或者我们直接计算矩阵
+
+            // 将弧度转换为角度
+            double rDeg = RadToDeg(roll);
+            double pDeg = RadToDeg(pitch);
+            double yDeg = RadToDeg(yaw);
+
+            // 注意：这里的旋转顺序可能需要根据具体的 URDF 文件微调
+            // 标准顺序通常是 Z * Y * X (Intrinsic) 或 X * Y * Z (Extrinsic)
+            // 最稳妥的方法是分别添加旋转：
+            //group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rDeg))); // Roll
+            //group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), pDeg))); // Pitch
+            //group.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), yDeg))); // Yaw
+
+            //// 2. 处理位移
+            //group.Children.Add(new TranslateTransform3D(x, y, z));
+            jointInfo.OriginX = x;
+            jointInfo.OriginY = y;
+            jointInfo.OriginZ = z;
+            jointInfo.OriginRoll = rDeg;
+            jointInfo.OriginPitch = pDeg;
+            jointInfo.OriginYaw = yaw;
+
+
+            return jointInfo;
+        }
+        // 辅助函数：把空格分隔的字符串 "1.0 2.0 3.0" 变成数组 ["1.0", "2.0", "3.0"]
+        private string[] SplitString(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return new[] { "0", "0", "0" };
+
+            // 按空格分割，并移除空项
+            var parts = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 确保返回3个元素，防止数组越界
+            if (parts.Length >= 3) return parts;
+
+            // 如果格式不对，补全
+            var result = new string[3];
+            for (int i = 0; i < 3; i++) result[i] = (i < parts.Length) ? parts[i] : "0";
+            return result;
+        }
+
 
         private Model3DGroup BuildLink(string linkName, XDocument doc)
         {
@@ -739,6 +1021,22 @@ namespace TeXiuSi
 
             return rawPath;
         }
+        // 辅助函数：清洗路径
+        private string CleanMeshPath(string rawPath)
+        {
+            if (string.IsNullOrEmpty(rawPath)) return "";
+
+            // 1. 去掉 "package://"
+            string path = rawPath.Replace("package://", "");
+
+            // 2. (可选) 如果你想去掉具体的包名 "DM9_URDF_2/"，只保留 "meshes/..."
+            // path = path.Replace("DM9_URDF_2/", ""); 
+
+            // 3. 将 Linux 风格的斜杠 / 转换为 Windows 的反斜杠 \
+            path = path.Replace("/", "\\");
+
+            return path;
+        }
         private IEnumerable<XElement> GetChildJointsFromXml(XDocument doc, string currentLinkName)
         {
             // 查找所有 <joint> 节点
@@ -813,6 +1111,7 @@ namespace TeXiuSi
 
             return group;
         }
+
         // 辅助：解析 "0.1 -0.5 3.14" 这样的字符串为 double[]
         private double[] ParseStringArray(string str)
         {
@@ -835,6 +1134,51 @@ namespace TeXiuSi
         {
             return radians * (180.0 / Math.PI);
         }
+        public Model3DGroup Initialize_Environment(out List<Joint> jointsInfo)
+        {
+            var baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf\\";
+            jointsInfo = new List<Joint>(); 
+            if (AllJoints != null && AllJoints.Count > 0)
+            {
+                // 遍历所有的 JointInfo
+                foreach (var joint in AllJoints)
+                {
+                    if (string.IsNullOrEmpty(joint.VisualMeshPath) || joint.VisualMeshPath == "无模型")
+                        continue;
+
+                    // 1. 加载 STL 模型
+                    ModelImporter import = new ModelImporter();
+                    // 注意：需要处理路径，比如 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, joint.VisualMeshPath)
+                    //RA = loader.Read(joint.VisualMeshPath);
+                    var link = import.Load(baseUrdfPath + joint.VisualMeshPath);
+                    var jointInfo=new Joint(link)
+                    {
+
+                        Type = 0,
+
+
+                    };
+                    jointsInfo.Add(jointInfo);
+
+                    RA.Children.Add(jointInfo.model);
+
+                    //// 2. 创建 Visual3D
+                    //var visual = new ModelVisual3D();
+                    //visual.Content = modelGroup;
+
+                    //// 3. 【关键】应用我们算出来的笛卡尔坐标矩阵
+                    //// MatrixTransform3D 接受一个 Matrix3D
+                    //visual.Transform = new MatrixTransform3D(joint.GlobalMatrix);
+
+                    //// 4. 添加到 HelixViewport3D
+                    //myHelixViewport.Children.Add(visual);
+                }
+                return RA;
+            }
+            return RA;
+        }
+
+
         #endregion
 
         /// <summary>

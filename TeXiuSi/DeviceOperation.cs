@@ -255,8 +255,11 @@ namespace TeXiuSi
             _motorControl = new MotorControl();
 
             model3D = _motorControl.Initialize_Environment(_motorControl.modelsNames, out joints);
-            var baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf\\DM9_URDF.urdf";
-            model3D = _motorControl.LoadUrdf(baseUrdfPath);
+            //var baseUrdfPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\3D_Models_Urdf\\DM9_URDF.urdf";
+            //_motorControl.LoadUrdf(baseUrdfPath);
+            //model3D = _motorControl.Initialize_Environment(out joints);
+
+
         }
 
 

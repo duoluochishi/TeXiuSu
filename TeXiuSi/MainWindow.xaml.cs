@@ -1,5 +1,6 @@
 ﻿#define IRB6700
 
+
 using HelixToolkit.Wpf;
 using RobotDynamics.MathUtilities;
 using RobotDynamics.Robots;
@@ -27,6 +28,8 @@ using TeXiuSi.Helper;
 using TeXiuSi.Model;
 using TeXiuSi.uc;
 using TeXiuSi.ViewModel;
+
+using Siemens.RosSharp.Urdf;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TeXiuSi
@@ -41,7 +44,7 @@ namespace TeXiuSi
         #region param
         //provides functionality to 3d models
         //这是一个Model3DGroup对象，它像一个容器，把机械臂的所有独立部件（如底座、大臂、小臂等）组合在一起，方便统一管理。
-        Model3DGroup RA = new Model3DGroup(); //RoboticArm 3d group
+        //Model3DGroup RA = new Model3DGroup(); //RoboticArm 3d group
         Model3D geom = null; //Debug sphere to check in which point the joint is rotatin
 
 
@@ -111,7 +114,7 @@ namespace TeXiuSi
             geom = new GeometryModel3D(builder.ToMesh(), Materials.Brown);
             visual = new ModelVisual3D();
             visual.Content = geom;
-
+             
             viewPort3d.RotateGesture = new MouseGesture(MouseAction.RightClick);
             viewPort3d.PanGesture = new MouseGesture(MouseAction.LeftClick);
             viewPort3d.Children.Add(visual);
@@ -146,6 +149,12 @@ namespace TeXiuSi
                    currentPose[3], currentPose[4], currentPose[5]
                );
         }
+
+        public void Load3DModel()
+        {
+
+        }
+
         // 接收 ViewModel 发出的“轨迹已准备好”事件
         private void OnTrajectoryReady(object sender, EventArgs e)
         {
